@@ -1,11 +1,12 @@
 Attribute VB_Name = "main"    
 
 Sub Test()
-    MsgBox ModelDictionary().Item("E")
+    ' MsgBox "Hello, World!"
+    MsgBox GetDictionaryKeys(ModelDictionary).Item(1)
 End Sub
 
 ' Modell
-Public Function ModelDictionary() As Dictionary
+Private Function ModelDictionary() As Dictionary
     Static obj As Dictionary
     
     If obj Is Nothing Then
@@ -20,7 +21,7 @@ Public Function ModelDictionary() As Dictionary
 End Function
 
 ' Anschlussgröße in Zoll
-Public Function ConnectionSizeInchDictionary() As Dictionary
+Private Function ConnectionSizeInchDictionary() As Dictionary
     Static obj As Dictionary
     
     If obj Is Nothing Then
@@ -37,11 +38,11 @@ Public Function ConnectionSizeInchDictionary() As Dictionary
         obj.Add "8", "3/8"
     End If
 
-    Set ConnectionSizeDictionary = obj
+    Set ConnectionSizeInchDictionary = obj
 End Function
 
 ' Gehäusematerial (benetzt)
-Public Function HousingMaterialWetDictionary() As Dictionary
+Private Function HousingMaterialWetDictionary() As Dictionary
     Static obj As Dictionary
     
     If obj Is Nothing Then
@@ -63,7 +64,7 @@ Public Function HousingMaterialWetDictionary() As Dictionary
 End Function
 
 ' Gehäusematerial (nicht benetzt)
-Public Function HousingMaterialNonwetDictionary() As Dictionary
+Private Function HousingMaterialNotwetDictionary() As Dictionary
     Static obj As Dictionary
     
     If obj Is Nothing Then
@@ -81,11 +82,11 @@ Public Function HousingMaterialNonwetDictionary() As Dictionary
         obj.Add "Z", "PTFE-beschichtetes Aluminium"
     End If
 
-    Set HousingMaterialDryDictionary = obj
+    Set HousingMaterialNotwetDictionary = obj
 End Function
 
 ' Material der Membrane		
-Public Function MembraneMaterialDictionary() As Dictionary
+Private Function MembraneMaterialDictionary() As Dictionary
     Static obj As Dictionary
 
     If obj Is Nothing Then
@@ -105,7 +106,7 @@ Public Function MembraneMaterialDictionary() As Dictionary
 End Function
 
 ' Membranausführung		
-Public Function MembraneDesignDictionary() As Dictionary
+Private Function MembraneDesignDictionary() As Dictionary
     Static obj As Dictionary
 
     If obj Is Nothing Then
@@ -122,7 +123,7 @@ Public Function MembraneDesignDictionary() As Dictionary
 End Function
 
 ' Material Rückschlagventil		
-Public Function CheckValveMaterialDictionary() As Dictionary
+Private Function CheckValveMaterialDictionary() As Dictionary
     Static obj As Dictionary
     
     If obj Is Nothing Then
@@ -147,7 +148,7 @@ Public Function CheckValveMaterialDictionary() As Dictionary
 End Function
 
 ' Material Ventilsitz		
-Public Function ValveSeatMaterialDictionary() As Dictionary
+Private Function ValveSeatMaterialDictionary() As Dictionary
     Static obj As Dictionary
     
     If obj Is Nothing Then
@@ -174,7 +175,7 @@ Public Function ValveSeatMaterialDictionary() As Dictionary
 End Function
 
 ' Gehäuseausführung		
-Public Function HousingDesignDictionary() As Dictionary
+Private Function HousingDesignDictionary() As Dictionary
     Static obj As Dictionary
     
     If obj Is Nothing Then
@@ -187,7 +188,7 @@ Public Function HousingDesignDictionary() As Dictionary
 End Function
 
 ' Revisionslevel	
-Public Function RevisionLevelDictionary() As Dictionary
+Private Function RevisionLevelDictionary() As Dictionary
     Static obj As Dictionary
     
     If obj Is Nothing Then
@@ -202,7 +203,7 @@ Public Function RevisionLevelDictionary() As Dictionary
 End Function
     
 ' Optionen		
-Public Function OptionsDictionary() As Dictionary
+Private Function OptionsDictionary() As Dictionary
     Static obj As Dictionary
     
     If obj Is Nothing Then
@@ -229,10 +230,240 @@ Public Function OptionsDictionary() As Dictionary
     Set OptionsDictionary = obj
 End Function
 
-Public Function GetModelName(ByVal key As String) As String
-    Dim dict As Dictionary
-    Set dict = ModelDictionary()
-    GetModelName = dict(key)
+' Get the keys of given dictionary
+' Private Function GetDictionaryKeys(dict As Dictionary) As Collection
+'     Dim key As Variant
+'     Dim keys As New Collection
+    
+'     For Each key In dict.Keys
+'         keys.Add key
+'     Next key
+    
+'     Set GetDictionaryKeys = keys
+' End Function
+
+' Get the model from article number
+Private Function GetModelFromArticleNumber(ArticleNumber As String) As Collection
+    Dim modelChar As String
+    Dim model As String
+    Dim remaindArticleNumber As String
+    Dim returnCollection As New Collection
+
+    modelChar = Mid(ArticleNumber, 1, 1)
+    If ModelDictionary.Exists(modelChar) Then
+        model = ModelDictionary.Item(modelChar)
+    Else
+        model = "Unknown"
+    End If
+    remaindArticleNumber = Mid(ArticleNumber, 2)
+    returnCollection.Add modelChar
+    returnCollection.Add model
+    returnCollection.Add remaindArticleNumber
+    Set GetModelFromArticleNumber = returnCollection
+End Function
+
+' Get the connection size from article number
+Private Function GetConnectionSizeFromArticleNumber(ArticleNumber As String) As Collection
+    Dim connectionSizeChar As String
+    Dim connectionSize As String
+    Dim remaindArticleNumber As String
+    Dim returnCollection As New Collection
+
+    connectionSizeChar = Mid(ArticleNumber, 1, 1)
+    If connectionSizeChar = "4" Then
+        connectionSizeChar = Mid(ArticleNumber, 1, 2)
+        If ConnectionSizeInchDictionary.Exists(connectionSizeChar) Then
+            connectionSize = ConnectionSizeInchDictionary.Item(connectionSizeChar)
+            remaindArticleNumber = Mid(ArticleNumber, 3)
+            returnCollection.Add connectionSizeChar
+            returnCollection.Add connectionSize
+            returnCollection.Add remaindArticleNumber
+            Set GetConnectionSizeFromArticleNumber = returnCollection
+        Else
+            connectionSizeChar = Mid(ArticleNumber, 1, 1)
+            If ConnectionSizeInchDictionary.Exists(connectionSizeChar) Then
+                connectionSize = ConnectionSizeInchDictionary.Item(connectionSizeChar)
+            Else
+                connectionSize = "Unknown"
+            End If
+            remaindArticleNumber = Mid(ArticleNumber, 2)
+            returnCollection.Add connectionSizeChar
+            returnCollection.Add connectionSize
+            returnCollection.Add remaindArticleNumber
+            Set GetConnectionSizeFromArticleNumber = returnCollection
+        End If
+    Else
+        If ConnectionSizeInchDictionary.Exists(connectionSizeChar) Then
+            connectionSize = ConnectionSizeInchDictionary.Item(connectionSizeChar)
+        Else
+            connectionSize = "Unknown"
+        End If
+        remaindArticleNumber = Mid(ArticleNumber, 2)
+        returnCollection.Add connectionSizeChar
+        returnCollection.Add connectionSize
+        returnCollection.Add remaindArticleNumber
+        Set GetConnectionSizeFromArticleNumber = returnCollection
+    End If
+End Function
+
+' Get the housing material (wet) from article number
+Private Function GetHousingMaterialWetFromArticleNumber(ArticleNumber As String) As Collection
+    Dim housingMaterialWetChar As String
+    Dim housingMaterialWet As String
+    Dim remainedArticleNumber As String
+    Dim returnCollection As New Collection
+
+    housingMaterialWetChar = Mid(ArticleNumber, 1, 1)
+    If HousingMaterialWetDictionary.Exists(housingMaterialWetChar) Then
+        housingMaterialWet = HousingMaterialWetDictionary.Item(housingMaterialWetChar)
+    Else
+        housingMaterialWet = "Unknown"
+    End If
+    remaindArticleNumber = Mid(ArticleNumber, 2)
+    returnCollection.Add housingMaterialWetChar
+    returnCollection.Add housingMaterialWet
+    returnCollection.Add remaindArticleNumber
+    Set GetHousingMaterialWetFromArticleNumber = returnCollection
+End Function
+
+' Get the housing material (dry) from article number
+Private Function GetHousingMaterialNotwetFromArticleNumber(ArticleNumber As String) As Collection
+    Dim housingMaterialNotwetChar As String
+    Dim housingMaterialNotwet As String
+    Dim remainedArticleNumber As String
+    Dim returnCollection As New Collection
+
+    housingMaterialNotwetChar = Mid(ArticleNumber, 1, 1)
+    If HousingMaterialNotwetDictionary.Exists(housingMaterialNotwetChar) Then
+        housingMaterialNotwet = HousingMaterialNotwetDictionary.Item(housingMaterialNotwetChar)
+    Else
+        housingMaterialNotwet = "Unknown"
+    End If
+    remaindArticleNumber = Mid(ArticleNumber, 2)
+    returnCollection.Add housingMaterialNotwetChar
+    returnCollection.Add housingMaterialNotwet
+    returnCollection.Add remaindArticleNumber
+    Set GetHousingMaterialNotwetFromArticleNumber = returnCollection
+End Function
+
+' Get the membrane material from article number
+Private Function GetMembraneMaterialFromArticleNumber(ArticleNumber As String) As Collection
+    Dim membraneMaterialChar As String
+    Dim membraneMaterial As String
+    Dim remainedArticleNumber As String
+    Dim returnCollection As New Collection
+
+    membraneMaterialChar = Mid(ArticleNumber, 1, 1)
+    If MembraneMaterialDictionary.Exists(membraneMaterialChar) Then
+        membraneMaterial = MembraneMaterialDictionary.Item(membraneMaterialChar)
+    Else
+        membraneMaterial = "Unknown"
+    End If
+    remaindArticleNumber = Mid(ArticleNumber, 2)
+    returnCollection.Add membraneMaterialChar
+    returnCollection.Add membraneMaterial
+    returnCollection.Add remaindArticleNumber
+    Set GetMembraneMaterialFromArticleNumber = returnCollection
+End Function
+
+' Get the membrane design from article number
+Private Function GetMembraneDesignFromArticleNumber(ArticleNumber As String) As Collection
+    Dim membraneDesignChar As String
+    Dim membraneDesign As String
+    Dim remainedArticleNumber As String
+    Dim returnCollection As New Collection
+
+    membraneDesignChar = Mid(ArticleNumber, 1, 1)
+    If MembraneDesignDictionary.Exists(membraneDesignChar) Then
+        membraneDesign = MembraneDesignDictionary.Item(membraneDesignChar)
+    Else
+        membraneDesign = "Unknown"
+    End If
+    remaindArticleNumber = Mid(ArticleNumber, 2)
+    returnCollection.Add membraneDesignChar
+    returnCollection.Add membraneDesign
+    returnCollection.Add remaindArticleNumber
+    Set GetMembraneDesignFromArticleNumber = returnCollection
+End Function
+
+' Get the check valve material from article number
+Private Function GetCheckValveMaterialFromArticleNumber(ArticleNumber As String) As Collection
+    Dim checkValveMaterialChar As String
+    Dim checkValveMaterial As String
+    Dim remainedArticleNumber As String
+    Dim returnCollection As New Collection
+
+    checkValveMaterialChar = Mid(ArticleNumber, 1, 1)
+    If CheckValveMaterialDictionary.Exists(checkValveMaterialChar) Then
+        checkValveMaterial = CheckValveMaterialDictionary.Item(checkValveMaterialChar)
+    Else
+        checkValveMaterial = "Unknown"
+    End If
+    remaindArticleNumber = Mid(ArticleNumber, 2)
+    returnCollection.Add checkValveMaterialChar
+    returnCollection.Add checkValveMaterial
+    returnCollection.Add remaindArticleNumber
+    Set GetCheckValveMaterialFromArticleNumber = returnCollection
+End Function
+
+' Get the valve seat material from article number
+Private Function GetValveSeatMaterialFromArticleNumber(ArticleNumber As String) As Collection
+    Dim valveSeatMaterialChar As String
+    Dim valveSeatMaterial As String
+    Dim remainedArticleNumber As String
+    Dim returnCollection As New Collection
+
+    valveSeatMaterialChar = Mid(ArticleNumber, 1, 1)
+    If ValveSeatMaterialDictionary.Exists(valveSeatMaterialChar) Then
+        valveSeatMaterial = ValveSeatMaterialDictionary.Item(valveSeatMaterialChar)
+    Else
+        valveSeatMaterial = "Unknown"
+    End If
+    remaindArticleNumber = Mid(ArticleNumber, 2)
+    returnCollection.Add valveSeatMaterialChar
+    returnCollection.Add valveSeatMaterial
+    returnCollection.Add remaindArticleNumber
+    Set GetValveSeatMaterialFromArticleNumber = returnCollection
+End Function
+
+' Get the housing design from article number
+Private Function GetHousingDesignFromArticleNumber(ArticleNumber As String) As Collection
+    Dim housingDesignChar As String
+    Dim housingDesign As String
+    Dim remainedArticleNumber As String
+    Dim returnCollection As New Collection
+
+    housingDesignChar = Mid(ArticleNumber, 1, 1)
+    If HousingDesignDictionary.Exists(housingDesignChar) Then
+        housingDesign = HousingDesignDictionary.Item(housingDesignChar)
+    Else
+        housingDesign = "Unknown"
+    End If
+    remaindArticleNumber = Mid(ArticleNumber, 2)
+    returnCollection.Add housingDesignChar
+    returnCollection.Add housingDesign
+    returnCollection.Add remaindArticleNumber
+    Set GetHousingDesignFromArticleNumber = returnCollection
+End Function
+
+' Get the revision level from article number
+Private Function GetRevisionLevelFromArticleNumber(ArticleNumber As String) As Collection
+    Dim revisionLevelChar As String
+    Dim revisionLevel As String
+    Dim remainedArticleNumber As String
+    Dim returnCollection As New Collection
+
+    revisionLevelChar = Mid(ArticleNumber, 1, 1)
+    If RevisionLevelDictionary.Exists(revisionLevelChar) Then
+        revisionLevel = RevisionLevelDictionary.Item(revisionLevelChar)
+    Else
+        revisionLevel = "Unknown"
+    End If
+    remaindArticleNumber = Mid(ArticleNumber, 2)
+    returnCollection.Add revisionLevelChar
+    returnCollection.Add revisionLevel
+    returnCollection.Add remaindArticleNumber
+    Set GetRevisionLevelFromArticleNumber = returnCollection
 End Function
 
 Sub BreakdownArticleName()
@@ -240,7 +471,7 @@ Sub BreakdownArticleName()
     Dim lastRow As Long, i As Long
     Dim articleNum As String
     Dim model As String, connSize As String, housingWet As String
-    Dim housingDry As String, memMaterial As String, memDesign As String
+    Dim housingNotwet As String, memMaterial As String, memDesign As String
     Dim checkValve As String, valveSeat As String, housingDesign As String
     Dim revision As String, options As String
     Dim outputRow As Long
@@ -251,20 +482,6 @@ Sub BreakdownArticleName()
 
     ' Find last row in INPUT sheet
     lastRow = wsInput.Cells(wsInput.Rows.Count, 1).End(xlUp).Row
-    
-    ' Set headers in OUTPUT sheet
-    ' wsOutput.Cells(1, 1).Value = "Article Number"
-    ' wsOutput.Cells(1, 2).Value = "Model"
-    ' wsOutput.Cells(1, 3).Value = "Connection Size"
-    ' wsOutput.Cells(1, 4).Value = "Housing Material (Wet)"
-    ' wsOutput.Cells(1, 5).Value = "Housing Material (Dry)"
-    ' wsOutput.Cells(1, 6).Value = "Membrane Material"
-    ' wsOutput.Cells(1, 7).Value = "Membrane Design Check"
-    ' wsOutput.Cells(1, 8).Value = "Check Valve Material"
-    ' wsOutput.Cells(1, 9).Value = "Valve Seat Material"
-    ' wsOutput.Cells(1, 10).Value = "Housing Design"
-    ' wsOutput.Cells(1, 11).Value = "Revision Level"
-    ' wsOutput.Cells(1, 12).Value = "Options"
 
     ' Loop through each article number
     outputRow = 2 ' Start from row 2 in OUTPUT sheet
@@ -274,37 +491,50 @@ Sub BreakdownArticleName()
         ' Check if article number is valid
         If Len(articleNum) >= 11 Then
             ' Extract components based on predefined structure
-            model = Mid(articleNum, 1, 1)
-            connSize = Mid(articleNum, 2, 1)
-            housingWet = Mid(articleNum, 3, 1)
-            housingDry = Mid(articleNum, 4, 1)
-            memMaterial = Mid(articleNum, 5, 1)
-            memDesign = Mid(articleNum, 6, 1)
-            checkValve = Mid(articleNum, 7, 1)
-            valveSeat = Mid(articleNum, 8, 1)
-            housingDesign = Mid(articleNum, 9, 1)
-            revision = Mid(articleNum, 10, 1)
-            
-            ' Extract options (if present)
-            If InStr(articleNum, "-") > 0 Then
-                options = Mid(articleNum, InStr(articleNum, "-"))
-            Else
-                options = ""
-            End If
+            modelChar = GetModelFromArticleNumber(articleNum).Item(1)
+            model = GetModelFromArticleNumber(articleNum).Item(2)
+            remainedArticleNum = GetModelFromArticleNumber(articleNum).Item(3)
+            connSizeChar = GetConnectionSizeFromArticleNumber(Cstr(remainedArticleNum)).Item(1)
+            connSize = GetConnectionSizeFromArticleNumber(Cstr(remainedArticleNum)).Item(2)
+            remainedArticleNum = GetConnectionSizeFromArticleNumber(Cstr(remainedArticleNum)).Item(3)
+            housingWetChar = GetHousingMaterialWetFromArticleNumber(Cstr(remainedArticleNum)).Item(1)
+            housingWet = GetHousingMaterialWetFromArticleNumber(Cstr(remainedArticleNum)).Item(2)
+            remainedArticleNum = GetHousingMaterialWetFromArticleNumber(Cstr(remainedArticleNum)).Item(3)
+            housingNotwetChar = GetHousingMaterialNotwetFromArticleNumber(Cstr(remainedArticleNum)).Item(1)
+            housingNotwet = GetHousingMaterialNotwetFromArticleNumber(Cstr(remainedArticleNum)).Item(2)
+            remainedArticleNum = GetHousingMaterialNotwetFromArticleNumber(Cstr(remainedArticleNum)).Item(3)
+            memMaterialChar = GetMembraneMaterialFromArticleNumber(Cstr(remainedArticleNum)).Item(1)
+            memMaterial = GetMembraneMaterialFromArticleNumber(Cstr(remainedArticleNum)).Item(2)
+            remainedArticleNum = GetMembraneMaterialFromArticleNumber(Cstr(remainedArticleNum)).Item(3)
+            memDesignChar = GetMembraneDesignFromArticleNumber(Cstr(remainedArticleNum)).Item(1)
+            memDesign = GetMembraneDesignFromArticleNumber(Cstr(remainedArticleNum)).Item(2)
+            remainedArticleNum = GetMembraneDesignFromArticleNumber(Cstr(remainedArticleNum)).Item(3)
+            checkValveChar = GetCheckValveMaterialFromArticleNumber(Cstr(remainedArticleNum)).Item(1)
+            checkValve = GetCheckValveMaterialFromArticleNumber(Cstr(remainedArticleNum)).Item(2)
+            remainedArticleNum = GetCheckValveMaterialFromArticleNumber(Cstr(remainedArticleNum)).Item(3)
+            valveSeatChar = GetValveSeatMaterialFromArticleNumber(Cstr(remainedArticleNum)).Item(1)
+            valveSeat = GetValveSeatMaterialFromArticleNumber(Cstr(remainedArticleNum)).Item(2)
+            remainedArticleNum = GetValveSeatMaterialFromArticleNumber(Cstr(remainedArticleNum)).Item(3)
+            housingDesignChar = GetHousingDesignFromArticleNumber(Cstr(remainedArticleNum)).Item(1)
+            housingDesign = GetHousingDesignFromArticleNumber(Cstr(remainedArticleNum)).Item(2)
+            remainedArticleNum = GetHousingDesignFromArticleNumber(Cstr(remainedArticleNum)).Item(3)
+            revisionChar = GetRevisionLevelFromArticleNumber(Cstr(remainedArticleNum)).Item(1)
+            revision = GetRevisionLevelFromArticleNumber(Cstr(remainedArticleNum)).Item(2)
+            ' remainedArticleNum = GetRevisionLevelFromArticleNumber(Cstr(remainedArticleNum)).Item(3)
             
             ' Write data to OUTPUT sheet
             wsOutput.Cells(outputRow, 1).Value = articleNum
             wsOutput.Cells(outputRow, 2).Value = model
             wsOutput.Cells(outputRow, 3).Value = connSize
             wsOutput.Cells(outputRow, 4).Value = housingWet
-            wsOutput.Cells(outputRow, 5).Value = housingDry
+            wsOutput.Cells(outputRow, 5).Value = housingNotwet
             wsOutput.Cells(outputRow, 6).Value = memMaterial
             wsOutput.Cells(outputRow, 7).Value = memDesign
             wsOutput.Cells(outputRow, 8).Value = checkValve
             wsOutput.Cells(outputRow, 9).Value = valveSeat
             wsOutput.Cells(outputRow, 10).Value = housingDesign
-            wsOutput.Cells(outputRow, 11).Value = revision
-            wsOutput.Cells(outputRow, 12).Value = options
+            ' wsOutput.Cells(outputRow, 11).Value = revision
+            ' wsOutput.Cells(outputRow, 12).Value = options
             
             ' Move to next row in OUTPUT sheet
             outputRow = outputRow + 1
