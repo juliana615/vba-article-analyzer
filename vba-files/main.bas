@@ -1262,6 +1262,56 @@ Private  Function GetSuctionHeightWetted(connectionSize As String, housingMateri
     End Select
 End Function
 
+' Get suction height dry
+Private  Function GetSuctionHeightDry(connectionSize As String, housingMaterialWet As String, housingDesign As String, options As String) As String
+    Select Case connectionSize
+    Case "1"
+        If options = "-ATEX" Then
+            GetSuctionHeightDry = "4,6"
+        Else
+            GetSuctionHeightDry = "4,9"
+        End If
+    Case "2"
+        If options = "-FP" Or options = "-SP" Or options = "-3A" Then
+            GetSuctionHeightDry = "5,1"
+        Else
+            If housingMaterialWet = "S" Then
+                GetSuctionHeightDry = "4,3"
+            ElseIf housingMaterialWet = "K" Or housingMaterialWet = "P" Then
+                GetSuctionHeightDry = "4,9"
+            Else
+                If housingDesign = "0" Then
+                    GetSuctionHeightDry = "5,2"
+                Else
+                    GetSuctionHeightDry = "5,5"
+                End If
+            End If
+        End If
+    Case "3"
+        If housingDesign = "0" Then
+            GetSuctionHeightDry = "6,1"
+        Else
+            GetSuctionHeightDry = "4,9"
+        End If
+    Case "4"
+        If housingDesign = "0" Then
+            GetSuctionHeightDry = "4,6"
+        Else
+            GetSuctionHeightDry = "4,5"
+        End If
+    Case "40"
+        GetSuctionHeightDry = "5,8"
+    Case "5"
+        GetSuctionHeightDry = "3,9"
+    Case "6"
+        GetSuctionHeightDry = "2,4"
+    Case "7"
+        GetSuctionHeightDry = "3,9"
+    Case "8"
+        GetSuctionHeightDry = "2,4"
+    End Select
+End Function
+    
 Sub BreakdownArticleName()
     Dim wsInput As Worksheet, wsOutput As Worksheet
     Dim lastRow As Long, i As Long
@@ -1371,6 +1421,8 @@ Sub BreakdownArticleName()
 
         suctionHeightWetted = GetSuctionHeightWetted(connSizeChar, housingWetChar, housingDesignChar, optionsChar)
 
+        suctionHeightDry = GetSuctionHeightDry(connSizeChar, housingWetChar, housingDesignChar, optionsChar)
+
         ' Write data to OUTPUT sheet
         wsOutput.Cells(outputRow, 1).Value = articleNum
         wsOutput.Cells(outputRow, 2).Value = model
@@ -1392,6 +1444,7 @@ Sub BreakdownArticleName()
         wsOutput.Cells(outputRow, 18).Value = connectionSizeForSuction
         wsOutput.Cells(outputRow, 19).Value = connectionSizeForPressure
         wsOutput.Cells(outputRow, 20).Value = suctionHeightWetted
+        wsOutput.Cells(outputRow, 21).Value = suctionHeightDry
         ' wsOutput.Cells(outputRow, 11).Value = revision
         ' wsOutput.Cells(outputRow, 12).Value = options
         
