@@ -230,18 +230,6 @@ Private Function OptionsDictionary() As Dictionary
     Set OptionsDictionary = obj
 End Function
 
-' Get the keys of given dictionary
-' Private Function GetDictionaryKeys(dict As Dictionary) As Collection
-'     Dim key As Variant
-'     Dim keys As New Collection
-    
-'     For Each key In dict.Keys
-'         keys.Add key
-'     Next key
-    
-'     Set GetDictionaryKeys = keys
-' End Function
-
 ' Get the model from article number
 Private Function GetModelFromArticleNumber(ArticleNumber As String) As Collection
     Dim modelChar As String
@@ -560,6 +548,24 @@ Private Function GetFDACompliance(model As String, meterialWet As String, membra
     GetFDACompliance = "Ohne FDA-Konformität"
 End Function
     
+' Get explosion protection from article number
+Private Function GetExplosionProtectionFromArticleNumber(ArticleNumber As String) As String
+    Dim options As String
+    Dim lastChar As String
+
+    If ArticleNumber = "" Then
+        GetExplosionProtectionFromArticleNumber = "Ohne Explosionsschutz (ATEX)"
+        Exit Function
+    Else
+        lastChar = Right(ArticleNumber, 5)
+        If lastChar = "-ATEX" Then
+            GetExplosionProtectionFromArticleNumber = "Inkl. Explosionsschutz (ATEX)"
+        Else
+            GetExplosionProtectionFromArticleNumber = "Ohne Explosionsschutz (ATEX)"
+        End If
+    End If
+End Function
+    
 Sub BreakdownArticleName()
     Dim wsInput As Worksheet, wsOutput As Worksheet
     Dim lastRow As Long, i As Long
@@ -651,6 +657,8 @@ Sub BreakdownArticleName()
         ' Debug.Print("articleNum " & articleNum & ": " & "optionsChar: " & optionsChar)
         FDACompliance = GetFDACompliance(Cstr(modelChar), Cstr(housingWetChar), Cstr(memMaterialChar), Cstr(checkValveChar), Cstr(valveSeatChar), Cstr(optionsChar))
 
+        explosionProtection = GetExplosionProtectionFromArticleNumber(articleNum)
+
         ' Write data to OUTPUT sheet
         wsOutput.Cells(outputRow, 1).Value = articleNum
         wsOutput.Cells(outputRow, 2).Value = model
@@ -663,6 +671,7 @@ Sub BreakdownArticleName()
         wsOutput.Cells(outputRow, 9).Value = valveSeat
         wsOutput.Cells(outputRow, 10).Value = housingDesign
         wsOutput.Cells(outputRow, 11).Value = FDACompliance
+        wsOutput.Cells(outputRow, 12).Value = explosionProtection
         ' wsOutput.Cells(outputRow, 11).Value = revision
         ' wsOutput.Cells(outputRow, 12).Value = options
         
