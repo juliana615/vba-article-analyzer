@@ -566,6 +566,48 @@ Private Function GetExplosionProtectionFromArticleNumber(ArticleNumber As String
     End If
 End Function
     
+' Get the maximum solid size from connection size, housing material wet and housing design
+Private Function GetMaxSolidSize(connectionSize As String, housingMaterialWet As String, housingDesign As String) As String
+    Select Case connectionSize
+    Case "1"
+        GetMaxSolidSize = "3,2"
+    Case "2"
+        Select Case housingMaterialWet
+        Case "S"
+            GetMaxSolidSize = "6,0"
+        Case "P"
+            GetMaxSolidSize = "6,3"
+        Case "K"
+            GetMaxSolidSize = "6,3"
+        Case "A"
+            GetMaxSolidSize = "11,1"
+        Case Else
+            If housingDesign = "0" Then
+                GetMaxSolidSize = "6,4"
+            Else
+                GetMaxSolidSize = "46,0"
+            End If
+        End Select
+    Case "3"
+        GetMaxSolidSize = "9,5"
+    Case "4"
+        GetMaxSolidSize = "4,8"
+    Case "40"
+        GetMaxSolidSize = "6,0"
+    Case "5"
+        GetMaxSolidSize = "1,6"
+    Case "6"
+        GetMaxSolidSize = "1,0"
+    Case "7"
+        GetMaxSolidSize = "1,6"
+    Case "8"
+        GetMaxSolidSize = "2,5"
+    Case Else
+        GetMaxSolidSize = "Unknown"
+    End Select
+
+End Function
+    
 Sub BreakdownArticleName()
     Dim wsInput As Worksheet, wsOutput As Worksheet
     Dim lastRow As Long, i As Long
@@ -659,6 +701,8 @@ Sub BreakdownArticleName()
 
         explosionProtection = GetExplosionProtectionFromArticleNumber(articleNum)
 
+        maxSolidSize = GetMaxSolidSize(connSizeChar, housingWetChar, housingDesignChar)
+
         ' Write data to OUTPUT sheet
         wsOutput.Cells(outputRow, 1).Value = articleNum
         wsOutput.Cells(outputRow, 2).Value = model
@@ -672,6 +716,7 @@ Sub BreakdownArticleName()
         wsOutput.Cells(outputRow, 10).Value = housingDesign
         wsOutput.Cells(outputRow, 11).Value = FDACompliance
         wsOutput.Cells(outputRow, 12).Value = explosionProtection
+        wsOutput.Cells(outputRow, 13).Value = maxSolidSize
         ' wsOutput.Cells(outputRow, 11).Value = revision
         ' wsOutput.Cells(outputRow, 12).Value = options
         
