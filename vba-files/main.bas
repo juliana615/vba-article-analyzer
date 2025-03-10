@@ -1151,7 +1151,7 @@ Private  Function GetConnectionSizeForSuction(connectionSize As String, options 
         Else
             GetConnectionSizeForSuction = "1"
         End If
-    Case "21"
+    Case "2"
         If options = "-FP" Or options = "-SP" Then
             GetConnectionSizeForSuction = "2 1/2"
         Else
@@ -1193,7 +1193,7 @@ Private  Function GetConnectionSizeForPressure(connectionSize As String, options
         Else
             GetConnectionSizeForPressure = "1"
         End If
-    Case "21"
+    Case "2"
         If options = "-FP" Or options = "-SP" Then
             GetConnectionSizeForPressure = "2 1/2"
         Else
@@ -1223,6 +1223,42 @@ Private  Function GetConnectionSizeForPressure(connectionSize As String, options
         GetConnectionSizeForPressure = "3/4"
     Case "8"
         GetConnectionSizeForPressure = "3/8"
+    End Select
+End Function
+
+' Get suction height wetted
+Private  Function GetSuctionHeightWetted(connectionSize As String, housingMaterialWet As String, housingDesign As String, options As String) As String
+    Select Case connectionSize
+    Case "1"
+        GetSuctionHeightWetted = "9,4"
+    Case "2"
+        If housingMaterialWet = "S" Then
+            GetSuctionHeightWetted = "9,1"
+        Else
+            If options = "-FP" Or options = "-SP" Or options = "-3A" Then
+                GetSuctionHeightWetted = "9,5"
+            Else
+                GetSuctionHeightWetted = "9,8"
+            End If
+        End If
+    Case "3"
+        If housingDesign = "0" Then
+            GetSuctionHeightWetted = "9,8"
+        Else
+            GetSuctionHeightWetted = "9,4"
+        End If
+    Case "4"
+        GetSuctionHeightWetted = "7,6"
+    Case "40"
+        GetSuctionHeightWetted = "9,4"
+    Case "5"
+        GetSuctionHeightWetted = "6,7"
+    Case "6"
+        GetSuctionHeightWetted = "n/a"
+    Case "7"
+        GetSuctionHeightWetted = "6,7"
+    Case "8"
+        GetSuctionHeightWetted = "n/a"
     End Select
 End Function
 
@@ -1333,6 +1369,8 @@ Sub BreakdownArticleName()
 
         connectionSizeForPressure = GetConnectionSizeForPressure(connSizeChar, optionsChar)
 
+        suctionHeightWetted = GetSuctionHeightWetted(connSizeChar, housingWetChar, housingDesignChar, optionsChar)
+
         ' Write data to OUTPUT sheet
         wsOutput.Cells(outputRow, 1).Value = articleNum
         wsOutput.Cells(outputRow, 2).Value = model
@@ -1350,8 +1388,10 @@ Sub BreakdownArticleName()
         wsOutput.Cells(outputRow, 14).Value = flowRatePerStroke
         wsOutput.Cells(outputRow, 15).Value = maxDischargePressure
         wsOutput.Cells(outputRow, 16).Value = conveyingCapacity
-        wsOutput.Cells(outputRow, 17).Value = connectionSizeForSuction
-        wsOutput.Cells(outputRow, 17).Value = connectionSizeForPressure
+        wsOutput.Cells(outputRow, 17).Value = connectionType
+        wsOutput.Cells(outputRow, 18).Value = connectionSizeForSuction
+        wsOutput.Cells(outputRow, 19).Value = connectionSizeForPressure
+        wsOutput.Cells(outputRow, 20).Value = suctionHeightWetted
         ' wsOutput.Cells(outputRow, 11).Value = revision
         ' wsOutput.Cells(outputRow, 12).Value = options
         
