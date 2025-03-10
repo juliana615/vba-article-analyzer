@@ -202,29 +202,29 @@ Private Function RevisionLevelDictionary() As Dictionary
     Set RevisionLevelDictionary = obj
 End Function
     
-' Optionen		
+' Optionsen		
 Private Function OptionsDictionary() As Dictionary
     Static obj As Dictionary
     
     If obj Is Nothing Then
         Set obj = New Dictionary
-        obj.Add "ATEX", "ATEX Compliant"
-        obj.Add "B", "BSP threaded"
-        obj.Add "CP", "Center Port"
-        obj.Add "DV", "Drop in Bolted Units to Replace VM Clamped (2”+3” Al & SS Only)"
-        obj.Add "FP", "Food Processing"
-        obj.Add "HD", "Horizontal Discharge   "
-        obj.Add "SP", "Sanitary Processing "
-        obj.Add "3A", "3A Sanitary"
-        obj.Add "HP", "High Pressure"
-        obj.Add "DW", "Drop in Bolted Units to Replace Wilden Clamped (2”+3” Al & SS Only)"
-        obj.Add "F", "Flap Valve 2” Al Only)"
-        obj.Add "OB", "Oil Bottle (V-Series Only"
-        obj.Add "SM", "Split Mainfold"
-        obj.Add "UL", "UL Listed"
-        obj.Add "E4", "120VAC Coil"
-        obj.Add "E0", "24VDC Coil "
-        obj.Add "U", "Universal ANSI/DIN Flange"
+        obj.Add "-ATEX", "ATEX Compliant"
+        obj.Add "-B", "BSP threaded"
+        obj.Add "-CP", "Center Port"
+        obj.Add "-DV", "Drop in Bolted Units to Replace VM Clamped (2”+3” Al & SS Only)"
+        obj.Add "-FP", "Food Processing"
+        obj.Add "-HD", "Horizontal Discharge   "
+        obj.Add "-SP", "Sanitary Processing "
+        obj.Add "-3A", "3A Sanitary"
+        obj.Add "-HP", "High Pressure"
+        obj.Add "-DW", "Drop in Bolted Units to Replace Wilden Clamped (2”+3” Al & SS Only)"
+        obj.Add "-F", "Flap Valve 2” Al Only)"
+        obj.Add "-OB", "Oil Bottle (V-Series Only"
+        obj.Add "-SM", "Split Mainfold"
+        obj.Add "-UL", "UL Listed"
+        obj.Add "-E4", "120VAC Coil"
+        obj.Add "-E0", "24VDC Coil "
+        obj.Add "-U", "Universal ANSI/DIN Flange"
     End If
 
     Set OptionsDictionary = obj
@@ -453,27 +453,130 @@ Private Function GetRevisionLevelFromArticleNumber(ArticleNumber As String) As C
     Dim remainedArticleNumber As String
     Dim returnCollection As New Collection
 
-    revisionLevelChar = Mid(ArticleNumber, 1, 1)
-    If RevisionLevelDictionary.Exists(revisionLevelChar) Then
-        revisionLevel = RevisionLevelDictionary.Item(revisionLevelChar)
-    Else
+    If ArticleNumber = "" Then
+        revisionLevelChar = ""
         revisionLevel = "Unknown"
+        remainedArticleNumber = ""
+        returnCollection.Add revisionLevelChar
+        returnCollection.Add revisionLevel
+        returnCollection.Add remainedArticleNumber
+        Set GetRevisionLevelFromArticleNumber = returnCollection
+        Exit Function
+    else
+        revisionLevelChar = Mid(ArticleNumber, 1, 1)
+        if revisionLevelChar = "-" Then
+            revisionLevelChar = ""
+            revisionLevel = "Unknown"
+            remainedArticleNumber = ArticleNumber
+        Else
+            If RevisionLevelDictionary.Exists(revisionLevelChar) Then
+                revisionLevel = RevisionLevelDictionary.Item(revisionLevelChar)
+            Else
+                revisionLevel = "Unknown"
+            End If
+            remainedArticleNumber = Mid(ArticleNumber, 2)
+        End If
+        returnCollection.Add revisionLevelChar
+        returnCollection.Add revisionLevel
+        returnCollection.Add remainedArticleNumber
+        Set GetRevisionLevelFromArticleNumber = returnCollection
     End If
-    remaindArticleNumber = Mid(ArticleNumber, 2)
-    returnCollection.Add revisionLevelChar
-    returnCollection.Add revisionLevel
-    returnCollection.Add remaindArticleNumber
-    Set GetRevisionLevelFromArticleNumber = returnCollection
+    
 End Function
 
+' Get the options from article number
+Private Function GetOptionsFromArticleNumber(ArticleNumber As String) As Collection
+    Dim options As String
+    Dim firstChar As String
+    Dim returnCollection As New Collection
+
+    If ArticleNumber = "" Then
+        optionsChar = ""
+        options = ""
+        returnCollection.Add optionsChar
+        returnCollection.Add options
+        Set GetOptionsFromArticleNumber = returnCollection
+        Exit Function
+    Else
+        firstChar = Mid(ArticleNumber, 1, 1)
+        if firstChar = "-" Then
+            If InStr(2, ArticleNumber, "-") > 0 Then
+                optionsChar = Mid(ArticleNumber, 1, InStr(2, ArticleNumber, "-") - 1)
+            Else
+                optionsChar = ArticleNumber
+            End If
+            If OptionsDictionary.Exists(optionsChar) Then
+                options = OptionsDictionary.Item(optionsChar)
+            Else
+                options = ""
+            End If
+        Else
+            optionsChar = ""
+            options = ""
+        End If
+
+        returnCollection.Add optionsChar
+        returnCollection.Add options
+        Set GetOptionsFromArticleNumber = returnCollection
+    End If
+    
+End Function
+
+' Get FDA compliance from model, material(wet), membrane material, check valve material, valve seat material, and options
+Private Function GetFDACompliance(model As String, meterialWet As String, membraneMaterial As String, checkValveMeterial As String, valveSeatMaterial As String, options As String) As String
+    Dim ws As Worksheet
+    Dim lastRow As Long
+    Dim i As Long
+    Dim returnString As String
+    
+    ' Set the worksheet where your data is stored
+    ' Set ws = ThisWorkbook.Sheets("FDA-Konformität") ' FDA-Konformität
+    Set ws = Tabelle10 ' FDA-Konformität
+    
+    ' Find the last row in the sheet
+    ' lastRow = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
+    lastRow = 102
+    
+    ' Loop through the rows to find a match
+    For i = 3 To lastRow ' Assuming the first row is headers
+        ' Debug.Print "Row " & i & ": " & ws.Cells(i, 1).Value & ", " & ws.Cells(i, 3).Value & ", " & ws.Cells(i, 5).Value & ", " & ws.Cells(i, 7).Value & ", " & ws.Cells(i, 8).Value & ", " & ws.Cells(i, 11).Value
+        ' Debug.Print "Input: " & model & ", " & meterialWet & ", " & membraneMaterial & ", " & checkValveMeterial & ", " & valveSeatMaterial & ", " & options
+
+        ' Check if the values match
+        If ws.Cells(i, 1).Value = model And _
+            ws.Cells(i, 3).Value = meterialWet And _
+            ws.Cells(i, 5).Value = membraneMaterial And _
+            ws.Cells(i, 7).Value = checkValveMeterial And _
+            ws.Cells(i, 8).Value = valveSeatMaterial And _
+            ws.Cells(i, 11).Value = options Then
+            ' Return the corresponding clothes name
+            Debug.Print "Match found: " & ws.Cells(i, 12).Value
+            GetFDACompliance = ws.Cells(i, 12).Value
+            Exit Function
+        End If
+    Next i
+    
+    ' If no match is found, return the default value "Ohne FDA-Konformität"
+    GetFDACompliance = "Ohne FDA-Konformität"
+End Function
+    
 Sub BreakdownArticleName()
     Dim wsInput As Worksheet, wsOutput As Worksheet
     Dim lastRow As Long, i As Long
-    Dim articleNum As String
-    Dim model As String, connSize As String, housingWet As String
-    Dim housingNotwet As String, memMaterial As String, memDesign As String
-    Dim checkValve As String, valveSeat As String, housingDesign As String
-    Dim revision As String, options As String
+    Dim articleNum As String, remainedArticleNum As String
+
+    Dim modelResult As Collection, modelChar As String, model As String
+    Dim connSizeResult As Collection, connSizeChar As String, connSize As String
+    Dim housingWetResult As Collection, housingWetChar As String, housingWet As String
+    Dim housingNotwetResult As Collection, housingNotwetChar As String, housingNotwet As String
+    Dim memMaterialResult As Collection, memMaterialChar As String, memMaterial As String
+    Dim memDesignResult As Collection, memDesignChar As String, memDesign As String
+    Dim checkValveResult As Collection, checkValveChar As String, checkValve As String
+    Dim valveSeatResult As Collection, valveSeatChar As String, valveSeat As String
+    Dim housingDesignResult As Collection, housingDesignChar As String, housingDesign As String
+    Dim revisionResult As Collection, revisionChar As String, revision As String
+    Dim optionsResult As Collection, optionsChar As String, options As String
+    Dim FDACompliance As String
     Dim outputRow As Long
     
     ' Set worksheet references
@@ -487,58 +590,84 @@ Sub BreakdownArticleName()
     outputRow = 2 ' Start from row 2 in OUTPUT sheet
     For i = 5 To lastRow
         articleNum = wsInput.Cells(i, 1).Value ' Read article number
-        
+
         ' Check if article number is valid
-        If Len(articleNum) >= 11 Then
+        ' If Len(articleNum) >= 11 Then
             ' Extract components based on predefined structure
-            modelChar = GetModelFromArticleNumber(articleNum).Item(1)
-            model = GetModelFromArticleNumber(articleNum).Item(2)
-            remainedArticleNum = GetModelFromArticleNumber(articleNum).Item(3)
-            connSizeChar = GetConnectionSizeFromArticleNumber(Cstr(remainedArticleNum)).Item(1)
-            connSize = GetConnectionSizeFromArticleNumber(Cstr(remainedArticleNum)).Item(2)
-            remainedArticleNum = GetConnectionSizeFromArticleNumber(Cstr(remainedArticleNum)).Item(3)
-            housingWetChar = GetHousingMaterialWetFromArticleNumber(Cstr(remainedArticleNum)).Item(1)
-            housingWet = GetHousingMaterialWetFromArticleNumber(Cstr(remainedArticleNum)).Item(2)
-            remainedArticleNum = GetHousingMaterialWetFromArticleNumber(Cstr(remainedArticleNum)).Item(3)
-            housingNotwetChar = GetHousingMaterialNotwetFromArticleNumber(Cstr(remainedArticleNum)).Item(1)
-            housingNotwet = GetHousingMaterialNotwetFromArticleNumber(Cstr(remainedArticleNum)).Item(2)
-            remainedArticleNum = GetHousingMaterialNotwetFromArticleNumber(Cstr(remainedArticleNum)).Item(3)
-            memMaterialChar = GetMembraneMaterialFromArticleNumber(Cstr(remainedArticleNum)).Item(1)
-            memMaterial = GetMembraneMaterialFromArticleNumber(Cstr(remainedArticleNum)).Item(2)
-            remainedArticleNum = GetMembraneMaterialFromArticleNumber(Cstr(remainedArticleNum)).Item(3)
-            memDesignChar = GetMembraneDesignFromArticleNumber(Cstr(remainedArticleNum)).Item(1)
-            memDesign = GetMembraneDesignFromArticleNumber(Cstr(remainedArticleNum)).Item(2)
-            remainedArticleNum = GetMembraneDesignFromArticleNumber(Cstr(remainedArticleNum)).Item(3)
-            checkValveChar = GetCheckValveMaterialFromArticleNumber(Cstr(remainedArticleNum)).Item(1)
-            checkValve = GetCheckValveMaterialFromArticleNumber(Cstr(remainedArticleNum)).Item(2)
-            remainedArticleNum = GetCheckValveMaterialFromArticleNumber(Cstr(remainedArticleNum)).Item(3)
-            valveSeatChar = GetValveSeatMaterialFromArticleNumber(Cstr(remainedArticleNum)).Item(1)
-            valveSeat = GetValveSeatMaterialFromArticleNumber(Cstr(remainedArticleNum)).Item(2)
-            remainedArticleNum = GetValveSeatMaterialFromArticleNumber(Cstr(remainedArticleNum)).Item(3)
-            housingDesignChar = GetHousingDesignFromArticleNumber(Cstr(remainedArticleNum)).Item(1)
-            housingDesign = GetHousingDesignFromArticleNumber(Cstr(remainedArticleNum)).Item(2)
-            remainedArticleNum = GetHousingDesignFromArticleNumber(Cstr(remainedArticleNum)).Item(3)
-            revisionChar = GetRevisionLevelFromArticleNumber(Cstr(remainedArticleNum)).Item(1)
-            revision = GetRevisionLevelFromArticleNumber(Cstr(remainedArticleNum)).Item(2)
-            ' remainedArticleNum = GetRevisionLevelFromArticleNumber(Cstr(remainedArticleNum)).Item(3)
-            
-            ' Write data to OUTPUT sheet
-            wsOutput.Cells(outputRow, 1).Value = articleNum
-            wsOutput.Cells(outputRow, 2).Value = model
-            wsOutput.Cells(outputRow, 3).Value = connSize
-            wsOutput.Cells(outputRow, 4).Value = housingWet
-            wsOutput.Cells(outputRow, 5).Value = housingNotwet
-            wsOutput.Cells(outputRow, 6).Value = memMaterial
-            wsOutput.Cells(outputRow, 7).Value = memDesign
-            wsOutput.Cells(outputRow, 8).Value = checkValve
-            wsOutput.Cells(outputRow, 9).Value = valveSeat
-            wsOutput.Cells(outputRow, 10).Value = housingDesign
-            ' wsOutput.Cells(outputRow, 11).Value = revision
-            ' wsOutput.Cells(outputRow, 12).Value = options
-            
-            ' Move to next row in OUTPUT sheet
-            outputRow = outputRow + 1
-        End If
+        Set modelResult = GetModelFromArticleNumber(articleNum)
+        modelChar = modelResult.Item(1)
+        model = modelResult.Item(2)
+        remainedArticleNum = modelResult.Item(3)
+
+        Set connSizeResult = GetConnectionSizeFromArticleNumber(Cstr(remainedArticleNum))
+        connSizeChar = connSizeResult.Item(1)
+        connSize = connSizeResult.Item(2)
+        remainedArticleNum = connSizeResult.Item(3)
+
+        Set housingWetResult = GetHousingMaterialWetFromArticleNumber(Cstr(remainedArticleNum))
+        housingWetChar = housingWetResult.Item(1)
+        housingWet = housingWetResult.Item(2)
+        remainedArticleNum = housingWetResult.Item(3)
+
+        Set housingNotwetResult = GetHousingMaterialNotwetFromArticleNumber(Cstr(remainedArticleNum))
+        housingNotwetChar = housingNotwetResult.Item(1)
+        housingNotwet = housingNotwetResult.Item(2)
+        remainedArticleNum = housingNotwetResult.Item(3)
+
+        Set memMaterialResult = GetMembraneMaterialFromArticleNumber(Cstr(remainedArticleNum))
+        memMaterialChar = memMaterialResult.Item(1)
+        memMaterial = memMaterialResult.Item(2)
+        remainedArticleNum = memMaterialResult.Item(3)
+
+        Set memDesignResult = GetMembraneDesignFromArticleNumber(Cstr(remainedArticleNum))
+        memDesignChar = memDesignResult.Item(1)
+        memDesign = memDesignResult.Item(2)
+        remainedArticleNum = memDesignResult.Item(3)
+
+        Set checkValveResult = GetCheckValveMaterialFromArticleNumber(Cstr(remainedArticleNum))
+        checkValveChar = checkValveResult.Item(1)
+        checkValve = checkValveResult.Item(2)
+        remainedArticleNum = checkValveResult.Item(3)
+        
+        Set valveSeatResult = GetValveSeatMaterialFromArticleNumber(Cstr(remainedArticleNum))
+        valveSeatChar = valveSeatResult.Item(1)
+        valveSeat = valveSeatResult.Item(2)
+        remainedArticleNum = valveSeatResult.Item(3)
+
+        Set housingDesignResult = GetHousingDesignFromArticleNumber(Cstr(remainedArticleNum))
+        housingDesignChar = housingDesignResult.Item(1)
+        housingDesign = housingDesignResult.Item(2)
+        remainedArticleNum = housingDesignResult.Item(3)
+
+        Set revisionResult = GetRevisionLevelFromArticleNumber(Cstr(remainedArticleNum))
+        revisionChar = revisionResult.Item(1)
+        revision = revisionResult.Item(2)
+        remainedArticleNum = revisionResult.Item(3)
+
+        Set optionsResult = GetOptionsFromArticleNumber(Cstr(remainedArticleNum))
+        optionsChar = optionsResult.Item(1)
+        options = optionsResult.Item(2)
+
+        ' Debug.Print("articleNum " & articleNum & ": " & "optionsChar: " & optionsChar)
+        FDACompliance = GetFDACompliance(Cstr(modelChar), Cstr(housingWetChar), Cstr(memMaterialChar), Cstr(checkValveChar), Cstr(valveSeatChar), Cstr(optionsChar))
+
+        ' Write data to OUTPUT sheet
+        wsOutput.Cells(outputRow, 1).Value = articleNum
+        wsOutput.Cells(outputRow, 2).Value = model
+        wsOutput.Cells(outputRow, 3).Value = connSize
+        wsOutput.Cells(outputRow, 4).Value = housingWet
+        wsOutput.Cells(outputRow, 5).Value = housingNotwet
+        wsOutput.Cells(outputRow, 6).Value = memMaterial
+        wsOutput.Cells(outputRow, 7).Value = memDesign
+        wsOutput.Cells(outputRow, 8).Value = checkValve
+        wsOutput.Cells(outputRow, 9).Value = valveSeat
+        wsOutput.Cells(outputRow, 10).Value = housingDesign
+        wsOutput.Cells(outputRow, 11).Value = FDACompliance
+        ' wsOutput.Cells(outputRow, 11).Value = revision
+        ' wsOutput.Cells(outputRow, 12).Value = options
+        
+        ' Move to next row in OUTPUT sheet
+        outputRow = outputRow + 1
     Next i
     
     MsgBox "Article numbers processed successfully!", vbInformation, "Done"
