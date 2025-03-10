@@ -1013,6 +1013,135 @@ Private Function GetConveyingCapacity(connectionSize As String, housingMaterialW
     End Select
 End Function
 
+' Get connection type
+Private  Function GetConnectionType(connectionSize As String, materialWet As String, materialNotwet As String, housingDesign As String, options As String) As String
+    Select Case connectionSize
+    Case "1"
+        Select Case materialWet
+        Case "P"
+            GetConnectionType = "Flanged - End Ported"
+        Case "K"
+            GetConnectionType = "Flanged - End Ported"
+        Case "A"
+            GetConnectionType = "NPT"
+        Case Else
+            Select Case options
+            Case "-B"
+                GetConnectionType = "BSP"
+            Case "-FP"
+                GetConnectionType = "TRI-CLAMP"
+            Case "-CP"
+                GetConnectionType = "Flanged - Center Ported"
+            Case Else
+                GetConnectionType = "NPT"
+            End Select
+        End Select
+    Case "2"
+        Select Case options
+        Case "-B"
+            GetConnectionType = "BSP"
+        Case "-HD"
+            GetConnectionType = "Flanged - Horizontal Discharge"
+        Case "-CP"
+            GetConnectionType = "Flanged - Center Ported"
+        Case "-N"
+            GetConnectionType = "NPT"
+        Case "-F"
+            GetConnectionType = "Universal ANSI/DIN Flange"
+        Case "-HP"
+            GetConnectionType = "NPT"
+        Case "-SP"
+            GetConnectionType = "TRI-CLAMP"
+        Case "-FP"
+            If materialNotwet = "J" Then
+                GetConnectionType = "TRI-CLAMP"
+            Else
+                GetConnectionType = "NPT"
+            End If
+        Case Else
+            Select Case materialWet
+            Case "S"
+                GetConnectionType = "Flanged - Vertical Discharge"
+            Case "K"
+                GetConnectionType = "Flanged - End Ported"
+            Case "P"
+                GetConnectionType = "Flanged - End Ported"
+            End Select
+        End Select
+    Case "3"
+        Select Case options
+        Case "-B"
+            GetConnectionType = "BSP"
+        Case "-FP"
+            GetConnectionType = "TRI-CLAMP"
+        Case Else
+            If housingDesign = "9" Then
+                If materialWet = "A" Or materialWet = "S" Then
+                    GetConnectionType = "Flanged - Horizontal Discharge"
+                ElseIf materialWet = "K" Or materialWet = "P" Then
+                    GetConnectionType = "Flanged - Center Ported"
+                Else
+                    GetConnectionType = "NPT"
+                End If
+            Else
+                GetConnectionType = "NPT"
+            End If
+        End Select
+    Case "4"
+        If options = "-B" Then
+            GetConnectionType = "BSP"
+        ElseIf options = "-FP" Or options = "-SP" Or options = "-3A" Then
+            GetConnectionType = "TRI-CLAMP"
+        ElseIf options = "-HD" Then
+            GetConnectionType = "Flanged - Horizontal Discharge"
+        Else
+            If housingDesign = "0" Then
+                If housingMaterial = "S" Then
+                    GetConnectionType = "NPT-Vertical Discharge"
+                Else
+                    GetConnectionType = "NPT"
+                End If
+            Else
+                If housingMaterial = "S" Then
+                    GetConnectionType = "Flanged - Vertical Discharge"
+                Else
+                    GetConnectionType = "Flanged - Center Ported"
+                End If
+            End If
+        End If
+    Case "40"
+        If options = "-B" Then
+            GetConnectionType = "BSP"
+        ElseIf options = "-A" Then
+            GetConnectionType = "Stainless Steel ANSI flange kit w/ nipple"
+        Else
+            If housingMaterial = "K" Or housingMaterial = "P" Then
+                GetConnectionType = "Flanged - Center Ported"
+            Else
+                GetConnectionType = "NPT"
+            End If
+        End If
+    Case "4D"
+        If options = "-B" Then
+            GetConnectionType = "BSP"
+        Else
+            GetConnectionType = "NPT"
+        End If
+    Case "5"
+        If options = "-FP" Then
+            GetConnectionType = "TRI-CLAMP"
+        Else
+            GetConnectionType = "NPT"
+        End If
+    Case "6"
+        GetConnectionType = "NPT"
+    Case "7"
+        GetConnectionType = "NPT"
+    Case "8"
+        GetConnectionType = "NPT"
+    End Select
+End Function
+
 Sub BreakdownArticleName()
     Dim wsInput As Worksheet, wsOutput As Worksheet
     Dim lastRow As Long, i As Long
@@ -1113,6 +1242,9 @@ Sub BreakdownArticleName()
         maxDischargePressure = GetMaxDischargePressure(connSizeChar, housingWetChar, housingNotwet, optionsChar)
 
         conveyingCapacity = GetConveyingCapacity(connSizeChar, housingWetChar, housingNotwetChar, memMaterialChar, memDesignChar, housingDesignChar, optionsChar)
+
+        connectionType = GetConnectionType(connSizeChar, housingWetChar, housingNotwetChar, housingDesignChar, optionsChar)
+
 
         ' Write data to OUTPUT sheet
         wsOutput.Cells(outputRow, 1).Value = articleNum
