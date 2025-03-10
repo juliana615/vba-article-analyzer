@@ -1472,6 +1472,352 @@ Private Function GetMaxTemperature(membraneMaterialChar As String) As String
     GetMaxTemperature = returnString
 End Function
 
+' Get weight, length, width, and heigth
+Private  Function GetWeightLengthWidthHeight(connectionSize As String, materialWet As String, materialNotwet As String, housingDesign As String, connectionType As String, options As String) As Collection
+    Dim weight As String
+    Dim length As String
+    Dim width As String
+    Dim height As String
+    Dim returnCollection As New Collection
+    
+    Select Case connectionSize
+    Case "1"
+        Select Case materialWet
+        Case "A"
+            If materialNotwet = "P" Then
+                weight = "10"
+                length = "20,5"
+                width = "27,2"
+                height = "36,9"
+            ElseIf materialNotwet = "A" Then
+                weight = "12,2"
+                length = "20,5"
+                width = "27,2"
+                height = "36,9"
+            End If
+        Case "S"
+            weight = "18,1"
+            length = "20,5"
+            width = "27,2"
+            height = "36,9"
+        Case "K"
+            weight = "11,8"
+            length = "20,6"
+            width = "34,3"
+            height = "43"
+        Case "P"
+            weight = "7,7"
+            length = "20,6"
+            width = "34,3"
+            height = "43"
+        End Select
+    Case "2"
+        Select Case materialWet
+        Case "A"
+            If housingDesign = "9" Then
+                weight = "36,7"
+                length = "33,4"
+                width = "45"
+                height = "67,2"
+            Else
+                weight = "29,5"
+                length = "34,5"
+                width = "41,6"
+                height = "67,8"
+            End If
+        Case "C"
+            weight = "51,3"
+            length = "34,5"
+            width = "41,6"
+            height = "66,5"
+        Case "K"
+            If connectionType = "Flanged End Ported" Then
+                weight = "42,2"
+                length = "30,5"
+                width = "50,3"
+                height = "76,8"
+            Else
+                weight = "45,4"
+                length = "30,5"
+                width = "44,5"
+                height = "76,8"
+            End If
+        Case "P"
+            If connectionType = "Flanged Center Ported" Then
+                weight = "33,1"
+                length = "30,5"
+                width = "44,5"
+                height = "76,8"
+            ElseIf connectionType = "Flanged End Ported" Then
+                weight = "31,3"
+                length = "30,5"
+                width = "50,3"
+                height = "76,8"
+            Else
+                weight = "26"
+                length = "50,3"
+                width = "30,5"
+                height = "76,9"
+            End If
+        Case "S"
+            If materialNotwet = "S" Then
+                If options = "-SP" Or options = "-3A" Then
+                    weight = "74,8"
+                    length = "43,4"
+                    width = "47,2"
+                    height = "88,1"
+                ElseIf options = "-FP" Then
+                    weight = "66,2"
+                    length = "34,5"
+                    width = "43,6"
+                    height = "66,6"
+                End If
+            ElseIf materialNotwet = "J" Then
+                If options = "-SP" Then
+                    weight = "60,8"
+                    length = "43,4"
+                    width = "47,2"
+                    height = "88,1"
+                ElseIf options = "-3A" Then
+                    weight = "60,8"
+                    length = "34,5"
+                    width = "43,6"
+                    height = "66,6"
+                End If
+            Else
+                If options = "-HD" Then
+                    weight = "65,8"
+                    length = "30,5"
+                    width = "45"
+                    height = "71,1"
+                Else
+                    weight = "65,8"
+                    length = "30,5"
+                    width = "45"
+                    height = "70,6"
+                End If
+            End If
+        End Select
+    Case "3"
+        Select Case materialWet
+        Case "A"
+            If housingDesign = "0" Then
+                weight = "49"
+                length = "38,1"
+                width = "50,8"
+                height = "81,5"
+            Else
+                weight = "76,2"
+                length = "40,9"
+                width = "63,8"
+                height = "92,2"
+            End If
+        Case "C"
+            weight = "76,2"
+            length = "38,1"
+            width = "50,8"
+            height = "83,3"
+        Case "K"
+            weight = "123"
+            length = "46,3"
+            width = "84,1"
+            height = "103,2"
+        Case "P"
+            weight = "94"
+            length = "46,3"
+            width = "84,1"
+            height = "103,2"
+        Case "S"
+            If options = "-FP" Then
+                If materialNotwet = "J" Then
+                    weight = "91"
+                    length = "43,1"
+                    width = "54,7"
+                    height = "81,3"
+                ElseIf materialNotwet = "A" Then
+                    weight = "86"
+                    length = "43,1"
+                    width = "54,7"
+                    height = "81,3"
+                ElseIf materialNotwet = "S" Then
+                    weight = "109"
+                    length = "43,1"
+                    width = "54,7"
+                    height = "81,3"
+                End If
+            Else
+                If materialNotwet = "A" Or materialNotwet = "S" Then
+                    weight = "76,2"
+                    length = "30,5"
+                    width = "50,8"
+                    height = "81,3"
+                Else
+                    weight = "76,2"
+                    length = "41,2"
+                    width = "56"
+                    height = "92,1"
+                End If
+            End If
+        End Select
+    Case "4"
+        Select Case materialWet
+        Case "A"
+            weight = "18,61"
+            length = "29,2"
+            width = "36"
+            height = "43,5"
+        Case "C"
+            weight = "25,87"
+            length = "29,2"
+            width = "36,5"
+            height = "42,9"
+        Case "K"
+            weight = "18,6"
+            length = "30,9"
+            width = "39,9"
+            height = "54,9"
+        Case "P"
+            If materialNotwet = "P" Then
+                weight = "18"
+                length = "30,9"
+                width = "39,9"
+                height = "54,9"
+            ElseIf materialNotwet = "A" Then
+                weight = "25"
+                length = "30,9"
+                width = "39,9"
+                height = "54,9"
+            End If
+        Case "S"
+            If materialNotwet = "A" Then
+                If options = "-HD" Then
+                    weight = "29,5"
+                    length = "31"
+                    width = "33,5"
+                    height = "51,3"
+                Else
+                    weight = "29,5"
+                    length = "29,2"
+                    width = "36,6"
+                    height = "42,6"
+                End If
+            ElseIf materialNotwet = "J" Then
+                If options = "-SP" Then
+                    weight = "25,87"
+                    length = "39,9"
+                    width = "35,4"
+                    height = "80,2"
+                ElseIf options = "-3A" Then
+                    weight = "25,87"
+                    length = "29,2"
+                    width = "36,2"
+                    height = "45,7"
+                ElseIf options = "-FP" Then
+                    weight = "25,87"
+                    length = "29,2"
+                    width = "42,3"
+                    height = "44"
+                End If
+            End If
+        End Select
+    Case "40"
+        Select Case materialWet
+        Case "A"
+            weight = "25"
+            length = "31"
+            width = "47,1"
+            height = "56,4"
+        Case "P"
+            weight = "37"
+            length = "33"
+            width = "58,4"
+            height = "73"
+        Case "K"
+            weight = "51"
+            length = "33"
+            width = "58,4"
+            height = "73"
+        Case Else
+            weight = "42"
+            length = "31"
+            width = "47,1"
+            height = "56,4"
+        End Select
+    Case "5"
+        Select Case materialWet
+        Case "A"
+            weight = "3,9"
+            length = "15,9"
+            width = "21,3"
+            height = "25,5"
+        Case "K"
+            weight = "5,4"
+            length = "15,9"
+            width = "23,6"
+            height = "29,7"
+        Case "P"
+            weight = "3,9"
+            length = "15,9"
+            width = "23,6"
+            height = "29,7"
+        Case "S"
+            If materialNotwet = "A" Then
+                weight = "17"
+                length = "15,9"
+                width = "21,3"
+                height = "25,5"
+            ElseIf materialNotwet = "P" Then
+                If options = "-FP" Then
+                    weight = "17"
+                    length = "15,9"
+                    width = "20,8"
+                    height = "28,3"
+                Else
+                    weight = "18"
+                    length = "15,10"
+                    width = "21,4"
+                    height = "25,6"
+                End If
+            End If
+        End Select
+    Case "6"
+        If materialWet = "K" Or materialWet = "P" Then
+            weight = "1,8"
+            length = "17,8"
+            width = "14"
+            height = "19,8"
+        ElseIf materialWet = "G" Then
+            weight = "1,8"
+            length = "13,9"
+            width = "19,1"
+            height = "20,1"
+        End If
+    Case "7"
+        weight = "3,9"
+        length = "15,9"
+        width = "21,3"
+        height = "25,5"
+    Case "8"
+        If materialWet = "K" Then
+            weight = "2"
+            length = "10,4"
+            width = "14,4"
+            height = "13,5"
+        ElseIf materialWet = "P" Then
+            weight = "1,4"
+            length = "10,4"
+            width = "14,4"
+            height = "13,5"
+        End If
+    End Select
+
+    returnCollection.Add weight
+    returnCollection.Add length
+    returnCollection.Add width
+    returnCollection.Add height
+    Set GetWeightLengthWidthHeight = returnCollection
+End Function
+
 Sub BreakdownArticleName()
     Dim wsInput As Worksheet, wsOutput As Worksheet
     Dim lastRow As Long, i As Long
@@ -1489,6 +1835,7 @@ Sub BreakdownArticleName()
     Dim revisionResult As Collection, revisionChar As String, revision As String
     Dim optionsResult As Collection, optionsChar As String, options As String
     Dim FDACompliance As String
+    Dim weightLengthWidthHeight As Collection, weight As String, length As String, width As String, height As String  
     Dim outputRow As Long
     
     ' Set worksheet references
@@ -1590,6 +1937,13 @@ Sub BreakdownArticleName()
         minTemperature = GetMinTemperature(memMaterialChar)
         maxTemperature = GetMaxTemperature(memMaterialChar)
 
+        Set weightLengthWidthHeight = GetWeightLengthWidthHeight(connSizeChar, housingWetChar, housingNotwetChar, housingDesignChar, Cstr(connectionType), optionsChar)
+        weight = weightLengthWidthHeight.Item(1)
+        length = weightLengthWidthHeight.Item(2)
+        width = weightLengthWidthHeight.Item(3)
+        height = weightLengthWidthHeight.Item(4)
+        E2SJYXYY0C-FP-ATEX
+
         ' Write data to OUTPUT sheet
         wsOutput.Cells(outputRow, 1).Value = articleNum
         wsOutput.Cells(outputRow, 2).Value = model
@@ -1616,6 +1970,10 @@ Sub BreakdownArticleName()
         wsOutput.Cells(outputRow, 23).Value = airConnectionOutlet
         wsOutput.Cells(outputRow, 24).Value = minTemperature
         wsOutput.Cells(outputRow, 25).Value = maxTemperature
+        wsOutput.Cells(outputRow, 26).Value = weight
+        wsOutput.Cells(outputRow, 27).Value = length
+        wsOutput.Cells(outputRow, 28).Value = width
+        wsOutput.Cells(outputRow, 29).Value = height
         ' wsOutput.Cells(outputRow, 11).Value = revision
         ' wsOutput.Cells(outputRow, 12).Value = options
         
