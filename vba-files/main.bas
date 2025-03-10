@@ -677,6 +677,16 @@ Private Function GetFlowRatePerStroke(connectionSize As String, housingMaterialW
 
 End Function
 
+' Get maximum discharge pressure
+Private Function GetMaxDischargePressure(connectionSize As String, housingMaterialWet As String, housingMaterialNotwet As String, options As String) As String
+    If connectionSize = "6" Or housingMaterialNotwet = "P" Or housingMaterialWet = "P" Or housingMaterialWet = "K" Or options = "-FP" Then
+        GetMaxDischargePressure = "6,8"
+    Else
+        GetMaxDischargePressure = "8,6"
+    End If
+
+End Function
+
 Sub BreakdownArticleName()
     Dim wsInput As Worksheet, wsOutput As Worksheet
     Dim lastRow As Long, i As Long
@@ -774,6 +784,8 @@ Sub BreakdownArticleName()
 
         flowRatePerStroke = GetFlowRatePerStroke(connSizeChar, housingWetChar, housingDesignChar, optionsChar)
 
+        maxDischargePressure = GetMaxDischargePressure(connSizeChar, housingWetChar, housingNotwet, optionsChar)
+
         ' Write data to OUTPUT sheet
         wsOutput.Cells(outputRow, 1).Value = articleNum
         wsOutput.Cells(outputRow, 2).Value = model
@@ -789,6 +801,7 @@ Sub BreakdownArticleName()
         wsOutput.Cells(outputRow, 12).Value = explosionProtection
         wsOutput.Cells(outputRow, 13).Value = maxSolidSize
         wsOutput.Cells(outputRow, 14).Value = flowRatePerStroke
+        wsOutput.Cells(outputRow, 15).Value = maxDischargePressure
         ' wsOutput.Cells(outputRow, 11).Value = revision
         ' wsOutput.Cells(outputRow, 12).Value = options
         
