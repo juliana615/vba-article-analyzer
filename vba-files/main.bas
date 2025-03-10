@@ -538,7 +538,7 @@ Private Function GetFDACompliance(model As String, meterialWet As String, membra
             ws.Cells(i, 8).Value = valveSeatMaterial And _
             ws.Cells(i, 11).Value = options Then
             ' Return the corresponding clothes name
-            Debug.Print "Match found: " & ws.Cells(i, 12).Value
+            ' Debug.Print "Match found: " & ws.Cells(i, 12).Value
             GetFDACompliance = ws.Cells(i, 12).Value
             Exit Function
         End If
@@ -608,6 +608,75 @@ Private Function GetMaxSolidSize(connectionSize As String, housingMaterialWet As
 
 End Function
     
+' Get flow rate per stroke
+Private Function GetFlowRatePerStroke(connectionSize As String, housingMaterialWet As String, housingDesign As String, options As String) As String
+    Select Case connectionSize
+    Case "1"
+        Select Case housingMaterialWet
+        Case "P"
+            GetFlowRatePerStroke = "0,42"
+        Case "K"
+            GetFlowRatePerStroke = "0,42"
+        Case Else
+            If options = "-ATEX" Then
+                GetFlowRatePerStroke = "0,38"
+            Else
+                GetFlowRatePerStroke = "0,34"
+            End If
+        End Select
+    Case "2"
+        Select Case housingMaterialWet
+        Case "A"
+            GetFlowRatePerStroke = "2,27"
+        Case "S"
+            GetFlowRatePerStroke = "2,27"
+        Case "P"
+            GetFlowRatePerStroke = "2,00"
+        Case "K"
+            GetFlowRatePerStroke = "2,00"
+        Case Else
+            If housingDesign = "0" Then
+                GetFlowRatePerStroke = "2,00"
+            Else
+                GetFlowRatePerStroke = "1,85"
+            End If
+        End Select
+    Case "3"
+        Select Case housingMaterialWet
+        Case "K"
+            GetFlowRatePerStroke = "3,40"
+        Case Else
+            If housingDesign = "9" Then
+                GetFlowRatePerStroke = "5,50"
+            Else
+                GetFlowRatePerStroke = "5,10"
+            End If
+        End Select
+    Case "4"
+        Select Case options
+        Case "-FP"
+            GetFlowRatePerStroke = "0,5"
+        Case "-3A"
+        GetFlowRatePerStroke = "1,1"
+        Case Else
+            GetFlowRatePerStroke = "1,17"
+        End Select
+    Case "40"
+        GetFlowRatePerStroke = "1,67"
+    Case "5"
+        GetFlowRatePerStroke = "0,08"
+    Case "6"
+        GetFlowRatePerStroke = "0,04"
+    Case "7"
+        GetFlowRatePerStroke = "0,08"
+    Case "8"
+        GetFlowRatePerStroke = "0,017"
+    Case Else
+        GetFlowRatePerStroke = "Unknown"
+    End Select
+
+End Function
+
 Sub BreakdownArticleName()
     Dim wsInput As Worksheet, wsOutput As Worksheet
     Dim lastRow As Long, i As Long
@@ -703,6 +772,8 @@ Sub BreakdownArticleName()
 
         maxSolidSize = GetMaxSolidSize(connSizeChar, housingWetChar, housingDesignChar)
 
+        flowRatePerStroke = GetFlowRatePerStroke(connSizeChar, housingWetChar, housingDesignChar, optionsChar)
+
         ' Write data to OUTPUT sheet
         wsOutput.Cells(outputRow, 1).Value = articleNum
         wsOutput.Cells(outputRow, 2).Value = model
@@ -717,6 +788,7 @@ Sub BreakdownArticleName()
         wsOutput.Cells(outputRow, 11).Value = FDACompliance
         wsOutput.Cells(outputRow, 12).Value = explosionProtection
         wsOutput.Cells(outputRow, 13).Value = maxSolidSize
+        wsOutput.Cells(outputRow, 14).Value = flowRatePerStroke
         ' wsOutput.Cells(outputRow, 11).Value = revision
         ' wsOutput.Cells(outputRow, 12).Value = options
         
