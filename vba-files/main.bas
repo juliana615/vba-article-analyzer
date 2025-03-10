@@ -1183,7 +1183,49 @@ Private  Function GetConnectionSizeForSuction(connectionSize As String, options 
         GetConnectionSizeForSuction = "3/8"
     End Select
 End Function
-    
+
+' Get connection size for pressure
+Private  Function GetConnectionSizeForPressure(connectionSize As String, options As String)
+    Select Case connectionSize
+    Case "1"
+        If options = "-FP" Then
+            GetConnectionSizeForPressure = "1 1/2"
+        Else
+            GetConnectionSizeForPressure = "1"
+        End If
+    Case "21"
+        If options = "-FP" Or options = "-SP" Then
+            GetConnectionSizeForPressure = "2 1/2"
+        Else
+            GetConnectionSizeForPressure = "2"
+        End If
+    Case "3"
+        GetConnectionSizeForPressure = "3"
+    Case "4"
+        If options = "-FP" Or options = "-SP" Then
+            GetConnectionSizeForPressure = "2"
+        Else
+            GetConnectionSizeForPressure = "1 1/2"
+        End If
+    Case "4D"
+        GetConnectionSizeForPressure = "1 1/2"
+    Case "40"
+        GetConnectionSizeForPressure = "1 1/2"
+    Case "5"
+        If options = "-FP" Then
+            GetConnectionSizeForPressure = "1 1/2"
+        Else
+            GetConnectionSizeForPressure = "1/2"
+        End If
+    Case "6"
+        GetConnectionSizeForPressure = "1/4"
+    Case "7"
+        GetConnectionSizeForPressure = "3/4"
+    Case "8"
+        GetConnectionSizeForPressure = "3/8"
+    End Select
+End Function
+
 Sub BreakdownArticleName()
     Dim wsInput As Worksheet, wsOutput As Worksheet
     Dim lastRow As Long, i As Long
@@ -1289,6 +1331,8 @@ Sub BreakdownArticleName()
 
         connectionSizeForSuction = GetConnectionSizeForSuction(connSizeChar, optionsChar)
 
+        connectionSizeForPressure = GetConnectionSizeForPressure(connSizeChar, optionsChar)
+
         ' Write data to OUTPUT sheet
         wsOutput.Cells(outputRow, 1).Value = articleNum
         wsOutput.Cells(outputRow, 2).Value = model
@@ -1307,6 +1351,7 @@ Sub BreakdownArticleName()
         wsOutput.Cells(outputRow, 15).Value = maxDischargePressure
         wsOutput.Cells(outputRow, 16).Value = conveyingCapacity
         wsOutput.Cells(outputRow, 17).Value = connectionSizeForSuction
+        wsOutput.Cells(outputRow, 17).Value = connectionSizeForPressure
         ' wsOutput.Cells(outputRow, 11).Value = revision
         ' wsOutput.Cells(outputRow, 12).Value = options
         
