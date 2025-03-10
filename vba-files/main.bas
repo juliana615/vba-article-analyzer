@@ -230,6 +230,46 @@ Private Function OptionsDictionary() As Dictionary
     Set OptionsDictionary = obj
 End Function
 
+' Min. Temperature of membrane material
+Private Function MembraneMaterialMinTempDictionary() As Dictionary
+    Static obj As Dictionary
+
+    If obj Is Nothing Then
+        Set obj = New Dictionary
+        obj.Add "1", "-23"
+        obj.Add "2", "-23"
+        obj.Add "3", "-40"
+        obj.Add "4", "-40"
+        obj.Add "5", "-37"
+        obj.Add "6", "-40"
+        obj.Add "7", "-29"
+        obj.Add "9", "-40"
+        obj.Add "Y", "-40"
+    End If
+
+    Set MembraneMaterialMinTempDictionary = obj
+End Function
+
+' Max. Temperature of membrane material
+Private Function MembraneMaterialMaxTempDictionary() As Dictionary
+    Static obj As Dictionary
+
+    If obj Is Nothing Then
+        Set obj = New Dictionary
+        obj.Add "1", "93"
+        obj.Add "2", "88"
+        obj.Add "3", "177"
+        obj.Add "4", "138"
+        obj.Add "5", "104"
+        obj.Add "6", "135"
+        obj.Add "7", "104"
+        obj.Add "9", "82"
+        obj.Add "Y", "135"
+    End If
+
+    Set MembraneMaterialMaxTempDictionary = obj
+End Function
+
 ' Get the model from article number
 Private Function GetModelFromArticleNumber(ArticleNumber As String) As Collection
     Dim modelChar As String
@@ -1147,40 +1187,40 @@ Private  Function GetConnectionSizeForSuction(connectionSize As String, options 
     Select Case connectionSize
     Case "1"
         If options = "-FP" Then
-            GetConnectionSizeForSuction = "1 1/2"
+            GetConnectionSizeForSuction = "'1 1/2"
         Else
-            GetConnectionSizeForSuction = "1"
+            GetConnectionSizeForSuction = "'1"
         End If
     Case "2"
         If options = "-FP" Or options = "-SP" Then
-            GetConnectionSizeForSuction = "2 1/2"
+            GetConnectionSizeForSuction = "'2 1/2"
         Else
-            GetConnectionSizeForSuction = "2"
+            GetConnectionSizeForSuction = "'2"
         End If
     Case "3"
-        GetConnectionSizeForSuction = "3"
+        GetConnectionSizeForSuction = "'3"
     Case "4"
         If options = "-FP" Or options = "-SP" Then
-            GetConnectionSizeForSuction = "2"
+            GetConnectionSizeForSuction = "'2"
         Else
-            GetConnectionSizeForSuction = "1 1/2"
+            GetConnectionSizeForSuction = "'1 1/2"
         End If
     Case "4D"
-        GetConnectionSizeForSuction = "1 1/4"
+        GetConnectionSizeForSuction = "'1 1/4"
     Case "40"
-        GetConnectionSizeForSuction = "1 1/2"
+        GetConnectionSizeForSuction = "'1 1/2"
     Case "5"
         If options = "-FP" Then
-            GetConnectionSizeForSuction = "1 1/2"
+            GetConnectionSizeForSuction = "'1 1/2"
         Else
-            GetConnectionSizeForSuction = "1/2"
+            GetConnectionSizeForSuction = "'1/2"
         End If
     Case "6"
-        GetConnectionSizeForSuction = "1/4"
+        GetConnectionSizeForSuction = "'1/4"
     Case "7"
-        GetConnectionSizeForSuction = "3/4"
+        GetConnectionSizeForSuction = "'3/4"
     Case "8"
-        GetConnectionSizeForSuction = "3/8"
+        GetConnectionSizeForSuction = "'3/8"
     End Select
 End Function
 
@@ -1189,40 +1229,40 @@ Private  Function GetConnectionSizeForPressure(connectionSize As String, options
     Select Case connectionSize
     Case "1"
         If options = "-FP" Then
-            GetConnectionSizeForPressure = "1 1/2"
+            GetConnectionSizeForPressure = "'1 1/2"
         Else
-            GetConnectionSizeForPressure = "1"
+            GetConnectionSizeForPressure = "'1"
         End If
     Case "2"
         If options = "-FP" Or options = "-SP" Then
-            GetConnectionSizeForPressure = "2 1/2"
+            GetConnectionSizeForPressure = "'2 1/2"
         Else
-            GetConnectionSizeForPressure = "2"
+            GetConnectionSizeForPressure = "'2"
         End If
     Case "3"
-        GetConnectionSizeForPressure = "3"
+        GetConnectionSizeForPressure = "'3"
     Case "4"
         If options = "-FP" Or options = "-SP" Then
-            GetConnectionSizeForPressure = "2"
+            GetConnectionSizeForPressure = "'2"
         Else
-            GetConnectionSizeForPressure = "1 1/2"
+            GetConnectionSizeForPressure = "'1 1/2"
         End If
     Case "4D"
-        GetConnectionSizeForPressure = "1 1/2"
+        GetConnectionSizeForPressure = "'1 1/2"
     Case "40"
-        GetConnectionSizeForPressure = "1 1/2"
+        GetConnectionSizeForPressure = "'1 1/2"
     Case "5"
         If options = "-FP" Then
-            GetConnectionSizeForPressure = "1 1/2"
+            GetConnectionSizeForPressure = "'1 1/2"
         Else
-            GetConnectionSizeForPressure = "1/2"
+            GetConnectionSizeForPressure = "'1/2"
         End If
     Case "6"
-        GetConnectionSizeForPressure = "1/4"
+        GetConnectionSizeForPressure = "'1/4"
     Case "7"
-        GetConnectionSizeForPressure = "3/4"
+        GetConnectionSizeForPressure = "'3/4"
     Case "8"
-        GetConnectionSizeForPressure = "3/8"
+        GetConnectionSizeForPressure = "'3/8"
     End Select
 End Function
 
@@ -1317,57 +1357,119 @@ Private  Function GetAirConnectionInlet(connectionSize As String, housingMateria
     Select Case connectionSize
     Case "1"
         If options = "-HP" Then
-            GetAirConnectionInlet = "1"
+            GetAirConnectionInlet = "'1"
         ElseIf options = "-FP" Then
-            GetAirConnectionInlet = "1/8"
+            GetAirConnectionInlet = "'1/8"
         Else
-            GetAirConnectionInlet = "3/8"
+            GetAirConnectionInlet = "'3/8"
         End If
     Case "2"
         If options = "-HP"Then
-            GetAirConnectionInlet = "3/4"
+            GetAirConnectionInlet = "'3/4"
         Else
             If housingMaterialWet = "K" Or housingMaterialWet = "P" Then
-                GetAirConnectionInlet = "3/8"
+                GetAirConnectionInlet = "'3/8"
             Else
-                GetAirConnectionInlet = "1/2"
+                GetAirConnectionInlet = "'1/2"
             End If
         End If
     Case "3"
         If housingMaterialWet = "K" Or housingMaterialWet = "P" Then
-            GetAirConnectionInlet = "3/4"
+            GetAirConnectionInlet = "'3/4"
         Else
-            GetAirConnectionInlet = "1/2"
+            GetAirConnectionInlet = "'1/2"
         End If
     Case "4"
         If options = "-HD" Then
-            GetAirConnectionInlet = "3/4"
+            GetAirConnectionInlet = "'3/4"
         Else
-            GetAirConnectionInlet = "1/2"
+            GetAirConnectionInlet = "'1/2"
         End If
     Case "40"
         If housingMaterialWet = "K" Or housingMaterialWet = "P" Then
-            GetAirConnectionInlet = "3/4"
+            GetAirConnectionInlet = "'3/4"
         Else
-            GetAirConnectionInlet = "1/2"
+            GetAirConnectionInlet = "'1/2"
         End If
     Case "5"
         If options = "-FP" Then
-            GetAirConnectionInlet = "1/8"
+            GetAirConnectionInlet = "'1/8"
         Else
-            GetAirConnectionInlet = "3/8"
+            GetAirConnectionInlet = "'3/8"
         End If
     Case "6"
         If housingMaterialWet = "K" Or housingMaterialWet = "P" Then
-            GetAirConnectionInlet = "3/8"
+            GetAirConnectionInlet = "'3/8"
         Else
-            GetAirConnectionInlet = "1/4"
+            GetAirConnectionInlet = "'1/4"
         End If
     Case "7"
-        GetAirConnectionInlet = "3/8"
+        GetAirConnectionInlet = "'3/8"
     Case "8"
-        GetAirConnectionInlet = "1/4"
+        GetAirConnectionInlet = "'1/4"
     End Select
+End Function
+
+' Get air connection outlet
+Private  Function GetAirConnectionOutlet(connectionSize As String, options As String) As String
+    Select Case connectionSize
+    Case "1"
+        If options = "-HP" Then
+            GetAirConnectionOutlet = "'1"
+        Else
+            GetAirConnectionOutlet = "'1/2"
+        End If
+    Case "2"
+        If options = "-HP" Then
+            GetAirConnectionOutlet = "'3/4"
+        Else
+            GetAirConnectionOutlet = "'1"
+        End If
+    Case "3"
+        GetAirConnectionOutlet = "'1"
+    Case "4"
+        GetAirConnectionOutlet = "'3/4"
+    Case "40"
+        GetAirConnectionOutlet = "'1"
+    Case "5"
+        If options = "-FP" Then
+            GetAirConnectionOutlet = "'1/8"
+        Else
+            GetAirConnectionOutlet = "'3/8"
+        End If
+    Case "6"
+        GetAirConnectionOutlet = "'1/4"
+    Case "7"
+        GetAirConnectionOutlet = "'3/8"
+    Case "8"
+        GetAirConnectionOutlet = "'1/4"
+    End Select
+End Function
+
+' Get Min. Temperature
+Private Function GetMinTemperature(membraneMaterialChar As String) As String
+    Dim returnString As String
+
+    If MembraneMaterialMinTempDictionary.Exists(membraneMaterialChar) Then
+        returnString = MembraneMaterialMinTempDictionary.Item(membraneMaterialChar)
+    Else
+        returnString = "Unknown"
+    End If
+
+    GetMinTemperature = returnString
+End Function
+
+' Get Max. Temperature
+Private Function GetMaxTemperature(membraneMaterialChar As String) As String
+    Dim returnString As String
+
+    If MembraneMaterialMaxTempDictionary.Exists(membraneMaterialChar) Then
+        returnString = MembraneMaterialMaxTempDictionary.Item(membraneMaterialChar)
+    Else
+        returnString = "Unknown"
+    End If
+
+    GetMaxTemperature = returnString
 End Function
 
 Sub BreakdownArticleName()
@@ -1483,6 +1585,10 @@ Sub BreakdownArticleName()
 
         airConnectionInlet = GetAirConnectionInlet(connSizeChar, housingWetChar, optionsChar)
 
+        airConnectionOutlet = GetAirConnectionOutlet(connSizeChar, optionsChar)
+
+        minTemperature = GetMinTemperature(memMaterialChar)
+        maxTemperature = GetMaxTemperature(memMaterialChar)
 
         ' Write data to OUTPUT sheet
         wsOutput.Cells(outputRow, 1).Value = articleNum
@@ -1507,6 +1613,9 @@ Sub BreakdownArticleName()
         wsOutput.Cells(outputRow, 20).Value = suctionHeightWetted
         wsOutput.Cells(outputRow, 21).Value = suctionHeightDry
         wsOutput.Cells(outputRow, 22).Value = airConnectionInlet
+        wsOutput.Cells(outputRow, 23).Value = airConnectionOutlet
+        wsOutput.Cells(outputRow, 24).Value = minTemperature
+        wsOutput.Cells(outputRow, 25).Value = maxTemperature
         ' wsOutput.Cells(outputRow, 11).Value = revision
         ' wsOutput.Cells(outputRow, 12).Value = options
         
