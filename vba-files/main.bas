@@ -687,6 +687,332 @@ Private Function GetMaxDischargePressure(connectionSize As String, housingMateri
 
 End Function
 
+' Get conveying capacity
+Private Function GetConveyingCapacity(connectionSize As String, housingMaterialWet As String, housingMaterialNotwet As String, membraneMaterial As String, membraneDesign As String, housingDesign As String, options As String) As String
+    Select Case connectionSize
+    Case "1"
+        Select Case housingMaterialWet
+        Case "K"
+            GetConveyingCapacity = "163"
+        Case "P"
+            GetConveyingCapacity = "163"
+        Case Else
+            Select Case housingMaterialNotwet
+            Case "A"
+                If membraneMaterial = "5" Then
+                    GetConveyingCapacity = "144"
+                Else
+                    GetConveyingCapacity = "185"
+                End If
+            Case "P"
+                If membraneMaterial = "5" Then
+                    GetConveyingCapacity = "136"
+                Else
+                    GetConveyingCapacity = "174"
+                End If
+            End Select
+        End Select
+    Case "2"
+        Select Case housingMaterialWet
+        Case "A"
+            If membraneMaterial = "5" Then
+                If housingDesign = "9" Then
+                    GetConveyingCapacity = "595"
+                Else
+                    GetConveyingCapacity = "617"
+                End If
+            Else
+                If housingDesign = "9" Then
+                    GetConveyingCapacity = "606"
+                Else
+                    If membraneDesign = "D" Then
+                        GetConveyingCapacity = "632"
+                    Else
+                        GetConveyingCapacity = "700"
+                    End If
+                End If
+            End If
+        Case "C"
+            Select Case membraneDesign
+            Case "F"
+                GetConveyingCapacity = "617"
+            Case "T"
+                GetConveyingCapacity = "617"
+            Case "R"
+                GetConveyingCapacity = "700"
+            Case "X"
+                GetConveyingCapacity = "700"
+            Case "D"
+                GetConveyingCapacity = "632"
+            End Select
+        Case "K"
+            Select Case membraneDesign
+            Case "F"
+                GetConveyingCapacity = "549"
+            Case "T"
+                GetConveyingCapacity = "549"
+            Case "D"
+                GetConveyingCapacity = "670"
+            End Select
+        Case "P"
+            Select Case membraneDesign
+            Case "F"
+                GetConveyingCapacity = "549"
+            Case "T"
+                GetConveyingCapacity = "549"
+            Case "D"
+                GetConveyingCapacity = "670"
+            Case "R"
+                GetConveyingCapacity = "670"
+            End Select
+        Case "S"
+            Select Case housingMaterialNotwet
+            Case "A"
+                If membraneMaterial = "5" Then
+                    GetConveyingCapacity = "617"
+                Else
+                    If housingDesign = "9" Then
+                        GetConveyingCapacity = "606"
+                    Else
+                        Select Case membraneDesign
+                        Case "T"
+                            GetConveyingCapacity = "606"
+                        Case "D"
+                            GetConveyingCapacity = "632"
+                        Case "R"
+                            GetConveyingCapacity = "700"
+                        Case "X"
+                            GetConveyingCapacity = "700"
+                        End Select
+                    End If
+                End If
+            Case "J"
+                If membraneMaterial = "5" Then
+                    If housingDesign = "0" Then
+                        GetConveyingCapacity = "617"
+                    Else
+                        GetConveyingCapacity = "549"
+                    End If
+                Else
+                    Select Case membraneDesign
+                    Case "D"
+                        GetConveyingCapacity = "632"
+                    Case "R"
+                        GetConveyingCapacity = "700"
+                    Case "X"
+                        Select Case options
+                        Case "-SP"
+                            GetConveyingCapacity = "670"
+                        Case "-FP"
+                            GetConveyingCapacity = "886"
+                        Case "-ATEX"
+                            GetConveyingCapacity = "700"
+                        End Select
+                    End Select
+                End If
+            Case "P"
+                GetConveyingCapacity = "644"
+            Case "S"
+                If membraneMaterial = "5" Then
+                    If housingDesign = "0" Then
+                        GetConveyingCapacity = "617"
+                    Else
+                        GetConveyingCapacity = "549"
+                    End If
+                Else
+                    If housingDesign = "9" Then
+                        GetConveyingCapacity = "606"
+                    Else
+                        If membraneDesign = "D" Then
+                            GetConveyingCapacity = "632"
+                        Else
+                            GetConveyingCapacity = "700"
+                        End If
+                    End If
+                End If
+            End Select
+        End Select
+    Case "3"
+        Select Case housingMaterialWet
+        Case "A"
+            If membraneMaterial = "5" Then
+                If membraneDesign = "T" And housingDesign = "9" Then
+                    GetConveyingCapacity = "704"
+                Else
+                    GetConveyingCapacity = "682"
+                End If
+            Else
+                If membraneDesign = "D" Then
+                    If housingDesign = "0" Then
+                        GetConveyingCapacity = "867"
+                    Else
+                        GetConveyingCapacity = "682"
+                    End If
+                Else
+                    If housingDesign = "0" Then
+                        GetConveyingCapacity = "886"
+                    Else
+                        GetConveyingCapacity = "1033"
+                    End If
+                End If
+            End If
+        Case "C"
+            If membraneMaterial = "5" Then
+                GetConveyingCapacity = "682"
+            Else
+                GetConveyingCapacity = "886"
+            End If
+        Case "K"
+            GetConveyingCapacity = "1060"
+        Case "P"
+            GetConveyingCapacity = "1060"
+        Case Else
+            If membraneMaterial = "5" Then
+                If housingDesign = "0" Then
+                    GetConveyingCapacity = "682"
+                Else
+                    If membraneDesign = "F" Then
+                        GetConveyingCapacity = "682"
+                    Else
+                        GetConveyingCapacity = "704"
+                    End If                    
+                End If
+            Else
+                If housingDesign = "9" Then
+                    If membraneDesign = "D" Then
+                        GetConveyingCapacity = "954"
+                    Else
+                        GetConveyingCapacity = "1033"
+                    End If
+                Else
+                    If membraneDesign = "D" Then
+                        GetConveyingCapacity = "867"
+                    Else
+                        GetConveyingCapacity = "886"
+                    End If
+                End If
+            End If
+        End Select
+    Case "4"
+        Select Case housingMaterialWet
+        Case "A"
+            GetConveyingCapacity = "268"
+        Case "C"
+            If membraneMaterial = "5" Then
+                GetConveyingCapacity = "242"
+            Else
+                GetConveyingCapacity = "268"
+            End If
+        Case "K"
+            If membraneMaterial = "5" Then
+                GetConveyingCapacity = "273"
+            Else
+                GetConveyingCapacity = "284"
+            End If
+        Case "P"
+            If membraneMaterial = "5" Then
+                GetConveyingCapacity = "272"
+            Else
+                GetConveyingCapacity = "284"
+            End If
+        Case "S"
+            Select Case housingMaterialNotwet
+            Case "A"
+                If membraneMaterial = "5" Then
+                    If housingDesign = "0" Then
+                        GetConveyingCapacity = "242"
+                    Else
+                        GetConveyingCapacity = "250"
+                    End If
+                Else
+                    If housingDesign = "0" Then
+                        GetConveyingCapacity = "268"
+                    Else
+                        If membraneDesign = "R" Then
+                            GetConveyingCapacity = "275"
+                        Else
+                            GetConveyingCapacity = "276"
+                        End If
+                    End If
+                End If
+            Case "J"
+                If membraneMaterial = "5" Then
+                    If membraneDesign = "T" Then
+                        GetConveyingCapacity = "246"
+                    Else
+                        GetConveyingCapacity = "193"
+                    End If
+                Else
+                    If options = "-SP" Then
+                        GetConveyingCapacity = "325"
+                    Else
+                        GetConveyingCapacity = "268"
+                    End If
+                End If
+            End Select
+        End Select
+    Case "40"
+        Select Case housingMaterialNotwet
+        Case "P"
+            GetConveyingCapacity = "378"
+        Case Else
+            If membraneMaterial = "5" Then
+                GetConveyingCapacity = "390"
+            Else
+                GetConveyingCapacity = "465"
+            End If
+        End Select
+    Case "5"
+        Select Case housingMaterialWet
+        Case "A"
+            If membraneMaterial = "5" Then
+                GetConveyingCapacity = "42"
+            Else
+                GetConveyingCapacity = "45"
+            End If
+        Case "K"
+            If membraneMaterial = "5" Then
+                GetConveyingCapacity = "38"
+            Else
+                GetConveyingCapacity = "42"
+            End If
+        Case "P"
+            If membraneMaterial = "5" Then
+                GetConveyingCapacity = "38"
+            Else
+                GetConveyingCapacity = "42"
+            End If
+        Case "S"
+            If membraneMaterial = "5" Then
+                GetConveyingCapacity = "42"
+            Else
+                GetConveyingCapacity = "45"
+            End If
+        End Select
+    Case "6"
+        GetConveyingCapacity = "19"
+    Case "7"
+        Select Case housingMaterialNotwet
+        Case "A"
+            If membraneMaterial = "5" Then
+                GetConveyingCapacity = "42"
+            Else
+                GetConveyingCapacity = "45"
+            End If
+        Case "P"
+            If membraneMaterial = "5" Then
+                GetConveyingCapacity = "32"
+            Else
+                GetConveyingCapacity = "45"
+            End If
+        End Select
+    Case "8"
+        GetConveyingCapacity = "26"
+    Case Else
+        GetConveyingCapacity = "Unknown"
+    End Select
+End Function
+
 Sub BreakdownArticleName()
     Dim wsInput As Worksheet, wsOutput As Worksheet
     Dim lastRow As Long, i As Long
@@ -786,6 +1112,8 @@ Sub BreakdownArticleName()
 
         maxDischargePressure = GetMaxDischargePressure(connSizeChar, housingWetChar, housingNotwet, optionsChar)
 
+        conveyingCapacity = GetConveyingCapacity(connSizeChar, housingWetChar, housingNotwetChar, memMaterialChar, memDesignChar, housingDesignChar, optionsChar)
+
         ' Write data to OUTPUT sheet
         wsOutput.Cells(outputRow, 1).Value = articleNum
         wsOutput.Cells(outputRow, 2).Value = model
@@ -802,6 +1130,7 @@ Sub BreakdownArticleName()
         wsOutput.Cells(outputRow, 13).Value = maxSolidSize
         wsOutput.Cells(outputRow, 14).Value = flowRatePerStroke
         wsOutput.Cells(outputRow, 15).Value = maxDischargePressure
+        wsOutput.Cells(outputRow, 16).Value = conveyingCapacity
         ' wsOutput.Cells(outputRow, 11).Value = revision
         ' wsOutput.Cells(outputRow, 12).Value = options
         
