@@ -1,5 +1,7 @@
 Attribute VB_Name = "main"    
 
+' ChrW(246) → ö, ChrW(223) → ß, ChrW(228) → ä, ChrW(252) → ü, ChrW(174) → ®, ChrW(8482) → ™, 
+
 ' Modell
 Private Function ModelDictionary() As Dictionary
     Static obj As Dictionary
@@ -45,7 +47,7 @@ Private Function HousingMaterialWetDictionary() As Dictionary
         obj.Add "A", Array("Aluminium", "Aluminum")
         obj.Add "B", Array("Aluminium B", "Aluminum B")
         obj.Add "C", Array("Gusseisen", "Cast Iron")
-        obj.Add "G", Array("Leitfähiges Polypropylen (Acetal)", "Conductive Polypropylene (Acetal)")
+        obj.Add "G", Array("Leitf" & ChrW(228) & "higes Polypropylen (Acetal)", "Conductive Polypropylene (Acetal)")
         obj.Add "H", Array("Hastelloy C", "Alloy C")
         obj.Add "J", Array("Vernickeltes Aluminium", "Nickel-plated aluminum")
         obj.Add "K", Array("PVDF", "PVDF")
@@ -67,7 +69,7 @@ Private Function HousingMaterialNotwetDictionary() As Dictionary
         obj.Add "A", Array("Aluminium", "Aluminum")
         obj.Add "B", Array("Aluminium B", "Aluminum B")
         obj.Add "C", Array("Gusseisen", "Cast Iron")
-        obj.Add "G", Array("Leitfähiges Polypropylen (Acetal)", "Conductive Polypropylene (Acetal)")
+        obj.Add "G", Array("Leitf" & ChrW(228) & "higes Polypropylen (Acetal)", "Conductive Polypropylene (Acetal)")
         obj.Add "H", Array("Hastelloy C", "Alloy C")
         obj.Add "J", Array("Vernickeltes Aluminium", "Nickel-plated aluminum")
         obj.Add "K", Array("PVDF", "PVDF")
@@ -86,15 +88,15 @@ Private Function MembraneMaterialDictionary() As Dictionary
 
     If obj Is Nothing Then
         Set obj = New Dictionary
-        obj.Add "1", "Neoprene® - CR"
-        obj.Add "2", "BunaN® - NBR - Nitrile"
-        obj.Add "3", "FKM - Viton®"
-        obj.Add "4", "EPDM - Nordel™"
-        obj.Add "5", "Teflon® - PTFE"
-        obj.Add "6", "Santoprene® -  TPE"
-        obj.Add "7", "Hytrel® - TPC"
-        obj.Add "9", "Geolast®"
-        obj.Add "Y", "Santoprene® -  FDA"
+        obj.Add "1", "Neoprene" & ChrW(174) & " - CR"
+        obj.Add "2", "BunaN" & ChrW(174) & " - NBR - Nitrile"
+        obj.Add "3", "FKM - Viton" & ChrW(174)
+        obj.Add "4", "EPDM - Nordel" & ChrW(8482)
+        obj.Add "5", "Teflon" & ChrW(174) & " - PTFE"
+        obj.Add "6", "Santoprene" & ChrW(174) & " -  TPE"
+        obj.Add "7", "Hytrel" & ChrW(174) & " - TPC"
+        obj.Add "9", "Geolast" & ChrW(174)
+        obj.Add "Y", "Santoprene" & ChrW(174) & " -  FDA"
     End If
 
     Set MembraneMaterialDictionary = obj
@@ -106,12 +108,12 @@ Private Function MembraneDesignDictionary() As Dictionary
 
     If obj Is Nothing Then
         Set obj = New Dictionary
-        obj.Add "R", "Versa-Rugged™"
-        obj.Add "D", "Versa-Dome™"
-        obj.Add "X", "Thermo-Matic™"
+        obj.Add "R", "Versa-Rugged" & ChrW(8482)
+        obj.Add "D", "Versa-Dome" & ChrW(8482)
+        obj.Add "X", "Thermo-Matic" & ChrW(8482)
         obj.Add "T", "2-piece"
-        obj.Add "B", "Versa-Tuff™"
-        obj.Add "F", "FUSION™"
+        obj.Add "B", "Versa-Tuff" & ChrW(8482)
+        obj.Add "F", "FUSION" & ChrW(8482)
     End If
 
     Set MembraneDesignDictionary = obj
@@ -123,18 +125,18 @@ Private Function CheckValveMaterialDictionary() As Dictionary
     
     If obj Is Nothing Then
         Set obj = New Dictionary
-        obj.Add "1", "Neoprene® - CR"
-        obj.Add "2", "BunaN® - NBR - Nitrile"
-        obj.Add "3", "FKM - Viton®"
-        obj.Add "4", "EPDM - Nordel™"
-        obj.Add "5", "Teflon® - PTFE"
-        obj.Add "6", "Santoprene® -  TPE"
-        obj.Add "7", "Hytrel® - TPC"
+        obj.Add "1", "Neoprene" & ChrW(174) & " - CR"
+        obj.Add "2", "BunaN" & ChrW(174) & " - NBR - Nitrile"
+        obj.Add "3", "FKM - Viton" & ChrW(174)
+        obj.Add "4", "EPDM - Nordel" & ChrW(8482)
+        obj.Add "5", "Teflon" & ChrW(174) & " - PTFE"
+        obj.Add "6", "Santoprene" & ChrW(174) & " -  TPE"
+        obj.Add "7", "Hytrel" & ChrW(174) & " - TPC"
         obj.Add "8", "Polyurethan"
-        obj.Add "9", "Geolast®"
+        obj.Add "9", "Geolast" & ChrW(174)
         obj.Add "A", "Acetal"
         obj.Add "S", "Edelstahl"
-        obj.Add "Y", "Santoprene® -  FDA"
+        obj.Add "Y", "Santoprene" & ChrW(174) & " -  FDA"
         obj.Add "K", "PVDF"
         obj.Add "P", "Polypropylen"
     End If
@@ -148,21 +150,21 @@ Private Function ValveSeatMaterialDictionary() As Dictionary
     
     If obj Is Nothing Then
         Set obj = New Dictionary
-        obj.Add "1", "Neoprene® - CR"
-        obj.Add "2", "BunaN® - NBR - Nitrile"
-        obj.Add "3", "FKM - Viton®"
-        obj.Add "4", "EPDM - Nordel™"
-        obj.Add "5", "Teflon® - PTFE"
-        obj.Add "6", "Santoprene® -  TPE"
-        obj.Add "7", "Hytrel® - TPC"
+        obj.Add "1", "Neoprene" & ChrW(174) & " - CR"
+        obj.Add "2", "BunaN" & ChrW(174) & " - NBR - Nitrile"
+        obj.Add "3", "FKM - Viton" & ChrW(174)
+        obj.Add "4", "EPDM - Nordel" & ChrW(8482)
+        obj.Add "5", "Teflon" & ChrW(174) & " - PTFE"
+        obj.Add "6", "Santoprene" & ChrW(174) & " -  TPE"
+        obj.Add "7", "Hytrel" & ChrW(174) & " - TPC"
         obj.Add "8", "Polyurethan"
-        obj.Add "9", "Geolast®"
+        obj.Add "9", "Geolast" & ChrW(174)
         obj.Add "A", "Aluminium"
         obj.Add "S", "Edelstahl"
         obj.Add "C", "Stahl"
         obj.Add "H", "Hastelloy C"
         obj.Add "T", "PTFE-ummanteltes Silikon"
-        obj.Add "Y", "Santoprene® -  FDA"
+        obj.Add "Y", "Santoprene" & ChrW(174) & " -  FDA"
         obj.Add "P", "Polypropylen"
     End If
 
@@ -580,7 +582,7 @@ Private Function GetFDACompliance(model As String, meterialWet As String, membra
     Next i
     
     ' If no match is found, return the default value "Ohne FDA-Konformität"
-    GetFDACompliance = "Ohne FDA-Konformität"
+    GetFDACompliance = "Ohne FDA-Konformit" & ChrW(228) & "t"
 End Function
     
 ' Get explosion protection from article number
@@ -1977,20 +1979,20 @@ Sub Main()
         wsSeoOutput.Cells(outputRow, 2).Value = "Druckluftmembranpumpe | " & connSize & " Zoll | " & articleNum
         wsSeoOutput.Cells(outputRow, 3).Value = articleNum
 
-        wsSeoOutput.Cells(outputRow, 4).Value = "Selbstansaugende Druckluftmembranpumpe (trocken) | Anschlussgröße: " & connSize & " Zoll | Förderleistung: " & conveyingCapacity & " Liter pro Minute | Förderdruck: max. " & maxDischargePressure & " bar | Gehäusematerial: " & housingWet(0) & " | Membranmaterial: " & memMaterial & " | Feststoffgröße: " & maxSolidSize & " mm"
+        wsSeoOutput.Cells(outputRow, 4).Value = "Selbstansaugende Druckluftmembranpumpe (trocken) | Anschlussgr" & ChrW(246) & ChrW(223) & "e: " & connSize & " Zoll | F" & ChrW(246) & "rderleistung: " & conveyingCapacity & " Liter pro Minute | F" & ChrW(246) & "rderdruck: max. " & maxDischargePressure & " bar | Geh" & ChrW(228) & "usematerial: " & housingWet(0) & " | Membranmaterial: " & memMaterial & " | Feststoffgr" & ChrW(246) & ChrW(223) & "e: " & maxSolidSize & " mm"
 
         wsSeoOutput.Cells(outputRow, 5).Value = "<ul>" & vbNewLine & _
         "<li>Selbstansaugende Druckluftmembranpumpe (trocken)</li>" & vbNewLine & _
-        "<li>Anschlussgröße: " & connSize & " Zoll</li>" & vbNewLine & _
-        "<li>Förderleistung: " & conveyingCapacity & " Liter pro Minute</li>" & vbNewLine & _
-        "<li>Förderdruck: max. " & maxDischargePressure & " bar</li>" & vbNewLine & _
-        "<li>Gehäusematerial: " & housingWet(0) & "</li>" & vbNewLine & _
+        "<li>Anschlussgr" & ChrW(246) & ChrW(223) & "e: " & connSize & " Zoll</li>" & vbNewLine & _
+        "<li>F" & ChrW(246) & "rderleistung: " & conveyingCapacity & " Liter pro Minute</li>" & vbNewLine & _
+        "<li>F" & ChrW(246) & "rderdruck: max. " & maxDischargePressure & " bar</li>" & vbNewLine & _
+        "<li>Geh" & ChrW(228) & "usematerial: " & housingWet(0) & "</li>" & vbNewLine & _
         "<li>Membranmaterial: " & memMaterial & "</li>" & vbNewLine & _
-        "<li>Feststoffgröße: " & maxSolidSize & " mm</li>" & vbNewLine & _
+        "<li>Feststoffgr" & ChrW(246) & ChrW(223) & "e: " & maxSolidSize & " mm</li>" & vbNewLine & _
         "</ul>" & vbNewLine & _
         "<ul>" & vbNewLine & _
         "<li><strong><a href=""#tab-attributes"" title=""Weitere technische Daten"">Weitere technische Daten</a></strong></li>" & vbNewLine & _
-        "<li><strong><a href=""#tab-cross"" title=""Kompatible Reparatursätze oder Ersatzteile"">Kompatible Reparatursätze oder Ersatzteile</a></strong></li>" & vbNewLine & _
+        "<li><strong><a href=""#tab-cross"" title=""Kompatible Reparaturs" & ChrW(228) & "tze oder Ersatzteile"">Kompatible Reparaturs" & ChrW(228) & "tze oder Ersatzteile</a></strong></li>" & vbNewLine & _
         "</ul>"
 
         wsSeoOutput.Cells(outputRow, 6).Value = "Air-operated double diaphragm pump | " & connSize & " Inch | " & articleNum
