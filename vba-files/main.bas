@@ -42,17 +42,17 @@ Private Function HousingMaterialWetDictionary() As Dictionary
     
     If obj Is Nothing Then
         Set obj = New Dictionary
-        obj.Add "A", "Aluminium"
-        obj.Add "B", "Aluminium B"
-        obj.Add "C", "Gusseisen"
-        obj.Add "G", "Leitfähiges Polypropylen (Acetal)"
-        obj.Add "H", "Hastelloy C"
-        obj.Add "J", "Vernickeltes Aluminium"
-        obj.Add "K", "PVDF"
-        obj.Add "P", "Polypropylen"
-        obj.Add "Q", "Epoxidbeschichtetes Aluminium"
-        obj.Add "S", "Edelstahl"
-        obj.Add "Z", "PTFE-beschichtetes Aluminium"
+        obj.Add "A", Array("Aluminium", "Aluminum")
+        obj.Add "B", Array("Aluminium B", "Aluminum B")
+        obj.Add "C", Array("Gusseisen", "Cast Iron")
+        obj.Add "G", Array("Leitfähiges Polypropylen (Acetal)", "Conductive Polypropylene (Acetal)")
+        obj.Add "H", Array("Hastelloy C", "Alloy C")
+        obj.Add "J", Array("Vernickeltes Aluminium", "Nickel-plated aluminum")
+        obj.Add "K", Array("PVDF", "PVDF")
+        obj.Add "P", Array("Polypropylen", "Polypropylene")
+        obj.Add "Q", Array("Epoxidbeschichtetes Aluminium", "Epoxy-coated aluminum")
+        obj.Add "S", Array("Edelstahl", "Stainless Steel")
+        obj.Add "Z", Array("PTFE-beschichtetes Aluminium", "PTFE-coated aluminum")
     End If
 
     Set HousingMaterialWetDictionary = obj
@@ -64,17 +64,17 @@ Private Function HousingMaterialNotwetDictionary() As Dictionary
     
     If obj Is Nothing Then
         Set obj = New Dictionary
-        obj.Add "A", "Aluminium"
-        obj.Add "B", "Aluminium B"
-        obj.Add "C", "Gusseisen"
-        obj.Add "G", "Leitfähiges Polypropylen (Acetal)"
-        obj.Add "H", "Hastelloy C"
-        obj.Add "J", "Vernickeltes Aluminium"
-        obj.Add "K", "PVDF"
-        obj.Add "P", "Polypropylen"
-        obj.Add "Q", "Epoxidbeschichtetes Aluminium"
-        obj.Add "S", "Edelstahl"
-        obj.Add "Z", "PTFE-beschichtetes Aluminium"
+        obj.Add "A", Array("Aluminium", "Aluminum")
+        obj.Add "B", Array("Aluminium B", "Aluminum B")
+        obj.Add "C", Array("Gusseisen", "Cast Iron")
+        obj.Add "G", Array("Leitfähiges Polypropylen (Acetal)", "Conductive Polypropylene (Acetal)")
+        obj.Add "H", Array("Hastelloy C", "Alloy C")
+        obj.Add "J", Array("Vernickeltes Aluminium", "Nickel-plated aluminum")
+        obj.Add "K", Array("PVDF", "PVDF")
+        obj.Add "P", Array("Polypropylen", "Polypropylene")
+        obj.Add "Q", Array("Epoxidbeschichtetes Aluminium", "Epoxy-coated aluminum")
+        obj.Add "S", Array("Edelstahl", "Stainless Steel")
+        obj.Add "Z", Array("PTFE-beschichtetes Aluminium", "PTFE-coated aluminum")
     End If
 
     Set HousingMaterialNotwetDictionary = obj
@@ -332,7 +332,7 @@ End Function
 ' Get the housing material (wet) from article number
 Private Function GetHousingMaterialWetFromArticleNumber(ArticleNumber As String) As Collection
     Dim housingMaterialWetChar As String
-    Dim housingMaterialWet As String
+    Dim housingMaterialWet As Variant
     Dim remainedArticleNumber As String
     Dim returnCollection As New Collection
 
@@ -340,7 +340,7 @@ Private Function GetHousingMaterialWetFromArticleNumber(ArticleNumber As String)
     If HousingMaterialWetDictionary.Exists(housingMaterialWetChar) Then
         housingMaterialWet = HousingMaterialWetDictionary.Item(housingMaterialWetChar)
     Else
-        housingMaterialWet = "Unknown"
+        housingMaterialWet = Array("Unbekannt", "Unknown")
     End If
     remaindArticleNumber = Mid(ArticleNumber, 2)
     returnCollection.Add housingMaterialWetChar
@@ -352,7 +352,7 @@ End Function
 ' Get the housing material (dry) from article number
 Private Function GetHousingMaterialNotwetFromArticleNumber(ArticleNumber As String) As Collection
     Dim housingMaterialNotwetChar As String
-    Dim housingMaterialNotwet As String
+    Dim housingMaterialNotwet As Variant
     Dim remainedArticleNumber As String
     Dim returnCollection As New Collection
 
@@ -360,7 +360,7 @@ Private Function GetHousingMaterialNotwetFromArticleNumber(ArticleNumber As Stri
     If HousingMaterialNotwetDictionary.Exists(housingMaterialNotwetChar) Then
         housingMaterialNotwet = HousingMaterialNotwetDictionary.Item(housingMaterialNotwetChar)
     Else
-        housingMaterialNotwet = "Unknown"
+        housingMaterialNotwet =  Array("Unbekannt", "Unknown")
     End If
     remaindArticleNumber = Mid(ArticleNumber, 2)
     returnCollection.Add housingMaterialNotwetChar
@@ -1820,8 +1820,8 @@ Sub Main()
 
     Dim modelResult As Collection, modelChar As String, model As String
     Dim connSizeResult As Collection, connSizeChar As String, connSize As String
-    Dim housingWetResult As Collection, housingWetChar As String, housingWet As String
-    Dim housingNotwetResult As Collection, housingNotwetChar As String, housingNotwet As String
+    Dim housingWetResult As Collection, housingWetChar As String, housingWet As Variant
+    Dim housingNotwetResult As Collection, housingNotwetChar As String, housingNotwet As Variant
     Dim memMaterialResult As Collection, memMaterialChar As String, memMaterial As String
     Dim memDesignResult As Collection, memDesignChar As String, memDesign As String
     Dim checkValveResult As Collection, checkValveChar As String, checkValve As String
@@ -1912,7 +1912,7 @@ Sub Main()
 
         flowRatePerStroke = GetFlowRatePerStroke(connSizeChar, housingWetChar, housingDesignChar, optionsChar)
 
-        maxDischargePressure = GetMaxDischargePressure(connSizeChar, housingWetChar, housingNotwet, optionsChar)
+        maxDischargePressure = GetMaxDischargePressure(connSizeChar, housingWetChar, housingNotwetChar, optionsChar)
 
         conveyingCapacity = GetConveyingCapacity(connSizeChar, housingWetChar, housingNotwetChar, memMaterialChar, memDesignChar, housingDesignChar, optionsChar)
 
@@ -1943,8 +1943,8 @@ Sub Main()
         wsOutput.Cells(outputRow, 1).Value = articleNum
         wsOutput.Cells(outputRow, 2).Value = model
         wsOutput.Cells(outputRow, 3).Value = connSize
-        wsOutput.Cells(outputRow, 4).Value = housingWet
-        wsOutput.Cells(outputRow, 5).Value = housingNotwet
+        wsOutput.Cells(outputRow, 4).Value = housingWet(0)
+        wsOutput.Cells(outputRow, 5).Value = housingNotwet(0)
         wsOutput.Cells(outputRow, 6).Value = memMaterial
         wsOutput.Cells(outputRow, 7).Value = memDesign
         wsOutput.Cells(outputRow, 8).Value = checkValve
@@ -1977,14 +1977,14 @@ Sub Main()
         wsSeoOutput.Cells(outputRow, 2).Value = "Druckluftmembranpumpe | " & connSize & " Zoll | " & articleNum
         wsSeoOutput.Cells(outputRow, 3).Value = articleNum
 
-        wsSeoOutput.Cells(outputRow, 4).Value = "Selbstansaugende Druckluftmembranpumpe (trocken) | Anschlussgröße: " & connSize & " Zoll | Förderleistung: " & conveyingCapacity & " Liter pro Minute | Förderdruck: max. " & maxDischargePressure & " bar | Gehäusematerial: " & housingWet & " | Membranmaterial: " & memMaterial & " | Feststoffgröße: " & maxSolidSize & " mm"
+        wsSeoOutput.Cells(outputRow, 4).Value = "Selbstansaugende Druckluftmembranpumpe (trocken) | Anschlussgröße: " & connSize & " Zoll | Förderleistung: " & conveyingCapacity & " Liter pro Minute | Förderdruck: max. " & maxDischargePressure & " bar | Gehäusematerial: " & housingWet(0) & " | Membranmaterial: " & memMaterial & " | Feststoffgröße: " & maxSolidSize & " mm"
 
         wsSeoOutput.Cells(outputRow, 5).Value = "<ul>" & vbNewLine & _
         "<li>Selbstansaugende Druckluftmembranpumpe (trocken)</li>" & vbNewLine & _
         "<li>Anschlussgröße: " & connSize & " Zoll</li>" & vbNewLine & _
         "<li>Förderleistung: " & conveyingCapacity & " Liter pro Minute</li>" & vbNewLine & _
         "<li>Förderdruck: max. " & maxDischargePressure & " bar</li>" & vbNewLine & _
-        "<li>Gehäusematerial: " & housingWet & "</li>" & vbNewLine & _
+        "<li>Gehäusematerial: " & housingWet(0) & "</li>" & vbNewLine & _
         "<li>Membranmaterial: " & memMaterial & "</li>" & vbNewLine & _
         "<li>Feststoffgröße: " & maxSolidSize & " mm</li>" & vbNewLine & _
         "</ul>" & vbNewLine & _
@@ -1996,14 +1996,14 @@ Sub Main()
         wsSeoOutput.Cells(outputRow, 6).Value = "Air-operated double diaphragm pump | " & connSize & " Inch | " & articleNum
         wsSeoOutput.Cells(outputRow, 7).Value = "versamatic-" & articleNum
 
-        wsSeoOutput.Cells(outputRow, 8).Value = "Self-priming air-operated diaphragm pump (dry)  | Connection size: " & connSize & " Inch | Flow rate: " & conveyingCapacity & " Litres per minute | Delivery pressure: max. " & maxDischargePressure & " bar | Housing material: " & housingWet & " | Diaphragm material: " & memMaterial & " | Solids size: " & maxSolidSize & " mm"
+        wsSeoOutput.Cells(outputRow, 8).Value = "Self-priming air-operated diaphragm pump (dry)  | Connection size: " & connSize & " Inch | Flow rate: " & conveyingCapacity & " Litres per minute | Delivery pressure: max. " & maxDischargePressure & " bar | Housing material: " & housingWet(1) & " | Diaphragm material: " & memMaterial & " | Solids size: " & maxSolidSize & " mm"
 
         wsSeoOutput.Cells(outputRow, 9).Value = "<ul>" & vbNewLine & _
         "<li>Self-priming air-operated diaphragm pump (dry)" & vbNewLine & _
         "<li>Connection size: " & connSize & " Inch</li>" & vbNewLine & _
         "<li>Flow rate: " & conveyingCapacity & " Litres per minute</li>" & vbNewLine & _
         "<li>Delivery pressure: max. " & maxDischargePressure & " bar</li>" & vbNewLine & _
-        "<li>Housing material: " & housingWet & "</li>" & vbNewLine & _
+        "<li>Housing material: " & housingWet(1) & "</li>" & vbNewLine & _
         "<li>Diaphragm material: " & memMaterial & "</li>" & vbNewLine & _
         "<li>Solids size: " & maxSolidSize & " mm</li>" & vbNewLine & _
         "</ul>" & vbNewLine & _
