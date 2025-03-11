@@ -1,10 +1,5 @@
 Attribute VB_Name = "main"    
 
-Sub Test()
-    ' MsgBox "Hello, World!"
-    MsgBox GetDictionaryKeys(ModelDictionary).Item(1)
-End Sub
-
 ' Modell
 Private Function ModelDictionary() As Dictionary
     Static obj As Dictionary
@@ -1818,7 +1813,7 @@ Private  Function GetWeightLengthWidthHeight(connectionSize As String, materialW
     Set GetWeightLengthWidthHeight = returnCollection
 End Function
 
-Sub BreakdownArticleName()
+Sub Main()
     Dim wsInput As Worksheet, wsOutput As Worksheet
     Dim lastRow As Long, i As Long
     Dim articleNum As String, remainedArticleNum As String
@@ -1841,6 +1836,7 @@ Sub BreakdownArticleName()
     ' Set worksheet references
     Set wsInput = ThisWorkbook.Sheets("INPUT")
     Set wsOutput = ThisWorkbook.Sheets("OUTPUT")
+    Set wsSeoOutput = ThisWorkbook.Sheets("SEO OUTPUT")
 
     ' Find last row in INPUT sheet
     lastRow = wsInput.Cells(wsInput.Rows.Count, 1).End(xlUp).Row
@@ -1942,7 +1938,6 @@ Sub BreakdownArticleName()
         length = weightLengthWidthHeight.Item(2)
         width = weightLengthWidthHeight.Item(3)
         height = weightLengthWidthHeight.Item(4)
-        E2SJYXYY0C-FP-ATEX
 
         ' Write data to OUTPUT sheet
         wsOutput.Cells(outputRow, 1).Value = articleNum
@@ -1977,6 +1972,46 @@ Sub BreakdownArticleName()
         ' wsOutput.Cells(outputRow, 11).Value = revision
         ' wsOutput.Cells(outputRow, 12).Value = options
         
+        ' Write SEO data to SEO OUTPUT sheet
+        wsSeoOutput.Cells(outputRow, 1).Value = articleNum
+        wsSeoOutput.Cells(outputRow, 2).Value = "Druckluftmembranpumpe | " & connSize & " Zoll | " & articleNum
+        wsSeoOutput.Cells(outputRow, 3).Value = articleNum
+
+        wsSeoOutput.Cells(outputRow, 4).Value = "Selbstansaugende Druckluftmembranpumpe (trocken) | Anschlussgröße: " & connSize & " Zoll | Förderleistung: " & conveyingCapacity & " Liter pro Minute | Förderdruck: max. " & maxDischargePressure & " bar | Gehäusematerial: " & housingWet & " | Membranmaterial: " & memMaterial & " | Feststoffgröße: " & maxSolidSize & " mm"
+
+        wsSeoOutput.Cells(outputRow, 5).Value = "<ul>" & vbNewLine & _
+        "<li>Selbstansaugende Druckluftmembranpumpe (trocken)</li>" & vbNewLine & _
+        "<li>Anschlussgröße: " & connSize & " Zoll</li>" & vbNewLine & _
+        "<li>Förderleistung: " & conveyingCapacity & " Liter pro Minute</li>" & vbNewLine & _
+        "<li>Förderdruck: max. " & maxDischargePressure & " bar</li>" & vbNewLine & _
+        "<li>Gehäusematerial: " & housingWet & "</li>" & vbNewLine & _
+        "<li>Membranmaterial: " & memMaterial & "</li>" & vbNewLine & _
+        "<li>Feststoffgröße: " & maxSolidSize & " mm</li>" & vbNewLine & _
+        "</ul>" & vbNewLine & _
+        "<ul>" & vbNewLine & _
+        "<li><strong><a href=""#tab-attributes"" title=""Weitere technische Daten"">Weitere technische Daten</a></strong></li>" & vbNewLine & _
+        "<li><strong><a href=""#tab-cross"" title=""Kompatible Reparatursätze oder Ersatzteile"">Kompatible Reparatursätze oder Ersatzteile</a></strong></li>" & vbNewLine & _
+        "</ul>"
+
+        wsSeoOutput.Cells(outputRow, 6).Value = "Air-operated double diaphragm pump | " & connSize & " Inch | " & articleNum
+        wsSeoOutput.Cells(outputRow, 7).Value = "versamatic-" & articleNum
+
+        wsSeoOutput.Cells(outputRow, 8).Value = "Self-priming air-operated diaphragm pump (dry)  | Connection size: " & connSize & " Inch | Flow rate: " & conveyingCapacity & " Litres per minute | Delivery pressure: max. " & maxDischargePressure & " bar | Housing material: " & housingWet & " | Diaphragm material: " & memMaterial & " | Solids size: " & maxSolidSize & " mm"
+
+        wsSeoOutput.Cells(outputRow, 9).Value = "<ul>" & vbNewLine & _
+        "<li>Self-priming air-operated diaphragm pump (dry)" & vbNewLine & _
+        "<li>Connection size: " & connSize & " Inch</li>" & vbNewLine & _
+        "<li>Flow rate: " & conveyingCapacity & " Litres per minute</li>" & vbNewLine & _
+        "<li>Delivery pressure: max. " & maxDischargePressure & " bar</li>" & vbNewLine & _
+        "<li>Housing material: " & housingWet & "</li>" & vbNewLine & _
+        "<li>Diaphragm material: " & memMaterial & "</li>" & vbNewLine & _
+        "<li>Solids size: " & maxSolidSize & " mm</li>" & vbNewLine & _
+        "</ul>" & vbNewLine & _
+        "<ul>" & vbNewLine & _
+        "<li><strong><a href=""#tab-attributes"" title=""Further technical data"">Further technical data</a></strong></li>" & vbNewLine & _
+        "<li><strong><a href=""#tab-cross"" title=""Compatible repair kits or spare parts"">Compatible repair kits or spare parts</a></strong></li>" & vbNewLine & _
+        "</ul>"
+       
         ' Move to next row in OUTPUT sheet
         outputRow = outputRow + 1
     Next i
