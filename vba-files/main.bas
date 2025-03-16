@@ -1816,6 +1816,169 @@ Private  Function GetWeightLengthWidthHeight(connectionSize As String, materialW
 End Function
 
 Sub Main()
+    '''''''''''''''''''''
+    ' Initializing Data '
+    '''''''''''''''''''''
+    ' Modell
+    Dim modelWS As Worksheet, modelTable As Range, modelData As Variant
+    modelWS = Tabelle23
+    Set modelTable = modelWS.Range("A3:B6")
+    modelData = modelTable.Value
+
+    ' Anschlussgröße
+    Dim connSizeWS As Worksheet, connSizeTable As Range, connSizeData As Variant
+    connSizeWS = Tabelle7
+    Set connSizeTable = connSizeWS.Range("A3:G19")
+    connSizeData = connSizeTable.Value
+
+    ' Gehäusematerial (benetzt)
+    Dim housingWetWS As Worksheet, housingWetTable As Range, housingWetData As Variant
+    housingWetWS = Tabelle15
+    Set housingWetTable = housingWetWS.Range("A3:C13")
+    housingWetData = housingWetTable.Value
+
+    ' Gehäusematerial (nicht benetzt)
+    Dim housingNotwetWS As Worksheet, housingNotwetTable As Range, housingNotwetData As Variant
+    housingNotwetWS = Sheet4
+    Set housingNotwetTable = housingNotwetWS.Range("A3:C13")
+    housingNotwetData = housingNotwetTable.Value
+
+    ' Material der Membrane		
+    Dim memMaterialeWS As Worksheet, memMaterialeTable As Range, memMaterialeData As Variant
+    memMaterialeWS = Tabelle12
+    Dim memMaterialTable As Range, memMaterialData As Variant
+    Set memMaterialTable = memMaterialeWS.Range("A3:C11")
+    memMaterialData = memMaterialTable.Value
+
+    ' Membranausführung		
+    Dim memDesignWS As Worksheet, memDesignTable As Range, memDesignData As Variant
+    memDesignWS = Tabelle24
+    Dim memDesignTable As Range, memDesignData As Variant
+    Set memDesignTable = memDesignWS.Range("A3:C8")
+    memDesignData = memDesignTable.Value
+
+    ' Material Rückschlagventil		
+    Dim checkValveWS As Worksheet, checkValveTable As Range, checkValveData As Variant
+    checkValveWS = Tabelle13
+    Dim checkValveTable As Range, checkValveData As Variant
+    Set checkValveTable = checkValveWS.Range("A3:C16")
+    checkValveData = checkValveTable.Value
+
+    ' Material Ventilsitz		
+    Dim valveSeatWS As Worksheet, valveSeatTable As Range, valveSeatData As Variant
+    valveSeatWS = Tabelle14
+    Set valveSeatTable = valveSeatWS.Range("A3:C18")
+    valveSeatData = valveSeatTable.Value
+
+    ' Gehäuseausführung		
+    Dim housingDesignWS As Worksheet, housingDesignTable As Range, housingDesignData As Variant
+    housingDesignWS = Tabelle9
+    Set housingDesignTable = housingDesignWS.Range("A3:C4")
+    housingDesignData = housingDesignTable.Value
+
+    ' Revisionslevel	
+    Dim revisionWS As Worksheet, revisionTable As Range, revisionData As Variant
+    revisionWS = Tabelle26
+    Set revisionTable = revisionWS.Range("A3:B7")
+    revisionData = revisionTable.Value
+
+    ' Optionsen		
+    Dim optionsWS As Worksheet, optionsTable As Range, optionsData As Variant
+    optionsWS = Tabelle27
+    Set optionsTable = optionsWS.Range("A3:C19")
+    optionsData = optionsTable.Value
+
+    ' FDA-Konformität												
+    Dim FDAWS As Worksheet, FDATable As Range, FDAData As Variant
+    FDAWS = Tabelle10
+    Set FDATable = FDAWS.Range("A3:O102")
+    FDAData = FDATable.Value
+
+    ' Exlosionsschutz (ATEX)	
+    Dim explosionWS As Worksheet, explosionTable As Range, explosionData As Variant
+    explosionWS = Tabelle11
+    Set explosionTable = explosionWS.Range("A3:F3")
+    explosionData = explosionTable.Value
+
+    ' Maximale Feststoffgröße							
+    Dim maxSolidSizeWS As Worksheet, maxSolidSizeTable As Range, maxSolidSizeData As Variant
+    maxSolidSizeWS = Tabelle8
+    Set maxSolidSizeTable = maxSolidSizeWS.Range("A3:H17")
+    maxSolidSizeData = maxSolidSizeTable.Value
+
+    ' Fördermenge per Hub							
+    Dim flowRateWS As Worksheet, flowRateTable As Range, flowRateData As Variant
+    flowRateWS = Tabelle18
+    Set flowRateTable = flowRateWS.Range("A3:H23")
+    flowRateData = flowRateTable.Value
+
+    ' Maximaler Förderdruck						
+    Dim maxDischargePressureWS As Worksheet, maxDischargePressureTable As Range, maxDischargePressureData As Variant
+    maxDischargePressureWS = Tabelle17
+    Set maxDischargePressureTable = maxDischargePressureWS.Range("A3:G11")
+    maxDischargePressureData = maxDischargePressureTable.Value
+
+    ' Förderleistung										
+    Dim conveyCapacityWS As Worksheet, conveyCapacityTable As Range, conveyCapacityData As Variant
+    conveyCapacityWS = Tabelle16
+    Set conveyCapacityTable = conveyCapacityWS.Range("A3:K205")
+    conveyCapacityData = conveyCapacityTable.Value
+
+    ' Anschlusstyp								
+    Dim connectionTypeWS As Worksheet, connectionTypeTable As Range, connectionTypeData As Variant
+    connectionTypeWS = Tabelle21
+    Set connectionTypeTable = connectionTypeWS.Range("A3:I81")
+    connectionTypeData = connectionTypeTable.Value
+
+    ' Anschlussgröße (Saugseite)
+    Dim connSizeSuctionWS As Worksheet, connSizeSuctionTable As Range, connSizeSuctionData As Variant
+    connSizeSuctionWS = Sheet5
+    Set connSizeSuctionTable = connSizeSuctionWS.Range("A3:F19")
+    connSizeSuctionData = connSizeSuctionTable.Value
+
+    ' Anschlussgröße (Druckseite)
+    Dim connSizePressureWS As Worksheet, connSizePressureTable As Range, connSizePressureData As Variant
+    connSizePressureWS = Sheet6
+    Set connSizePressureTable = connSizePressureWS.Range("A3:F19")
+    connSizePressureData = connSizePressureTable.Value
+
+    ' Ansaughöhe (nass)
+    Dim suctionHeightWetWS As Worksheet, suctionHeightWetTable As Range, suctionHeightWetData As Variant
+    suctionHeightWetWS = Tabelle19
+    Set suctionHeightWetTable = suctionHeightWetWS.Range("A3:H16")
+    suctionHeightWetData = suctionHeightWetTable.Value
+
+    ' Ansaughöhe (trocken)
+    Dim suctionHeightDryWS As Worksheet, suctionHeightDryTable As Range, suctionHeightDryData As Variant
+    suctionHeightDryWS = Tabelle29
+    Set suctionHeightDryTable = suctionHeightDryWS.Range("A3:H21")
+    suctionHeightDryData = suctionHeightDryTable.Value
+
+    ' Luftanschluss (Eingang)
+    Dim airConnInletWS As Worksheet, airConnInletTable As Range, airConnInletData As Variant
+    airConnInletWS = Tabelle30
+    Set airConnInletTable = airConnInletWS.Range("A3:G24")
+    airConnInletData = airConnInletTable.Value
+
+    ' Luftanschluss (Ausgang)
+    Dim airConnOutletWS As Worksheet, airConnOutletTable As Range, airConnOutletData As Variant
+    airConnOutletWS = Tabelle20
+    Set airConnOutletTable = airConnOutletWS.Range("A3:F14")
+    airConnOutletData = airConnOutletTable.Value
+
+    ' Gewicht-Abmessungen
+    Dim dimensionsWS As Worksheet, dimensionsTable As Range, dimensionsData As Variant
+    dimensionsWS = Tabelle22
+    Set dimensionsTable = dimensionsWS.Range("A3:L64")
+    dimensionsData = dimensionsTable.Value
+
+    ' Temperatur - Material der Membrane			
+    Dim memMaterialTempWS As Worksheet, memMaterialTempTable As Range, memMaterialTempData As Variant
+    memMaterialTempWS = Tabelle31
+    Set memMaterialTempTable = memMaterialTempWS.Range("A3:D11")
+    memMaterialTempData = memMaterialTempTable.Value
+
+
     Dim wsInput As Worksheet, wsOutput As Worksheet
     Dim lastRow As Long, i As Long
     Dim articleNum As String, remainedArticleNum As String
