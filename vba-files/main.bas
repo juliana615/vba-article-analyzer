@@ -2,6 +2,51 @@ Attribute VB_Name = "main"
 
 ' ChrW(246) → ö, ChrW(223) → ß, ChrW(228) → ä, ChrW(252) → ü, ChrW(174) → ®, ChrW(8482) → ™, ChrW(8443) → °C
 
+' Sub GetRGBColor()
+'     Dim testCell As Range
+'     Dim wsSeoInput As Worksheet
+'     Set wsSeoInput = ThisWorkbook.Sheets("SEO INPUT")
+'     Set testCell = wsSeoInput.Range("B6")
+'     Dim colorValue As Long
+'     Dim redVal As Integer, greenVal As Integer, blueVal As Integer
+    
+'     colorValue = testCell.Interior.Color
+    
+'     redVal = colorValue Mod 256
+'     greenVal = (colorValue \ 256) Mod 256
+'     blueVal = (colorValue \ 65536) Mod 256
+    
+'     MsgBox "RGB: (" & redVal & ", " & greenVal & ", " & blueVal & ")"
+' End Sub
+
+Private Function GetVariableDict(variableData As Variant) As Object
+    Dim dict As Object
+    Set dict = CreateObject("Scripting.Dictionary")
+    
+    Dim i As Integer
+    For i = 1 To UBound(variableData, 1) ' Loop through rows
+        If Not dict.exists(variableData(i, 1)) Then ' Avoid duplicates
+            dict.Add variableData(i, 1), variableData(i, 2) ' Add key-value pair
+        End If
+    Next i
+    
+    Set GetVariableDict = dict ' Return dictionary
+End Function
+    
+' Private Function GetVariableDictionary(variableData As Variant) As Dictionary
+'     Static obj As Dictionary
+
+'     If obj Is Nothing Then
+'         Set obj = New Dictionary
+'         Dim i As Integer
+'         For i = 1 To UBound(variableData, 1)
+'             obj.Add variableData(i, 1), variableData(i, 2)
+'         Next i
+'     End If
+
+'     Set GetVariableDictionary = obj
+' End Function
+    
 Sub Main()
     '''''''''''''''''''''
     ' Initializing Data '
@@ -162,13 +207,25 @@ Sub Main()
     Set memMaterialTempTable = memMaterialTempWS.Range("A3:D11")
     memMaterialTempData = memMaterialTempTable.Value
 
+    ' Variables
+    Dim wsVariable As Worksheet, variableTable As Range, variableData As Variant, variableDict As Object
+    Set wsVariable = ThisWorkbook.Sheets("Variables")
+    Set variableTable = wsVariable.Range("A1:B7")
+    variableData = variableTable.Value
+    ' Set variableDict = GetVariableDict(variableData)
+
+    Dim wsSeoInput As Worksheet, seoInputTable As Range, seoInputData As Variant
+    Set wsSeoInput = ThisWorkbook.Sheets("SEO INPUT")
+    set seoInputTable = wsSeoInput.Range("B4:I200")
+    seoInputData = seoInputTable.Value
+
     ' Set worksheet references
     Dim wsInput As Worksheet, wsOutput As Worksheet, wsSeoOutput As Worksheet
     Set wsInput = ThisWorkbook.Sheets("INPUT")
     Set wsOutput = ThisWorkbook.Sheets("OUTPUT")
     Set wsSeoOutput = ThisWorkbook.Sheets("SEO OUTPUT")
 
-    Dim lastRow As Long, i As Long
+    Dim lastRow As Long
     Dim articleNum As String, remainedArticleNum As String
 
     Dim modelChar As String, model As String, remaindArticleNumber As String
@@ -188,8 +245,14 @@ Sub Main()
     Dim maxSolidSize As String, flowRate As String, maxDischargePressure As String, conveyCapacity As String, connectionType As String, connSizeSuction As String, connSizePressure As String, suctionHeightWet As String, suctionHeightDry As String, airConnInlet As String, airConnOutlet As String
     Dim weight As String, length As String, width As String, height As String  
     Dim memMaterialTempMin As String, memMaterialTempMax As String
+    Dim redColor As Long, greenColor As Long
+    Dim seoArticleNameDE As String, seoUrlPathDE As String, seoMetaDescriptionDE As String, seoShortDescriptionDE As String, seoArticleNameEN As String, seoUrlPathEN As String, seoMetaDescriptionEN As String, seoShortDescriptionEN As String
+    Dim seoArticleNameDECell As String, seoUrlPathDECell As String, seoMetaDescriptionDECell As String, seoShortDescriptionDECell As String, seoArticleNameENCell As String, seoUrlPathENCell As String, seoMetaDescriptionENCell As String, seoShortDescriptionENCell As String
     Dim outputRow As Long
     
+    redColor = RGB(252, 228, 214)
+    greenColor = RGB(226, 239, 218)
+
     ' Find last row in INPUT sheet
     lastRow = wsInput.Cells(wsInput.Rows.Count, 1).End(xlUp).Row
 
@@ -574,9 +637,23 @@ Sub Main()
             End If
         Next j
         
+        If variableDict Is Nothing Then
+            Set variableDict = New Dictionary
+            variableDict.add "connSizeInch", connSizeInch
+            variableDict.add "articleNum", articleNum
+            variableDict.add "flowRate", flowRate
+            variableDict.add "maxDischargePressure", maxDischargePressure
+            variableDict.add "housingWet", housingWet
+            variableDict.add "memMaterial", memMaterial
+            variableDict.add "maxSolidSize", maxSolidSize
+        End If
+        
         ' Reset OUTPUT sheet and SEO OUTPUT sheet
         For k = 1 To 29
             wsOutput.Cells(outputRow, k).Value = ""
+        Next k
+        For k = 1 To 9
+            wsSeoOutput.Cells(outputRow, k).Value = ""
         Next k
 
         ' Write data to OUTPUT sheet
@@ -609,50 +686,225 @@ Sub Main()
         wsOutput.Cells(outputRow, 27).Value = length
         wsOutput.Cells(outputRow, 28).Value = width
         wsOutput.Cells(outputRow, 29).Value = height
-    '     ' wsOutput.Cells(outputRow, 11).Value = revision
-    '     ' wsOutput.Cells(outputRow, 12).Value = options
         
-    '     ' Write SEO data to SEO OUTPUT sheet
-    '     wsSeoOutput.Cells(outputRow, 1).Value = articleNum
-    '     wsSeoOutput.Cells(outputRow, 2).Value = "Druckluftmembranpumpe | " & connSize & " Zoll | " & articleNum
-    '     wsSeoOutput.Cells(outputRow, 3).Value = articleNum
+        ' Create SEO fields
+        For j = 1 To UBound(seoInputData, 1)
+            ' Initialize
+            If j = 1 Then
+                seoArticleNameDE = ""
+                seoUrlPathDE = ""
+                seoMetaDescriptionDE = ""
+                seoShortDescriptionDE = ""
+                seoArticleNameEN = ""
+                seoUrlPathEN = ""
+                seoMetaDescriptionEN = ""
+                seoShortDescriptionEN = ""
+            End If
+            seoArticleNameDECell = seoInputData(j, 1)
+            If seoArticleNameDECell <> "" Then
+                ' Debug.Print "seoArticleNameDECell: "; seoArticleNameDECell
+                If seoArticleNameDECell Like "*[[]*[]]*" Then
+                    seoArticleNameDECell = Mid(seoArticleNameDECell, InStr(seoArticleNameDECell, "[") + 1, InStr(seoArticleNameDECell, "]") - InStr(seoArticleNameDECell, "[") - 1)
+                    ' Debug.Print "Refined seoArticleNameDECell: "; seoArticleNameDECell
+                    For k = 1 To UBound(variableData, 1)
+                        If variableData(k, 1) = seoArticleNameDECell Then
+                            seoArticleNameDECell = variableData(k, 2)
+                            ' Debug.Print "variableData: "; seoArticleNameDECell
+                            If variableDict.Exists(seoArticleNameDECell) Then
+                                seoArticleNameDECell = variableDict.Item(seoArticleNameDECell)
+                            End If
+                            Exit For
+                        End If
+                    Next k
+                End If
+                If seoArticleNameDE = "" Then
+                    seoArticleNameDE = seoArticleNameDECell
+                Else
+                    seoArticleNameDE = seoArticleNameDE & " " & seoArticleNameDECell
+                End If
+            End If
 
-    '     wsSeoOutput.Cells(outputRow, 4).Value = "Selbstansaugende Druckluftmembranpumpe (trocken) | Anschlussgr" & ChrW(246) & ChrW(223) & "e: " & connSize & " Zoll | F" & ChrW(246) & "rderleistung: " & conveyingCapacity & " Liter pro Minute | F" & ChrW(246) & "rderdruck: max. " & maxDischargePressure & " bar | Geh" & ChrW(228) & "usematerial: " & housingWet(0) & " | Membranmaterial: " & memMaterial & " | Feststoffgr" & ChrW(246) & ChrW(223) & "e: " & maxSolidSize & " mm"
+            seoUrlPathDECell = seoInputData(j, 2)
+            If seoUrlPathDECell <> "" Then
+                ' Debug.Print "seoUrlPathDECell: "; seoUrlPathDECell
+                If seoUrlPathDECell Like "*[[]*[]]*" Then
+                    seoUrlPathDECell = Mid(seoUrlPathDECell, InStr(seoUrlPathDECell, "[") + 1, InStr(seoUrlPathDECell, "]") - InStr(seoUrlPathDECell, "[") - 1)
+                    ' Debug.Print "Refined seoUrlPathDECell: "; seoUrlPathDECell
+                    For k = 1 To UBound(variableData, 1)
+                        If variableData(k, 1) = seoUrlPathDECell Then
+                            seoUrlPathDECell = variableData(k, 2)
+                            ' Debug.Print "variableData: "; seoUrlPathDECell
+                            If variableDict.Exists(seoUrlPathDECell) Then
+                                seoUrlPathDECell = variableDict.Item(seoUrlPathDECell)
+                            End If
+                            Exit For
+                        End If
+                    Next k
+                End If
+                If seoUrlPathDE = "" Then
+                    seoUrlPathDE = seoUrlPathDECell
+                Else
+                    seoUrlPathDE = seoUrlPathDE & " " & seoUrlPathDECell
+                End If
+            End If
 
-    '     wsSeoOutput.Cells(outputRow, 5).Value = "<ul>" & vbNewLine & _
-    '     "<li>Selbstansaugende Druckluftmembranpumpe (trocken)</li>" & vbNewLine & _
-    '     "<li>Anschlussgr" & ChrW(246) & ChrW(223) & "e: " & connSize & " Zoll</li>" & vbNewLine & _
-    '     "<li>F" & ChrW(246) & "rderleistung: " & conveyingCapacity & " Liter pro Minute</li>" & vbNewLine & _
-    '     "<li>F" & ChrW(246) & "rderdruck: max. " & maxDischargePressure & " bar</li>" & vbNewLine & _
-    '     "<li>Geh" & ChrW(228) & "usematerial: " & housingWet(0) & "</li>" & vbNewLine & _
-    '     "<li>Membranmaterial: " & memMaterial & "</li>" & vbNewLine & _
-    '     "<li>Feststoffgr" & ChrW(246) & ChrW(223) & "e: " & maxSolidSize & " mm</li>" & vbNewLine & _
-    '     "</ul>" & vbNewLine & _
-    '     "<ul>" & vbNewLine & _
-    '     "<li><strong><a href=""#tab-attributes"" title=""Weitere technische Daten"">Weitere technische Daten</a></strong></li>" & vbNewLine & _
-    '     "<li><strong><a href=""#tab-cross"" title=""Kompatible Reparaturs" & ChrW(228) & "tze oder Ersatzteile"">Kompatible Reparaturs" & ChrW(228) & "tze oder Ersatzteile</a></strong></li>" & vbNewLine & _
-    '     "</ul>"
+            seoMetaDescriptionDECell = seoInputData(j, 3)
+            If seoMetaDescriptionDECell <> "" Then
+                ' Debug.Print "seoMetaDescriptionDECell: "; seoMetaDescriptionDECell
+                If seoMetaDescriptionDECell Like "*[[]*[]]*" Then
+                    seoMetaDescriptionDECell = Mid(seoMetaDescriptionDECell, InStr(seoMetaDescriptionDECell, "[") + 1, InStr(seoMetaDescriptionDECell, "]") - InStr(seoMetaDescriptionDECell, "[") - 1)
+                    ' Debug.Print "Refined seoMetaDescriptionDECell: "; seoMetaDescriptionDECell
+                    For k = 1 To UBound(variableData, 1)
+                        If variableData(k, 1) = seoMetaDescriptionDECell Then
+                            seoMetaDescriptionDECell = variableData(k, 2)
+                            ' Debug.Print "variableData: "; seoMetaDescriptionDECell
+                            If variableDict.Exists(seoMetaDescriptionDECell) Then
+                                seoMetaDescriptionDECell = variableDict.Item(seoMetaDescriptionDECell)
+                            End If
+                            Exit For
+                        End If
+                    Next k
+                End If
+                If seoMetaDescriptionDE = "" Then
+                    seoMetaDescriptionDE = seoMetaDescriptionDECell
+                Else
+                    seoMetaDescriptionDE = seoMetaDescriptionDE & " " & seoMetaDescriptionDECell
+                End If
+            End If
 
-    '     wsSeoOutput.Cells(outputRow, 6).Value = "Air-operated double diaphragm pump | " & connSize & " Inch | " & articleNum
-    '     wsSeoOutput.Cells(outputRow, 7).Value = "versamatic-" & articleNum
+            seoShortDescriptionDECell = seoInputData(j, 4)
+            If seoShortDescriptionDECell <> "" Then
+                ' Debug.Print "seoShortDescriptionDECell: "; seoShortDescriptionDECell
+                If seoShortDescriptionDECell Like "*[[]*[]]*" Then
+                    seoShortDescriptionDECell = Mid(seoShortDescriptionDECell, InStr(seoShortDescriptionDECell, "[") + 1, InStr(seoShortDescriptionDECell, "]") - InStr(seoShortDescriptionDECell, "[") - 1)
+                    ' Debug.Print "Refined seoShortDescriptionDECell: "; seoShortDescriptionDECell
+                    For k = 1 To UBound(variableData, 1)
+                        If variableData(k, 1) = seoShortDescriptionDECell Then
+                            seoShortDescriptionDECell = variableData(k, 2)
+                            ' Debug.Print "variableData: "; seoShortDescriptionDECell
+                            If variableDict.Exists(seoShortDescriptionDECell) Then
+                                seoShortDescriptionDECell = variableDict.Item(seoShortDescriptionDECell)
+                            End If
+                            Exit For
+                        End If
+                    Next k
+                End If
+                If seoShortDescriptionDE = "" Then
+                    seoShortDescriptionDE = seoShortDescriptionDECell
+                Else
+                    seoShortDescriptionDE = seoShortDescriptionDE & " " & seoShortDescriptionDECell
+                End If
+            End If
 
-    '     wsSeoOutput.Cells(outputRow, 8).Value = "Self-priming air-operated diaphragm pump (dry)  | Connection size: " & connSize & " Inch | Flow rate: " & conveyingCapacity & " Litres per minute | Delivery pressure: max. " & maxDischargePressure & " bar | Housing material: " & housingWet(1) & " | Diaphragm material: " & memMaterial & " | Solids size: " & maxSolidSize & " mm"
+            seoArticleNameENCell = seoInputData(j, 5)
+            If seoArticleNameENCell <> "" Then
+                ' Debug.Print "seoArticleNameENCell: "; seoArticleNameENCell
+                If seoArticleNameENCell Like "*[[]*[]]*" Then
+                    seoArticleNameENCell = Mid(seoArticleNameENCell, InStr(seoArticleNameENCell, "[") + 1, InStr(seoArticleNameENCell, "]") - InStr(seoArticleNameENCell, "[") - 1)
+                    ' Debug.Print "Refined seoArticleNameENCell: "; seoArticleNameENCell
+                    For k = 1 To UBound(variableData, 1)
+                        If variableData(k, 1) = seoArticleNameENCell Then
+                            seoArticleNameENCell = variableData(k, 2)
+                            ' Debug.Print "variableData: "; seoArticleNameENCell
+                            If variableDict.Exists(seoArticleNameENCell) Then
+                                seoArticleNameENCell = variableDict.Item(seoArticleNameENCell)
+                            End If
+                            Exit For
+                        End If
+                    Next k
+                End If
+                If seoArticleNameEN = "" Then
+                    seoArticleNameEN = seoArticleNameENCell
+                Else
+                    seoArticleNameEN = seoArticleNameEN & " " & seoArticleNameENCell
+                End If
+            End If
 
-    '     wsSeoOutput.Cells(outputRow, 9).Value = "<ul>" & vbNewLine & _
-    '     "<li>Self-priming air-operated diaphragm pump (dry)" & vbNewLine & _
-    '     "<li>Connection size: " & connSize & " Inch</li>" & vbNewLine & _
-    '     "<li>Flow rate: " & conveyingCapacity & " Litres per minute</li>" & vbNewLine & _
-    '     "<li>Delivery pressure: max. " & maxDischargePressure & " bar</li>" & vbNewLine & _
-    '     "<li>Housing material: " & housingWet(1) & "</li>" & vbNewLine & _
-    '     "<li>Diaphragm material: " & memMaterial & "</li>" & vbNewLine & _
-    '     "<li>Solids size: " & maxSolidSize & " mm</li>" & vbNewLine & _
-    '     "</ul>" & vbNewLine & _
-    '     "<ul>" & vbNewLine & _
-    '     "<li><strong><a href=""#tab-attributes"" title=""Further technical data"">Further technical data</a></strong></li>" & vbNewLine & _
-    '     "<li><strong><a href=""#tab-cross"" title=""Compatible repair kits or spare parts"">Compatible repair kits or spare parts</a></strong></li>" & vbNewLine & _
-    '     "</ul>"
-       
-    '     ' Move to next row in OUTPUT sheet
+            seoUrlPathENCell = seoInputData(j, 6)
+            If seoUrlPathENCell <> "" Then
+                ' Debug.Print "seoUrlPathENCell: "; seoUrlPathENCell
+                If seoUrlPathENCell Like "*[[]*[]]*" Then
+                    seoUrlPathENCell = Mid(seoUrlPathENCell, InStr(seoUrlPathENCell, "[") + 1, InStr(seoUrlPathENCell, "]") - InStr(seoUrlPathENCell, "[") - 1)
+                    ' Debug.Print "Refined seoUrlPathENCell: "; seoUrlPathENCell
+                    For k = 1 To UBound(variableData, 1)
+                        If variableData(k, 1) = seoUrlPathENCell Then
+                            seoUrlPathENCell = variableData(k, 2)
+                            ' Debug.Print "variableData: "; seoUrlPathENCell
+                            If variableDict.Exists(seoUrlPathENCell) Then
+                                seoUrlPathENCell = variableDict.Item(seoUrlPathENCell)
+                            End If
+                            Exit For
+                        End If
+                    Next k
+                End If
+                If seoUrlPathEN = "" Then
+                    seoUrlPathEN = seoUrlPathENCell
+                Else
+                    seoUrlPathEN = seoUrlPathEN & " " & seoUrlPathENCell
+                End If
+            End If
+
+            seoMetaDescriptionENCell = seoInputData(j, 7)
+            If seoMetaDescriptionENCell <> "" Then
+                ' Debug.Print "seoMetaDescriptionENCell: "; seoMetaDescriptionENCell
+                If seoMetaDescriptionENCell Like "*[[]*[]]*" Then
+                    seoMetaDescriptionENCell = Mid(seoMetaDescriptionENCell, InStr(seoMetaDescriptionENCell, "[") + 1, InStr(seoMetaDescriptionENCell, "]") - InStr(seoMetaDescriptionENCell, "[") - 1)
+                    ' Debug.Print "Refined seoMetaDescriptionENCell: "; seoMetaDescriptionENCell
+                    For k = 1 To UBound(variableData, 1)
+                        If variableData(k, 1) = seoMetaDescriptionENCell Then
+                            seoMetaDescriptionENCell = variableData(k, 2)
+                            ' Debug.Print "variableData: "; seoMetaDescriptionENCell
+                            If variableDict.Exists(seoMetaDescriptionENCell) Then
+                                seoMetaDescriptionENCell = variableDict.Item(seoMetaDescriptionENCell)
+                            End If
+                            Exit For
+                        End If
+                    Next k
+                End If
+                If seoMetaDescriptionEN = "" Then
+                    seoMetaDescriptionEN = seoMetaDescriptionENCell
+                Else
+                    seoMetaDescriptionEN = seoMetaDescriptionEN & " " & seoMetaDescriptionENCell
+                End If
+            End If
+
+            seoShortDescriptionENCell = seoInputData(j, 8)
+            If seoShortDescriptionENCell <> "" Then
+                ' Debug.Print "seoShortDescriptionENCell: "; seoShortDescriptionENCell
+                If seoShortDescriptionENCell Like "*[[]*[]]*" Then
+                    seoShortDescriptionENCell = Mid(seoShortDescriptionENCell, InStr(seoShortDescriptionENCell, "[") + 1, InStr(seoShortDescriptionENCell, "]") - InStr(seoShortDescriptionENCell, "[") - 1)
+                    ' Debug.Print "Refined seoShortDescriptionENCell: "; seoShortDescriptionENCell
+                    For k = 1 To UBound(variableData, 1)
+                        If variableData(k, 1) = seoShortDescriptionENCell Then
+                            seoShortDescriptionENCell = variableData(k, 2)
+                            ' Debug.Print "variableData: "; seoShortDescriptionENCell
+                            If variableDict.Exists(seoShortDescriptionENCell) Then
+                                seoShortDescriptionENCell = variableDict.Item(seoShortDescriptionENCell)
+                            End If
+                            Exit For
+                        End If
+                    Next k
+                End If
+                If seoShortDescriptionEN = "" Then
+                    seoShortDescriptionEN = seoShortDescriptionENCell
+                Else
+                    seoShortDescriptionEN = seoShortDescriptionEN & " " & seoShortDescriptionENCell
+                End If
+            End If
+        Next j
+
+        ' Write SEO data to SEO OUTPUT sheet
+        wsSeoOutput.Cells(outputRow, 1).Value = articleNum
+        wsSeoOutput.Cells(outputRow, 2).Value = seoArticleNameDE
+        wsSeoOutput.Cells(outputRow, 3).Value = seoUrlPathDE
+        wsSeoOutput.Cells(outputRow, 4).Value = seoMetaDescriptionDE
+        wsSeoOutput.Cells(outputRow, 5).Value = seoShortDescriptionDE
+        wsSeoOutput.Cells(outputRow, 6).Value = seoArticleNameEN
+        wsSeoOutput.Cells(outputRow, 7).Value = seoUrlPathEN
+        wsSeoOutput.Cells(outputRow, 8).Value = seoMetaDescriptionEN
+        wsSeoOutput.Cells(outputRow, 9).Value = seoShortDescriptionEN
+
+        ' Move to next row in OUTPUT sheet
         outputRow = outputRow + 1
     Next i
     
