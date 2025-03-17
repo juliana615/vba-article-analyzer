@@ -1821,365 +1821,445 @@ Sub Main()
     '''''''''''''''''''''
     ' Modell
     Dim modelWS As Worksheet, modelTable As Range, modelData As Variant
-    modelWS = Tabelle23
+    Set modelWS = Tabelle23
     Set modelTable = modelWS.Range("A3:B6")
     modelData = modelTable.Value
 
     ' Anschlussgröße
     Dim connSizeWS As Worksheet, connSizeTable As Range, connSizeData As Variant
-    connSizeWS = Tabelle7
+    Set connSizeWS = Tabelle7
     Set connSizeTable = connSizeWS.Range("A3:G19")
     connSizeData = connSizeTable.Value
 
     ' Gehäusematerial (benetzt)
     Dim housingWetWS As Worksheet, housingWetTable As Range, housingWetData As Variant
-    housingWetWS = Tabelle15
+    Set housingWetWS = Tabelle15
     Set housingWetTable = housingWetWS.Range("A3:C13")
     housingWetData = housingWetTable.Value
 
     ' Gehäusematerial (nicht benetzt)
     Dim housingNotwetWS As Worksheet, housingNotwetTable As Range, housingNotwetData As Variant
-    housingNotwetWS = Sheet4
+    Set housingNotwetWS = Sheet4
     Set housingNotwetTable = housingNotwetWS.Range("A3:C13")
     housingNotwetData = housingNotwetTable.Value
 
     ' Material der Membrane		
-    Dim memMaterialeWS As Worksheet, memMaterialeTable As Range, memMaterialeData As Variant
-    memMaterialeWS = Tabelle12
-    Dim memMaterialTable As Range, memMaterialData As Variant
-    Set memMaterialTable = memMaterialeWS.Range("A3:C11")
+    Dim memMaterialWS As Worksheet, memMaterialTable As Range, memMaterialData As Variant
+    Set memMaterialWS = Tabelle12
+    Set memMaterialTable = memMaterialWS.Range("A3:C11")
     memMaterialData = memMaterialTable.Value
 
     ' Membranausführung		
     Dim memDesignWS As Worksheet, memDesignTable As Range, memDesignData As Variant
-    memDesignWS = Tabelle24
-    Dim memDesignTable As Range, memDesignData As Variant
+    Set memDesignWS = Tabelle24
     Set memDesignTable = memDesignWS.Range("A3:C8")
     memDesignData = memDesignTable.Value
 
     ' Material Rückschlagventil		
     Dim checkValveWS As Worksheet, checkValveTable As Range, checkValveData As Variant
-    checkValveWS = Tabelle13
-    Dim checkValveTable As Range, checkValveData As Variant
+    Set checkValveWS = Tabelle13
     Set checkValveTable = checkValveWS.Range("A3:C16")
     checkValveData = checkValveTable.Value
 
     ' Material Ventilsitz		
     Dim valveSeatWS As Worksheet, valveSeatTable As Range, valveSeatData As Variant
-    valveSeatWS = Tabelle14
+    Set valveSeatWS = Tabelle14
     Set valveSeatTable = valveSeatWS.Range("A3:C18")
     valveSeatData = valveSeatTable.Value
 
     ' Gehäuseausführung		
     Dim housingDesignWS As Worksheet, housingDesignTable As Range, housingDesignData As Variant
-    housingDesignWS = Tabelle9
+    Set housingDesignWS = Tabelle9
     Set housingDesignTable = housingDesignWS.Range("A3:C4")
     housingDesignData = housingDesignTable.Value
 
     ' Revisionslevel	
     Dim revisionWS As Worksheet, revisionTable As Range, revisionData As Variant
-    revisionWS = Tabelle26
+    Set revisionWS = Tabelle26
     Set revisionTable = revisionWS.Range("A3:B7")
     revisionData = revisionTable.Value
 
     ' Optionsen		
     Dim optionsWS As Worksheet, optionsTable As Range, optionsData As Variant
-    optionsWS = Tabelle27
+    Set optionsWS = Tabelle27
     Set optionsTable = optionsWS.Range("A3:C19")
     optionsData = optionsTable.Value
 
     ' FDA-Konformität												
     Dim FDAWS As Worksheet, FDATable As Range, FDAData As Variant
-    FDAWS = Tabelle10
+    Set FDAWS = Tabelle10
     Set FDATable = FDAWS.Range("A3:O102")
     FDAData = FDATable.Value
 
     ' Exlosionsschutz (ATEX)	
     Dim explosionWS As Worksheet, explosionTable As Range, explosionData As Variant
-    explosionWS = Tabelle11
+    Set explosionWS = Tabelle11
     Set explosionTable = explosionWS.Range("A3:F3")
     explosionData = explosionTable.Value
 
     ' Maximale Feststoffgröße							
     Dim maxSolidSizeWS As Worksheet, maxSolidSizeTable As Range, maxSolidSizeData As Variant
-    maxSolidSizeWS = Tabelle8
+    Set maxSolidSizeWS = Tabelle8
     Set maxSolidSizeTable = maxSolidSizeWS.Range("A3:H17")
     maxSolidSizeData = maxSolidSizeTable.Value
 
     ' Fördermenge per Hub							
     Dim flowRateWS As Worksheet, flowRateTable As Range, flowRateData As Variant
-    flowRateWS = Tabelle18
+    Set flowRateWS = Tabelle18
     Set flowRateTable = flowRateWS.Range("A3:H23")
     flowRateData = flowRateTable.Value
 
     ' Maximaler Förderdruck						
     Dim maxDischargePressureWS As Worksheet, maxDischargePressureTable As Range, maxDischargePressureData As Variant
-    maxDischargePressureWS = Tabelle17
+    Set maxDischargePressureWS = Tabelle17
     Set maxDischargePressureTable = maxDischargePressureWS.Range("A3:G11")
     maxDischargePressureData = maxDischargePressureTable.Value
 
     ' Förderleistung										
     Dim conveyCapacityWS As Worksheet, conveyCapacityTable As Range, conveyCapacityData As Variant
-    conveyCapacityWS = Tabelle16
+    Set conveyCapacityWS = Tabelle16
     Set conveyCapacityTable = conveyCapacityWS.Range("A3:K205")
     conveyCapacityData = conveyCapacityTable.Value
 
     ' Anschlusstyp								
     Dim connectionTypeWS As Worksheet, connectionTypeTable As Range, connectionTypeData As Variant
-    connectionTypeWS = Tabelle21
+    Set connectionTypeWS = Tabelle21
     Set connectionTypeTable = connectionTypeWS.Range("A3:I81")
     connectionTypeData = connectionTypeTable.Value
 
     ' Anschlussgröße (Saugseite)
     Dim connSizeSuctionWS As Worksheet, connSizeSuctionTable As Range, connSizeSuctionData As Variant
-    connSizeSuctionWS = Sheet5
+    Set connSizeSuctionWS = Sheet5
     Set connSizeSuctionTable = connSizeSuctionWS.Range("A3:F19")
     connSizeSuctionData = connSizeSuctionTable.Value
 
     ' Anschlussgröße (Druckseite)
     Dim connSizePressureWS As Worksheet, connSizePressureTable As Range, connSizePressureData As Variant
-    connSizePressureWS = Sheet6
+    Set connSizePressureWS = Sheet6
     Set connSizePressureTable = connSizePressureWS.Range("A3:F19")
     connSizePressureData = connSizePressureTable.Value
 
     ' Ansaughöhe (nass)
     Dim suctionHeightWetWS As Worksheet, suctionHeightWetTable As Range, suctionHeightWetData As Variant
-    suctionHeightWetWS = Tabelle19
+    Set suctionHeightWetWS = Tabelle19
     Set suctionHeightWetTable = suctionHeightWetWS.Range("A3:H16")
     suctionHeightWetData = suctionHeightWetTable.Value
 
     ' Ansaughöhe (trocken)
     Dim suctionHeightDryWS As Worksheet, suctionHeightDryTable As Range, suctionHeightDryData As Variant
-    suctionHeightDryWS = Tabelle29
+    Set suctionHeightDryWS = Tabelle29
     Set suctionHeightDryTable = suctionHeightDryWS.Range("A3:H21")
     suctionHeightDryData = suctionHeightDryTable.Value
 
     ' Luftanschluss (Eingang)
     Dim airConnInletWS As Worksheet, airConnInletTable As Range, airConnInletData As Variant
-    airConnInletWS = Tabelle30
+    Set airConnInletWS = Tabelle30
     Set airConnInletTable = airConnInletWS.Range("A3:G24")
     airConnInletData = airConnInletTable.Value
 
     ' Luftanschluss (Ausgang)
     Dim airConnOutletWS As Worksheet, airConnOutletTable As Range, airConnOutletData As Variant
-    airConnOutletWS = Tabelle20
+    Set airConnOutletWS = Tabelle20
     Set airConnOutletTable = airConnOutletWS.Range("A3:F14")
     airConnOutletData = airConnOutletTable.Value
 
     ' Gewicht-Abmessungen
     Dim dimensionsWS As Worksheet, dimensionsTable As Range, dimensionsData As Variant
-    dimensionsWS = Tabelle22
+    Set dimensionsWS = Tabelle22
     Set dimensionsTable = dimensionsWS.Range("A3:L64")
     dimensionsData = dimensionsTable.Value
 
     ' Temperatur - Material der Membrane			
     Dim memMaterialTempWS As Worksheet, memMaterialTempTable As Range, memMaterialTempData As Variant
-    memMaterialTempWS = Tabelle31
+    Set memMaterialTempWS = Tabelle31
     Set memMaterialTempTable = memMaterialTempWS.Range("A3:D11")
     memMaterialTempData = memMaterialTempTable.Value
 
-
-    Dim wsInput As Worksheet, wsOutput As Worksheet
-    Dim lastRow As Long, i As Long
-    Dim articleNum As String, remainedArticleNum As String
-
-    Dim modelResult As Collection, modelChar As String, model As String
-    Dim connSizeResult As Collection, connSizeChar As String, connSize As String
-    Dim housingWetResult As Collection, housingWetChar As String, housingWet As Variant
-    Dim housingNotwetResult As Collection, housingNotwetChar As String, housingNotwet As Variant
-    Dim memMaterialResult As Collection, memMaterialChar As String, memMaterial As String
-    Dim memDesignResult As Collection, memDesignChar As String, memDesign As String
-    Dim checkValveResult As Collection, checkValveChar As String, checkValve As String
-    Dim valveSeatResult As Collection, valveSeatChar As String, valveSeat As String
-    Dim housingDesignResult As Collection, housingDesignChar As String, housingDesign As String
-    Dim revisionResult As Collection, revisionChar As String, revision As String
-    Dim optionsResult As Collection, optionsChar As String, options As String
-    Dim FDACompliance As String
-    Dim weightLengthWidthHeight As Collection, weight As String, length As String, width As String, height As String  
-    Dim outputRow As Long
-    
     ' Set worksheet references
+    Dim wsInput As Worksheet, wsOutput As Worksheet, wsSeoOutput As Worksheet
     Set wsInput = ThisWorkbook.Sheets("INPUT")
     Set wsOutput = ThisWorkbook.Sheets("OUTPUT")
     Set wsSeoOutput = ThisWorkbook.Sheets("SEO OUTPUT")
 
+    Dim lastRow As Long, i As Long
+    Dim articleNum As String, remainedArticleNum As String
+
+    Dim modelChar As String, model As String, remaindArticleNumber As String
+    Dim connSizeChar As String, connSize As String
+    Dim housingWetChar As String, housingWet As Variant
+    Dim housingNotwetChar As String, housingNotwet As Variant
+    Dim memMaterialChar As String, memMaterial As String
+    Dim memDesignChar As String, memDesign As String
+    Dim checkValveChar As String, checkValve As String
+    Dim valveSeatChar As String, valveSeat As String
+    Dim housingDesignChar As String, housingDesign As String
+    Dim revisionChar As String, revision As String
+    Dim optionOneChar As String, optionOne As String
+    Dim optionTwoChar As String, optionTwo As String
+    Dim FDACompliance As String
+    Dim weightLengthWidthHeight As Collection, weight As String, length As String, width As String, height As String  
+    Dim outputRow As Long
+    
     ' Find last row in INPUT sheet
     lastRow = wsInput.Cells(wsInput.Rows.Count, 1).End(xlUp).Row
 
     ' Loop through each article number
     outputRow = 2 ' Start from row 2 in OUTPUT sheet
-    For i = 5 To lastRow
+    ' For i = 5 To lastRow
+    For i = 55 To 55
         articleNum = wsInput.Cells(i, 1).Value ' Read article number
 
-        ' Check if article number is valid
-        ' If Len(articleNum) >= 11 Then
-            ' Extract components based on predefined structure
-        Set modelResult = GetModelFromArticleNumber(articleNum)
-        modelChar = modelResult.Item(1)
-        model = modelResult.Item(2)
-        remainedArticleNum = modelResult.Item(3)
+        ' Get parameters from article number
+        modelChar = Mid(articleNum, 1, 1)
+        remainedArticleNumber = Mid(articleNum, 2)
 
-        Set connSizeResult = GetConnectionSizeFromArticleNumber(Cstr(remainedArticleNum))
-        connSizeChar = connSizeResult.Item(1)
-        connSize = connSizeResult.Item(2)
-        remainedArticleNum = connSizeResult.Item(3)
+        connSizeChar = Mid(remainedArticleNumber, 1, 1)
+        If connSizeChar = "4" Then
+            connSizeChar = Mid(remainedArticleNumber, 1, 2)
+            If connSizeChar = "4D" Or connSizeChar = "40" Then
+                remainedArticleNumber = Mid(remainedArticleNumber, 3)
+            Else
+                connSizeChar = Mid(remainedArticleNumber, 1, 1)
+                remainedArticleNumber = Mid(remainedArticleNumber, 2)
+            End If
+        Else
+            remainedArticleNumber = Mid(remainedArticleNumber, 2)
+        End If
 
-        Set housingWetResult = GetHousingMaterialWetFromArticleNumber(Cstr(remainedArticleNum))
-        housingWetChar = housingWetResult.Item(1)
-        housingWet = housingWetResult.Item(2)
-        remainedArticleNum = housingWetResult.Item(3)
+        housingWetChar = Mid(remainedArticleNumber, 1, 1)
+        remainedArticleNumber = Mid(remainedArticleNumber, 2)
 
-        Set housingNotwetResult = GetHousingMaterialNotwetFromArticleNumber(Cstr(remainedArticleNum))
-        housingNotwetChar = housingNotwetResult.Item(1)
-        housingNotwet = housingNotwetResult.Item(2)
-        remainedArticleNum = housingNotwetResult.Item(3)
+        housingNotwetChar = Mid(remainedArticleNumber, 1, 1)
+        remainedArticleNumber = Mid(remainedArticleNumber, 2)
 
-        Set memMaterialResult = GetMembraneMaterialFromArticleNumber(Cstr(remainedArticleNum))
-        memMaterialChar = memMaterialResult.Item(1)
-        memMaterial = memMaterialResult.Item(2)
-        remainedArticleNum = memMaterialResult.Item(3)
+        memMaterialChar = Mid(remainedArticleNumber, 1, 1)
+        remainedArticleNumber = Mid(remainedArticleNumber, 2)
 
-        Set memDesignResult = GetMembraneDesignFromArticleNumber(Cstr(remainedArticleNum))
-        memDesignChar = memDesignResult.Item(1)
-        memDesign = memDesignResult.Item(2)
-        remainedArticleNum = memDesignResult.Item(3)
+        memDesignChar = Mid(remainedArticleNumber, 1, 1)
+        remainedArticleNumber = Mid(remainedArticleNumber, 2)
 
-        Set checkValveResult = GetCheckValveMaterialFromArticleNumber(Cstr(remainedArticleNum))
-        checkValveChar = checkValveResult.Item(1)
-        checkValve = checkValveResult.Item(2)
-        remainedArticleNum = checkValveResult.Item(3)
+        checkValveChar = Mid(remainedArticleNumber, 1, 1)
+        remainedArticleNumber = Mid(remainedArticleNumber, 2)
+
+        valveSeatChar = Mid(remainedArticleNumber, 1, 1)
+        remainedArticleNumber = Mid(remainedArticleNumber, 2)
+
+        housingDesignChar = Mid(remainedArticleNumber, 1, 1)
+        remainedArticleNumber = Mid(remainedArticleNumber, 2)
+
+        If Len(remainedArticleNumber) > 0 Then
+            revisionChar = Mid(remainedArticleNumber, 1, 1)
+            If revisionChar = "-" Then
+                revisionChar = ""
+                remainedArticleNumber = Mid(remainedArticleNumber, 1)
+            Else
+                remainedArticleNumber = Mid(remainedArticleNumber, 2)
+            End If
+        Else
+            revisionChar = ""
+        End If
+
+        If Len(remainedArticleNumber) > 0 Then
+            firstChar = Mid(remainedArticleNumber, 1, 1)
+            If firstChar = "-" Then
+                If InStr(2, remainedArticleNumber, "-") > 0 Then
+                    optionOneChar = Mid(remainedArticleNumber, 1, InStr(2, remainedArticleNumber, "-") - 1)
+                    optionTwoChar = Mid(remainedArticleNumber, InStr(2, remainedArticleNumber, "-"))
+                Else
+                    optionOneChar = remainedArticleNumber
+                    optionTwoChar = ""
+                End If
+            Else
+                optionOneChar = ""
+                optionTwoChar = ""
+            End If
+        Else
+            optionOneChar = ""
+            optionTwoChar = ""
+        End If
+
+        MsgBox "Model: " & modelChar & vbNewLine & _
+                "Connection Size: " & connSizeChar & vbNewLine & _
+                "Housing Wet: " & housingWetChar & vbNewLine & _
+                "Housing Notwet: " & housingNotwetChar & vbNewLine & _
+                "Membrane Material: " & memMaterialChar & vbNewLine & _
+                "Membrane Design: " & memDesignChar & vbNewLine & _
+                "Check Valve: " & checkValveChar & vbNewLine & _
+                "Valve Seat: " & valveSeatChar & vbNewLine & _
+                "Housing Design: " & housingDesignChar & vbNewLine & _
+                "Revision: " & revisionChar & vbNewLine & _
+                "Option1: " & optionOneChar & vbNewLine & _
+                "Option2: " & optionTwoChar
+
+    '     For i = 1 To UBound(modelData, 1)
+    '         If modelData(i, 1) = modelChar Then
+    '             model = modelData(i, 2)
+    '             Exit For
+    '         End If
+    '     Next i
+
+
+    '     Set connSizeResult = GetConnectionSizeFromArticleNumber(Cstr(remainedArticleNum))
+    '     connSizeChar = connSizeResult.Item(1)
+    '     connSize = connSizeResult.Item(2)
+    '     remainedArticleNum = connSizeResult.Item(3)
+
+    '     Set housingWetResult = GetHousingMaterialWetFromArticleNumber(Cstr(remainedArticleNum))
+    '     housingWetChar = housingWetResult.Item(1)
+    '     housingWet = housingWetResult.Item(2)
+    '     remainedArticleNum = housingWetResult.Item(3)
+
+    '     Set housingNotwetResult = GetHousingMaterialNotwetFromArticleNumber(Cstr(remainedArticleNum))
+    '     housingNotwetChar = housingNotwetResult.Item(1)
+    '     housingNotwet = housingNotwetResult.Item(2)
+    '     remainedArticleNum = housingNotwetResult.Item(3)
+
+    '     Set memMaterialResult = GetMembraneMaterialFromArticleNumber(Cstr(remainedArticleNum))
+    '     memMaterialChar = memMaterialResult.Item(1)
+    '     memMaterial = memMaterialResult.Item(2)
+    '     remainedArticleNum = memMaterialResult.Item(3)
+
+    '     Set memDesignResult = GetMembraneDesignFromArticleNumber(Cstr(remainedArticleNum))
+    '     memDesignChar = memDesignResult.Item(1)
+    '     memDesign = memDesignResult.Item(2)
+    '     remainedArticleNum = memDesignResult.Item(3)
+
+    '     Set checkValveResult = GetCheckValveMaterialFromArticleNumber(Cstr(remainedArticleNum))
+    '     checkValveChar = checkValveResult.Item(1)
+    '     checkValve = checkValveResult.Item(2)
+    '     remainedArticleNum = checkValveResult.Item(3)
         
-        Set valveSeatResult = GetValveSeatMaterialFromArticleNumber(Cstr(remainedArticleNum))
-        valveSeatChar = valveSeatResult.Item(1)
-        valveSeat = valveSeatResult.Item(2)
-        remainedArticleNum = valveSeatResult.Item(3)
+    '     Set valveSeatResult = GetValveSeatMaterialFromArticleNumber(Cstr(remainedArticleNum))
+    '     valveSeatChar = valveSeatResult.Item(1)
+    '     valveSeat = valveSeatResult.Item(2)
+    '     remainedArticleNum = valveSeatResult.Item(3)
 
-        Set housingDesignResult = GetHousingDesignFromArticleNumber(Cstr(remainedArticleNum))
-        housingDesignChar = housingDesignResult.Item(1)
-        housingDesign = housingDesignResult.Item(2)
-        remainedArticleNum = housingDesignResult.Item(3)
+    '     Set housingDesignResult = GetHousingDesignFromArticleNumber(Cstr(remainedArticleNum))
+    '     housingDesignChar = housingDesignResult.Item(1)
+    '     housingDesign = housingDesignResult.Item(2)
+    '     remainedArticleNum = housingDesignResult.Item(3)
 
-        Set revisionResult = GetRevisionLevelFromArticleNumber(Cstr(remainedArticleNum))
-        revisionChar = revisionResult.Item(1)
-        revision = revisionResult.Item(2)
-        remainedArticleNum = revisionResult.Item(3)
+    '     Set revisionResult = GetRevisionLevelFromArticleNumber(Cstr(remainedArticleNum))
+    '     revisionChar = revisionResult.Item(1)
+    '     revision = revisionResult.Item(2)
+    '     remainedArticleNum = revisionResult.Item(3)
 
-        Set optionsResult = GetOptionsFromArticleNumber(Cstr(remainedArticleNum))
-        optionsChar = optionsResult.Item(1)
-        options = optionsResult.Item(2)
+    '     Set optionsResult = GetOptionsFromArticleNumber(Cstr(remainedArticleNum))
+    '     optionsChar = optionsResult.Item(1)
+    '     options = optionsResult.Item(2)
 
-        ' Debug.Print("articleNum " & articleNum & ": " & "optionsChar: " & optionsChar)
-        FDACompliance = GetFDACompliance(Cstr(modelChar), Cstr(housingWetChar), Cstr(memMaterialChar), Cstr(checkValveChar), Cstr(valveSeatChar), Cstr(optionsChar))
+    '     ' Debug.Print("articleNum " & articleNum & ": " & "optionsChar: " & optionsChar)
+    '     FDACompliance = GetFDACompliance(Cstr(modelChar), Cstr(housingWetChar), Cstr(memMaterialChar), Cstr(checkValveChar), Cstr(valveSeatChar), Cstr(optionsChar))
 
-        explosionProtection = GetExplosionProtectionFromArticleNumber(articleNum)
+    '     explosionProtection = GetExplosionProtectionFromArticleNumber(articleNum)
 
-        maxSolidSize = GetMaxSolidSize(connSizeChar, housingWetChar, housingDesignChar)
+    '     maxSolidSize = GetMaxSolidSize(connSizeChar, housingWetChar, housingDesignChar)
 
-        flowRatePerStroke = GetFlowRatePerStroke(connSizeChar, housingWetChar, housingDesignChar, optionsChar)
+    '     flowRatePerStroke = GetFlowRatePerStroke(connSizeChar, housingWetChar, housingDesignChar, optionsChar)
 
-        maxDischargePressure = GetMaxDischargePressure(connSizeChar, housingWetChar, housingNotwetChar, optionsChar)
+    '     maxDischargePressure = GetMaxDischargePressure(connSizeChar, housingWetChar, housingNotwetChar, optionsChar)
 
-        conveyingCapacity = GetConveyingCapacity(connSizeChar, housingWetChar, housingNotwetChar, memMaterialChar, memDesignChar, housingDesignChar, optionsChar)
+    '     conveyingCapacity = GetConveyingCapacity(connSizeChar, housingWetChar, housingNotwetChar, memMaterialChar, memDesignChar, housingDesignChar, optionsChar)
 
-        connectionType = GetConnectionType(connSizeChar, housingWetChar, housingNotwetChar, housingDesignChar, optionsChar)
+    '     connectionType = GetConnectionType(connSizeChar, housingWetChar, housingNotwetChar, housingDesignChar, optionsChar)
 
-        connectionSizeForSuction = GetConnectionSizeForSuction(connSizeChar, optionsChar)
+    '     connectionSizeForSuction = GetConnectionSizeForSuction(connSizeChar, optionsChar)
 
-        connectionSizeForPressure = GetConnectionSizeForPressure(connSizeChar, optionsChar)
+    '     connectionSizeForPressure = GetConnectionSizeForPressure(connSizeChar, optionsChar)
 
-        suctionHeightWetted = GetSuctionHeightWetted(connSizeChar, housingWetChar, housingDesignChar, optionsChar)
+    '     suctionHeightWetted = GetSuctionHeightWetted(connSizeChar, housingWetChar, housingDesignChar, optionsChar)
 
-        suctionHeightDry = GetSuctionHeightDry(connSizeChar, housingWetChar, housingDesignChar, optionsChar)
+    '     suctionHeightDry = GetSuctionHeightDry(connSizeChar, housingWetChar, housingDesignChar, optionsChar)
 
-        airConnectionInlet = GetAirConnectionInlet(connSizeChar, housingWetChar, optionsChar)
+    '     airConnectionInlet = GetAirConnectionInlet(connSizeChar, housingWetChar, optionsChar)
 
-        airConnectionOutlet = GetAirConnectionOutlet(connSizeChar, optionsChar)
+    '     airConnectionOutlet = GetAirConnectionOutlet(connSizeChar, optionsChar)
 
-        minTemperature = GetMinTemperature(memMaterialChar)
-        maxTemperature = GetMaxTemperature(memMaterialChar)
+    '     minTemperature = GetMinTemperature(memMaterialChar)
+    '     maxTemperature = GetMaxTemperature(memMaterialChar)
 
-        Set weightLengthWidthHeight = GetWeightLengthWidthHeight(connSizeChar, housingWetChar, housingNotwetChar, housingDesignChar, Cstr(connectionType), optionsChar)
-        weight = weightLengthWidthHeight.Item(1)
-        length = weightLengthWidthHeight.Item(2)
-        width = weightLengthWidthHeight.Item(3)
-        height = weightLengthWidthHeight.Item(4)
+    '     Set weightLengthWidthHeight = GetWeightLengthWidthHeight(connSizeChar, housingWetChar, housingNotwetChar, housingDesignChar, Cstr(connectionType), optionsChar)
+    '     weight = weightLengthWidthHeight.Item(1)
+    '     length = weightLengthWidthHeight.Item(2)
+    '     width = weightLengthWidthHeight.Item(3)
+    '     height = weightLengthWidthHeight.Item(4)
 
-        ' Write data to OUTPUT sheet
-        wsOutput.Cells(outputRow, 1).Value = articleNum
-        wsOutput.Cells(outputRow, 2).Value = model
-        wsOutput.Cells(outputRow, 3).Value = connSize
-        wsOutput.Cells(outputRow, 4).Value = housingWet(0)
-        wsOutput.Cells(outputRow, 5).Value = housingNotwet(0)
-        wsOutput.Cells(outputRow, 6).Value = memMaterial
-        wsOutput.Cells(outputRow, 7).Value = memDesign
-        wsOutput.Cells(outputRow, 8).Value = checkValve
-        wsOutput.Cells(outputRow, 9).Value = valveSeat
-        wsOutput.Cells(outputRow, 10).Value = housingDesign
-        wsOutput.Cells(outputRow, 11).Value = FDACompliance
-        wsOutput.Cells(outputRow, 12).Value = explosionProtection
-        wsOutput.Cells(outputRow, 13).Value = maxSolidSize
-        wsOutput.Cells(outputRow, 14).Value = flowRatePerStroke
-        wsOutput.Cells(outputRow, 15).Value = maxDischargePressure
-        wsOutput.Cells(outputRow, 16).Value = conveyingCapacity
-        wsOutput.Cells(outputRow, 17).Value = connectionType
-        wsOutput.Cells(outputRow, 18).Value = connectionSizeForSuction
-        wsOutput.Cells(outputRow, 19).Value = connectionSizeForPressure
-        wsOutput.Cells(outputRow, 20).Value = suctionHeightWetted
-        wsOutput.Cells(outputRow, 21).Value = suctionHeightDry
-        wsOutput.Cells(outputRow, 22).Value = airConnectionInlet
-        wsOutput.Cells(outputRow, 23).Value = airConnectionOutlet
-        wsOutput.Cells(outputRow, 24).Value = minTemperature
-        wsOutput.Cells(outputRow, 25).Value = maxTemperature
-        wsOutput.Cells(outputRow, 26).Value = weight
-        wsOutput.Cells(outputRow, 27).Value = length
-        wsOutput.Cells(outputRow, 28).Value = width
-        wsOutput.Cells(outputRow, 29).Value = height
-        ' wsOutput.Cells(outputRow, 11).Value = revision
-        ' wsOutput.Cells(outputRow, 12).Value = options
+    '     ' Write data to OUTPUT sheet
+    '     wsOutput.Cells(outputRow, 1).Value = articleNum
+    '     wsOutput.Cells(outputRow, 2).Value = model
+    '     wsOutput.Cells(outputRow, 3).Value = connSize
+    '     wsOutput.Cells(outputRow, 4).Value = housingWet(0)
+    '     wsOutput.Cells(outputRow, 5).Value = housingNotwet(0)
+    '     wsOutput.Cells(outputRow, 6).Value = memMaterial
+    '     wsOutput.Cells(outputRow, 7).Value = memDesign
+    '     wsOutput.Cells(outputRow, 8).Value = checkValve
+    '     wsOutput.Cells(outputRow, 9).Value = valveSeat
+    '     wsOutput.Cells(outputRow, 10).Value = housingDesign
+    '     wsOutput.Cells(outputRow, 11).Value = FDACompliance
+    '     wsOutput.Cells(outputRow, 12).Value = explosionProtection
+    '     wsOutput.Cells(outputRow, 13).Value = maxSolidSize
+    '     wsOutput.Cells(outputRow, 14).Value = flowRatePerStroke
+    '     wsOutput.Cells(outputRow, 15).Value = maxDischargePressure
+    '     wsOutput.Cells(outputRow, 16).Value = conveyingCapacity
+    '     wsOutput.Cells(outputRow, 17).Value = connectionType
+    '     wsOutput.Cells(outputRow, 18).Value = connectionSizeForSuction
+    '     wsOutput.Cells(outputRow, 19).Value = connectionSizeForPressure
+    '     wsOutput.Cells(outputRow, 20).Value = suctionHeightWetted
+    '     wsOutput.Cells(outputRow, 21).Value = suctionHeightDry
+    '     wsOutput.Cells(outputRow, 22).Value = airConnectionInlet
+    '     wsOutput.Cells(outputRow, 23).Value = airConnectionOutlet
+    '     wsOutput.Cells(outputRow, 24).Value = minTemperature
+    '     wsOutput.Cells(outputRow, 25).Value = maxTemperature
+    '     wsOutput.Cells(outputRow, 26).Value = weight
+    '     wsOutput.Cells(outputRow, 27).Value = length
+    '     wsOutput.Cells(outputRow, 28).Value = width
+    '     wsOutput.Cells(outputRow, 29).Value = height
+    '     ' wsOutput.Cells(outputRow, 11).Value = revision
+    '     ' wsOutput.Cells(outputRow, 12).Value = options
         
-        ' Write SEO data to SEO OUTPUT sheet
-        wsSeoOutput.Cells(outputRow, 1).Value = articleNum
-        wsSeoOutput.Cells(outputRow, 2).Value = "Druckluftmembranpumpe | " & connSize & " Zoll | " & articleNum
-        wsSeoOutput.Cells(outputRow, 3).Value = articleNum
+    '     ' Write SEO data to SEO OUTPUT sheet
+    '     wsSeoOutput.Cells(outputRow, 1).Value = articleNum
+    '     wsSeoOutput.Cells(outputRow, 2).Value = "Druckluftmembranpumpe | " & connSize & " Zoll | " & articleNum
+    '     wsSeoOutput.Cells(outputRow, 3).Value = articleNum
 
-        wsSeoOutput.Cells(outputRow, 4).Value = "Selbstansaugende Druckluftmembranpumpe (trocken) | Anschlussgr" & ChrW(246) & ChrW(223) & "e: " & connSize & " Zoll | F" & ChrW(246) & "rderleistung: " & conveyingCapacity & " Liter pro Minute | F" & ChrW(246) & "rderdruck: max. " & maxDischargePressure & " bar | Geh" & ChrW(228) & "usematerial: " & housingWet(0) & " | Membranmaterial: " & memMaterial & " | Feststoffgr" & ChrW(246) & ChrW(223) & "e: " & maxSolidSize & " mm"
+    '     wsSeoOutput.Cells(outputRow, 4).Value = "Selbstansaugende Druckluftmembranpumpe (trocken) | Anschlussgr" & ChrW(246) & ChrW(223) & "e: " & connSize & " Zoll | F" & ChrW(246) & "rderleistung: " & conveyingCapacity & " Liter pro Minute | F" & ChrW(246) & "rderdruck: max. " & maxDischargePressure & " bar | Geh" & ChrW(228) & "usematerial: " & housingWet(0) & " | Membranmaterial: " & memMaterial & " | Feststoffgr" & ChrW(246) & ChrW(223) & "e: " & maxSolidSize & " mm"
 
-        wsSeoOutput.Cells(outputRow, 5).Value = "<ul>" & vbNewLine & _
-        "<li>Selbstansaugende Druckluftmembranpumpe (trocken)</li>" & vbNewLine & _
-        "<li>Anschlussgr" & ChrW(246) & ChrW(223) & "e: " & connSize & " Zoll</li>" & vbNewLine & _
-        "<li>F" & ChrW(246) & "rderleistung: " & conveyingCapacity & " Liter pro Minute</li>" & vbNewLine & _
-        "<li>F" & ChrW(246) & "rderdruck: max. " & maxDischargePressure & " bar</li>" & vbNewLine & _
-        "<li>Geh" & ChrW(228) & "usematerial: " & housingWet(0) & "</li>" & vbNewLine & _
-        "<li>Membranmaterial: " & memMaterial & "</li>" & vbNewLine & _
-        "<li>Feststoffgr" & ChrW(246) & ChrW(223) & "e: " & maxSolidSize & " mm</li>" & vbNewLine & _
-        "</ul>" & vbNewLine & _
-        "<ul>" & vbNewLine & _
-        "<li><strong><a href=""#tab-attributes"" title=""Weitere technische Daten"">Weitere technische Daten</a></strong></li>" & vbNewLine & _
-        "<li><strong><a href=""#tab-cross"" title=""Kompatible Reparaturs" & ChrW(228) & "tze oder Ersatzteile"">Kompatible Reparaturs" & ChrW(228) & "tze oder Ersatzteile</a></strong></li>" & vbNewLine & _
-        "</ul>"
+    '     wsSeoOutput.Cells(outputRow, 5).Value = "<ul>" & vbNewLine & _
+    '     "<li>Selbstansaugende Druckluftmembranpumpe (trocken)</li>" & vbNewLine & _
+    '     "<li>Anschlussgr" & ChrW(246) & ChrW(223) & "e: " & connSize & " Zoll</li>" & vbNewLine & _
+    '     "<li>F" & ChrW(246) & "rderleistung: " & conveyingCapacity & " Liter pro Minute</li>" & vbNewLine & _
+    '     "<li>F" & ChrW(246) & "rderdruck: max. " & maxDischargePressure & " bar</li>" & vbNewLine & _
+    '     "<li>Geh" & ChrW(228) & "usematerial: " & housingWet(0) & "</li>" & vbNewLine & _
+    '     "<li>Membranmaterial: " & memMaterial & "</li>" & vbNewLine & _
+    '     "<li>Feststoffgr" & ChrW(246) & ChrW(223) & "e: " & maxSolidSize & " mm</li>" & vbNewLine & _
+    '     "</ul>" & vbNewLine & _
+    '     "<ul>" & vbNewLine & _
+    '     "<li><strong><a href=""#tab-attributes"" title=""Weitere technische Daten"">Weitere technische Daten</a></strong></li>" & vbNewLine & _
+    '     "<li><strong><a href=""#tab-cross"" title=""Kompatible Reparaturs" & ChrW(228) & "tze oder Ersatzteile"">Kompatible Reparaturs" & ChrW(228) & "tze oder Ersatzteile</a></strong></li>" & vbNewLine & _
+    '     "</ul>"
 
-        wsSeoOutput.Cells(outputRow, 6).Value = "Air-operated double diaphragm pump | " & connSize & " Inch | " & articleNum
-        wsSeoOutput.Cells(outputRow, 7).Value = "versamatic-" & articleNum
+    '     wsSeoOutput.Cells(outputRow, 6).Value = "Air-operated double diaphragm pump | " & connSize & " Inch | " & articleNum
+    '     wsSeoOutput.Cells(outputRow, 7).Value = "versamatic-" & articleNum
 
-        wsSeoOutput.Cells(outputRow, 8).Value = "Self-priming air-operated diaphragm pump (dry)  | Connection size: " & connSize & " Inch | Flow rate: " & conveyingCapacity & " Litres per minute | Delivery pressure: max. " & maxDischargePressure & " bar | Housing material: " & housingWet(1) & " | Diaphragm material: " & memMaterial & " | Solids size: " & maxSolidSize & " mm"
+    '     wsSeoOutput.Cells(outputRow, 8).Value = "Self-priming air-operated diaphragm pump (dry)  | Connection size: " & connSize & " Inch | Flow rate: " & conveyingCapacity & " Litres per minute | Delivery pressure: max. " & maxDischargePressure & " bar | Housing material: " & housingWet(1) & " | Diaphragm material: " & memMaterial & " | Solids size: " & maxSolidSize & " mm"
 
-        wsSeoOutput.Cells(outputRow, 9).Value = "<ul>" & vbNewLine & _
-        "<li>Self-priming air-operated diaphragm pump (dry)" & vbNewLine & _
-        "<li>Connection size: " & connSize & " Inch</li>" & vbNewLine & _
-        "<li>Flow rate: " & conveyingCapacity & " Litres per minute</li>" & vbNewLine & _
-        "<li>Delivery pressure: max. " & maxDischargePressure & " bar</li>" & vbNewLine & _
-        "<li>Housing material: " & housingWet(1) & "</li>" & vbNewLine & _
-        "<li>Diaphragm material: " & memMaterial & "</li>" & vbNewLine & _
-        "<li>Solids size: " & maxSolidSize & " mm</li>" & vbNewLine & _
-        "</ul>" & vbNewLine & _
-        "<ul>" & vbNewLine & _
-        "<li><strong><a href=""#tab-attributes"" title=""Further technical data"">Further technical data</a></strong></li>" & vbNewLine & _
-        "<li><strong><a href=""#tab-cross"" title=""Compatible repair kits or spare parts"">Compatible repair kits or spare parts</a></strong></li>" & vbNewLine & _
-        "</ul>"
+    '     wsSeoOutput.Cells(outputRow, 9).Value = "<ul>" & vbNewLine & _
+    '     "<li>Self-priming air-operated diaphragm pump (dry)" & vbNewLine & _
+    '     "<li>Connection size: " & connSize & " Inch</li>" & vbNewLine & _
+    '     "<li>Flow rate: " & conveyingCapacity & " Litres per minute</li>" & vbNewLine & _
+    '     "<li>Delivery pressure: max. " & maxDischargePressure & " bar</li>" & vbNewLine & _
+    '     "<li>Housing material: " & housingWet(1) & "</li>" & vbNewLine & _
+    '     "<li>Diaphragm material: " & memMaterial & "</li>" & vbNewLine & _
+    '     "<li>Solids size: " & maxSolidSize & " mm</li>" & vbNewLine & _
+    '     "</ul>" & vbNewLine & _
+    '     "<ul>" & vbNewLine & _
+    '     "<li><strong><a href=""#tab-attributes"" title=""Further technical data"">Further technical data</a></strong></li>" & vbNewLine & _
+    '     "<li><strong><a href=""#tab-cross"" title=""Compatible repair kits or spare parts"">Compatible repair kits or spare parts</a></strong></li>" & vbNewLine & _
+    '     "</ul>"
        
-        ' Move to next row in OUTPUT sheet
-        outputRow = outputRow + 1
+    '     ' Move to next row in OUTPUT sheet
+    '     outputRow = outputRow + 1
     Next i
     
-    MsgBox "Article numbers processed successfully!", vbInformation, "Done"
+    ' MsgBox "Article numbers processed successfully!", vbInformation, "Done"
 End Sub
