@@ -2193,33 +2193,22 @@ Sub Main()
         Next j
 
         For j = 1 To UBound(FDAData, 1)
-            If FDAData(j, 1) = modelChar Then
-                If FDAData(j, 3) = housingWetChar Then
-                    If FDAData(j, 5) = memMaterialChar Then
-                        If FDAData(j, 7) = checkValveChar Then
-                            If FDAData(j, 8) = valveSeatChar Then
-                                If FDAData(j, 2) = connSizeChar Then
-                                    If FDAData(j, 4) = housingNotwetChar Then
-                                        FDAComplianceDE = FDAData(j, 12)
-                                        FDAComplianceEN = FDAData(j, 13)
-                                    End If
-                                ElseIf FDAData(j, 2) = "" Then
-                                    FDAComplianceDE = FDAData(j, 12)
-                                    FDAComplianceEN = FDAData(j, 13)
-                                End If
-                                Exit For
-                            End If
-                        End If
+            If FDAData(j, 1) = modelChar And FDAData(j, 3) = housingWetChar And FDAData(j, 5) = memMaterialChar And FDAData(j, 7) = checkValveChar And FDAData(j, 8) = valveSeatChar And FDAData(j, 11) = optionOneChar Then
+                If FDAData(j, 2) = connSizeChar Or FDAData(j, 2) = "" Then
+                    If FDAData(j, 4) = housingNotwetChar Or FDAData(j, 4) = "" Then
+                        FDAComplianceDE = FDAData(j, 12)
+                        FDAComplianceEN = FDAData(j, 13)
+                        Exit For
                     End If
                 End If
             Else
-                FDAComplianceDE = FDAData(3, 15)
-                FDAComplianceEN = FDAData(3, 15)
+                FDAComplianceDE = FDAData(1, 15)
+                FDAComplianceEN = FDAData(1, 15)
             End If
         Next j
 
         For j = 1 To UBound(explosionData, 1)
-            If explosionData(j, 1) = optionTwoChar Then
+            If explosionData(j, 1) = optionOneChar Or explosionData(j, 1) = optionTwoChar Then
                 explosionDE = explosionData(j, 2)
                 explosionEN = explosionData(j, 3)
                 Exit For
@@ -2231,7 +2220,7 @@ Sub Main()
 
         For j = 1 To UBound(maxSolidSizeData, 1)
             If maxSolidSizeData(j, 1) = connSizeChar Then
-                If maxSolidSizeData(j, 2) = housingWetChar Then
+                If maxSolidSizeData(j, 2) = housingWetChar Or maxSolidSizeData(j, 2) = "" Then
                     If maxSolidSizeData(j, 3) = housingNotwetChar Or maxSolidSizeData(j, 3) = "" Then
                         If maxSolidSizeData(j, 7) = housingDesignChar Or maxSolidSizeData(j, 7) = "" Then
                             maxSolidSize = maxSolidSizeData(j, 8)
