@@ -1985,19 +1985,22 @@ Sub Main()
     Dim articleNum As String, remainedArticleNum As String
 
     Dim modelChar As String, model As String, remaindArticleNumber As String
-    Dim connSizeChar As String, connSize As String
-    Dim housingWetChar As String, housingWet As Variant
-    Dim housingNotwetChar As String, housingNotwet As Variant
-    Dim memMaterialChar As String, memMaterial As String
-    Dim memDesignChar As String, memDesign As String
-    Dim checkValveChar As String, checkValve As String
-    Dim valveSeatChar As String, valveSeat As String
-    Dim housingDesignChar As String, housingDesign As String
+    Dim connSizeChar As String, connSizeInch As String, connSizeMM As String
+    Dim housingWetChar As String, housingWetDE As String, housingWetEN As String
+    Dim housingNotwetChar As String, housingNotwetDE As String, housingNotwetEN As String
+    Dim memMaterialChar As String, memMaterialDE As String, memMaterialEN As String
+    Dim memDesignChar As String, memDesignDE As String, memDesignEN As String
+    Dim checkValveChar As String, checkValveDE As String, checkValveEN As String
+    Dim valveSeatChar As String, valveSeatDE As String, valveSeatEN As String
+    Dim housingDesignChar As String, housingDesignDE As String, housingDesignEN As String
     Dim revisionChar As String, revision As String
     Dim optionOneChar As String, optionOne As String
     Dim optionTwoChar As String, optionTwo As String
-    Dim FDACompliance As String
-    Dim weightLengthWidthHeight As Collection, weight As String, length As String, width As String, height As String  
+    Dim FDAComplianceDE As String, FDAComplianceEN As String
+    Dim explosionDE As String, explosionEN As String
+    Dim maxSolidSize As String, flowRate As String, maxDischargePressure As String, conveyCapacity As String, connectionType As String, connSizeSuction As String, connSizePressure As String, suctionHeightWet As String, suctionHeightDry As String, airConnInlet As String, airConnOutlet As String
+    Dim weight As String, length As String, width As String, height As String  
+    Dim memMaterialTempMin As String, memMaterialTempMax As String
     Dim outputRow As Long
     
     ' Find last row in INPUT sheet
@@ -2005,8 +2008,9 @@ Sub Main()
 
     ' Loop through each article number
     outputRow = 2 ' Start from row 2 in OUTPUT sheet
+
     ' For i = 5 To lastRow
-    For i = 55 To 55
+    For i = 5 To 5
         articleNum = wsInput.Cells(i, 1).Value ' Read article number
 
         ' Get parameters from article number
@@ -2078,26 +2082,323 @@ Sub Main()
             optionTwoChar = ""
         End If
 
-        MsgBox "Model: " & modelChar & vbNewLine & _
-                "Connection Size: " & connSizeChar & vbNewLine & _
-                "Housing Wet: " & housingWetChar & vbNewLine & _
-                "Housing Notwet: " & housingNotwetChar & vbNewLine & _
-                "Membrane Material: " & memMaterialChar & vbNewLine & _
-                "Membrane Design: " & memDesignChar & vbNewLine & _
-                "Check Valve: " & checkValveChar & vbNewLine & _
-                "Valve Seat: " & valveSeatChar & vbNewLine & _
-                "Housing Design: " & housingDesignChar & vbNewLine & _
-                "Revision: " & revisionChar & vbNewLine & _
-                "Option1: " & optionOneChar & vbNewLine & _
-                "Option2: " & optionTwoChar
+        ' MsgBox "Model: " & modelChar & vbNewLine & _
+        '         "Connection Size: " & connSizeChar & vbNewLine & _
+        '         "Housing Wet: " & housingWetChar & vbNewLine & _
+        '         "Housing Notwet: " & housingNotwetChar & vbNewLine & _
+        '         "Membrane Material: " & memMaterialChar & vbNewLine & _
+        '         "Membrane Design: " & memDesignChar & vbNewLine & _
+        '         "Check Valve: " & checkValveChar & vbNewLine & _
+        '         "Valve Seat: " & valveSeatChar & vbNewLine & _
+        '         "Housing Design: " & housingDesignChar & vbNewLine & _
+        '         "Revision: " & revisionChar & vbNewLine & _
+        '         "Option1: " & optionOneChar & vbNewLine & _
+        '         "Option2: " & optionTwoChar
 
-    '     For i = 1 To UBound(modelData, 1)
-    '         If modelData(i, 1) = modelChar Then
-    '             model = modelData(i, 2)
-    '             Exit For
-    '         End If
-    '     Next i
+        For j = 1 To UBound(modelData, 1)
+            If modelData(j, 1) = modelChar Then
+                model = modelData(j, 2)
+                Exit For
+            End If
+        Next j
 
+        For j = 1 To UBound(connSizeData, 1)
+            If connSizeData(j, 1) = connSizeChar Then
+                If connSizeData(j, 2) = optionOneChar Then
+                    connSizeInch = connSizeData(j, 5)
+                    connSizeMM = connSizeData(j, 7)
+                ElseIf connSizeData(j, 2) = "" Then
+                    connSizeInch = connSizeData(j, 5)
+                    connSizeMM = connSizeData(j, 7)
+                End If
+                Exit For
+            End If
+        Next j
+
+        For j = 1 To UBound(housingWetData, 1)
+            If housingWetData(j, 1) = housingWetChar Then
+                housingWetDE = housingWetData(j, 2)
+                housingWetEN = housingWetData(j, 3)
+                Exit For
+            End If
+        Next j
+
+        For j = 1 To UBound(housingNotwetData, 1)
+            If housingNotwetData(j, 1) = housingNotwetChar Then
+                housingNotwetDE = housingNotwetData(j, 2)
+                housingNotwetEN = housingNotwetData(j, 3)
+                Exit For
+            End If
+        Next j
+
+        For j = 1 To UBound(memMaterialData, 1)
+            If memMaterialData(j, 1) = memMaterialChar Then
+                memMaterialDE = memMaterialData(j, 2)
+                memMaterialEN = memMaterialData(j, 3)
+                Exit For
+            End If
+        Next j
+
+        For j = 1 To UBound(memDesignData, 1)
+            If memDesignData(j, 1) = memDesignChar Then
+                memDesignDE = memDesignData(j, 2)
+                memDesignEN = memDesignData(j, 3)
+                Exit For
+            End If
+        Next j
+
+        For j = 1 To UBound(checkValveData, 1)
+            If checkValveData(j, 1) = checkValveChar Then
+                checkValveDE = checkValveData(j, 2)
+                checkValveEN = checkValveData(j, 3)
+                Exit For
+            End If
+        Next j
+
+        For j = 1 To UBound(valveSeatData, 1)
+            If valveSeatData(j, 1) = valveSeatChar Then
+                valveSeatDE = valveSeatData(j, 2)
+                valveSeatEN = valveSeatData(j, 3)
+                Exit For
+            End If
+        Next j
+
+        For j = 1 To UBound(housingDesignData, 1)
+            If housingDesignData(j, 1) = housingDesignChar Then
+                housingDesignDE = housingDesignData(j, 2)
+                housingDesignEN = housingDesignData(j, 3)
+                Exit For
+            End If
+        Next j
+
+        For j = 1 To UBound(revisionData, 1)
+            If revisionData(j, 1) = revisionChar Then
+                revision = revisionData(j, 2)
+                Exit For
+            End If
+        Next j
+
+        For j = 1 To UBound(optionsData, 1)
+            If optionsData(j, 1) = optionOneChar Then
+                optionOne = optionsData(j, 3)
+                Exit For
+            End If
+        Next j
+
+        For j = 1 To UBound(optionsData, 1)
+            If optionsData(j, 1) = optionTwoChar Then
+                optionTwo = optionsData(j, 3)
+                Exit For
+            End If
+        Next j
+
+        For j = 1 To UBound(FDAData, 1)
+            If FDAData(j, 1) = modelChar Then
+                If FDAData(j, 3) = housingWetChar Then
+                    If FDAData(j, 5) = memMaterialChar Then
+                        If FDAData(j, 7) = checkValveChar Then
+                            If FDAData(j, 8) = valveSeatChar Then
+                                If FDAData(j, 2) = connSizeChar Then
+                                    If FDAData(j, 4) = housingNotwetChar Then
+                                        FDAComplianceDE = FDAData(j, 12)
+                                        FDAComplianceEN = FDAData(j, 13)
+                                    End If
+                                ElseIf FDAData(j, 2) = "" Then
+                                    FDAComplianceDE = FDAData(j, 12)
+                                    FDAComplianceEN = FDAData(j, 13)
+                                End If
+                                Exit For
+                            End If
+                        End If
+                    End If
+                End If
+            Else
+                FDAComplianceDE = FDAData(3, 15)
+                FDAComplianceEN = FDAData(3, 15)
+            End If
+        Next j
+
+        For j = 1 To UBound(explosionData, 1)
+            If explosionData(j, 1) = optionTwoChar Then
+                explosionDE = explosionData(j, 2)
+                explosionEN = explosionData(j, 3)
+                Exit For
+            Else
+                explosionDE = explosionData(1, 6)
+                explosionEN = explosionData(1, 6)
+            End If
+        Next j
+
+        For j = 1 To UBound(maxSolidSizeData, 1)
+            If maxSolidSizeData(j, 1) = connSizeChar Then
+                If maxSolidSizeData(j, 2) = housingWetChar Then
+                    If maxSolidSizeData(j, 3) = housingNotwetChar Or maxSolidSizeData(j, 3) = "" Then
+                        If maxSolidSizeData(j, 7) = housingDesignChar Or maxSolidSizeData(j, 7) = "" Then
+                            maxSolidSize = maxSolidSizeData(j, 8)
+                            Exit For
+                        End If
+                    End If
+                End If
+            End If
+        Next j
+
+        For j = 1 To UBound(flowRateData, 1)
+            If flowRateData(j, 1) = connSizeChar Then
+                If flowRateData(j, 2) = housingWetChar Or flowRateData(j, 2) = "" Then
+                    If flowRateData(j, 3) = housingDesignChar Or flowRateData(j, 3) = "" Then
+                        If flowRateData(j, 4) = optionOneChar Or flowRateData(j, 4) = "" Then
+                            flowRate = flowRateData(j, 7)
+                            Exit For
+                        End If
+                    End If
+                End If
+            End If
+        Next j
+
+        For j = 1 To UBound(maxDischargePressureData, 1)
+            If maxDischargePressureData(j, 1) = connSizeChar Or maxDischargePressureData(j, 1) = "" Then
+                If maxDischargePressureData(j, 2) = housingWetChar Or maxDischargePressureData(j, 2) = "" Then
+                    If maxDischargePressureData(j, 3) = housingNotwetChar Or maxDischargePressureData(j, 3) = "" Then
+                        If maxDischargePressureData(j, 4) = optionOneChar Or maxDischargePressureData(j, 4) = "" Then
+                            maxDischargePressure = maxDischargePressureData(j, 7)
+                            Exit For
+                        End If
+                    End If
+                End If
+            End If
+        Next j
+
+        For j = 1 To UBound(conveyCapacityData, 1)
+            If conveyCapacityData(j, 1) = connSizeChar Then
+                If conveyCapacityData(j, 2) = housingWetChar Then
+                    If conveyCapacityData(j, 3) = housingNotwetChar Then
+                        If conveyCapacityData(j, 4) = memMaterialChar Or conveyCapacityData(j, 4) = "" Then
+                            If conveyCapacityData(j, 5) = memDesignChar Or conveyCapacityData(j, 5) = "" Then
+                                If conveyCapacityData(j, 6) = housingDesignChar Or conveyCapacityData(j, 6) = "" Then
+                                    conveyCapacity = conveyCapacityData(j, 10)
+                                    Exit For
+                                End If
+                            End If
+                        End If
+                    End If
+                End If
+            End If
+        Next j
+
+        For j = 1 To UBound(connectionTypeData, 1)
+            If connectionTypeData(j, 1) = modelChar Then
+                If connectionTypeData(j, 2) = connSizeChar Then
+                    If connectionTypeData(j, 3) = housingWetChar Or connectionTypeData(j, 3) = "" Then
+                        If connectionTypeData(j, 4) = housingNotwetChar Or connectionTypeData(j, 4) = "" Then
+                            If connectionTypeData(j, 5) = housingDesignChar Or connectionTypeData(j, 5) = "" Then
+                                If connectionTypeData(j, 6) = optionOneChar Or connectionTypeData(j, 6) = "" Then
+                                    If connectionTypeData(j, 7) = optionTwoChar Or connectionTypeData(j, 7) = "" Then
+                                        connectionType = connectionTypeData(j, 9)
+                                        Exit For
+                                    End If
+                                End If
+                            End If
+                        End If
+                    End If
+                End If
+            End If
+        Next j
+
+        For j = 1 To UBound(connSizeSuctionData, 1)
+            If connSizeSuctionData(j, 1) = connSizeChar Then
+                If connSizeSuctionData(j, 2) = optionOneChar Or connSizeSuctionData(j, 2) = "" Then
+                    connSizeSuction = connSizeSuctionData(j, 5)
+                    Exit For
+                End If
+            End If
+        Next j
+
+        For j = 1 To UBound(connSizePressureData, 1)
+            If connSizePressureData(j, 1) = connSizeChar Then
+                If connSizePressureData(j, 2) = optionOneChar Or connSizePressureData(j, 2) = "" Then
+                    connSizePressure = connSizePressureData(j, 5)
+                    Exit For
+                End If
+            End If
+        Next j
+
+        For j = 1 To UBound(suctionHeightWetData, 1)
+            If suctionHeightWetData(j, 1) = connSizeChar Then
+                If suctionHeightWetData(j, 2) = housingWetChar Or suctionHeightWetData(j, 2) = "" Then
+                    If suctionHeightWetData(j, 3) = housingDesignChar Or suctionHeightWetData(j, 3) = "" Then
+                        If suctionHeightWetData(j, 4) = optionOneChar Or suctionHeightWetData(j, 4) = "" Then
+                            suctionHeightWet = suctionHeightWetData(j, 7)
+                            Exit For
+                        End If
+                    End If
+                End If
+            End If
+        Next j
+
+        For j = 1 To UBound(suctionHeightDryData, 1)
+            If suctionHeightDryData(j, 1) = connSizeChar Then
+                If suctionHeightDryData(j, 2) = housingWetChar Or suctionHeightDryData(j, 2) = "" Then
+                    If suctionHeightDryData(j, 3) = housingDesignChar Or suctionHeightDryData(j, 3) = "" Then
+                        If suctionHeightDryData(j, 4) = optionOneChar Or suctionHeightDryData(j, 4) = "" Then
+                            suctionHeightDry = suctionHeightDryData(j, 7)
+                            Exit For
+                        End If
+                    End If
+                End If
+            End If
+        Next j
+        
+        For j = 1 To UBound(airConnInletData, 1)
+            If airConnInletData(j, 1) = connSizeChar Then
+                If airConnInletData(j, 2) = housingWetChar Or airConnInletData(j, 2) = "" Then
+                    If airConnInletData(j, 3) = housingDesignChar Or airConnInletData(j, 3) = "" Then
+                        If airConnInletData(j, 4) = optionOneChar Or airConnInletData(j, 4) = "" Then
+                            airConnInlet = airConnInletData(j, 6)
+                            Exit For
+                        End If
+                    End If
+                End If
+            End If
+        Next j
+
+        For j = 1 To UBound(airConnOutletData, 1)
+            If airConnOutletData(j, 1) = connSizeChar Then
+                If airConnOutletData(j, 2) = optionOneChar Or airConnOutletData(j, 2) = "" Then
+                    airConnOutlet = airConnOutletData(j, 5)
+                    Exit For
+                End If
+            End If
+        Next j
+
+        For j = 1 To UBound(dimensionsData, 1)
+            If dimensionsData(j, 1) = connSizeChar Then
+                If dimensionsData(j, 2) = housingWetChar Or dimensionsData(j, 2) = "" Then
+                    If dimensionsData(j, 3) = housingNotwetChar Or dimensionsData(j, 3) = "" Then
+                        If dimensionsData(j, 4) = housingDesignChar Or dimensionsData(j, 4) = "" Then
+                            If dimensionsData(j, 5) = connectionType Or dimensionsData(j, 5) = "" Then
+                                If dimensionsData(j, 6) = optionOneChar Or dimensionsData(j, 6) = "" Then
+                                    weight = dimensionsData(j, 9)
+                                    length = dimensionsData(j, 10)
+                                    width = dimensionsData(j, 11)
+                                    height = dimensionsData(j, 12)
+                                    Exit For
+                                End If
+                            End If
+                        End If
+                    End If
+                End If
+            End If
+        Next j
+        
+        For j = 1 To UBound(memMaterialTempData, 1)
+            If memMaterialTempData(j, 1) = memMaterialChar Then
+                memMaterialTempMin = memMaterialTempData(j, 3)
+                memMaterialTempMax = memMaterialTempData(j, 4)
+                Exit For
+            End If
+        Next j
+        
+        MsgBox "Model: " & connSizeInch & " | " & connSizeMM
 
     '     Set connSizeResult = GetConnectionSizeFromArticleNumber(Cstr(remainedArticleNum))
     '     connSizeChar = connSizeResult.Item(1)
