@@ -208,7 +208,7 @@ Sub Main()
     memMaterialTempData = memMaterialTempTable.Value
 
     ' Variables
-    Dim wsVariable As Worksheet, variableTable As Range, variableData As Variant, variableDict As Object
+    Dim wsVariable As Worksheet, variableTable As Range, variableData As Variant, variableDictDE As Object, variableDictEN As Object
     Set wsVariable = ThisWorkbook.Sheets("Variables")
     Set variableTable = wsVariable.Range("A1:B7")
     variableData = variableTable.Value
@@ -259,8 +259,8 @@ Sub Main()
     ' Loop through each article number
     outputRow = 2 ' Start from row 2 in OUTPUT sheet
 
-    For i = 5 To lastRow
-    ' For i = 5 To 5
+    ' For i = 5 To lastRow
+    For i = 5 To 5
         articleNum = wsInput.Cells(i, 1).Value ' Read article number
 
         ' Get parameters from article number
@@ -637,17 +637,28 @@ Sub Main()
             End If
         Next j
         
-        If variableDict Is Nothing Then
-            Set variableDict = New Dictionary
-            variableDict.add "connSizeInch", connSizeInch
-            variableDict.add "articleNum", articleNum
-            variableDict.add "flowRate", flowRate
-            variableDict.add "maxDischargePressure", maxDischargePressure
-            variableDict.add "housingWet", housingWet
-            variableDict.add "memMaterial", memMaterial
-            variableDict.add "maxSolidSize", maxSolidSize
+        If variableDictDE Is Nothing Then
+            Set variableDictDE = New Dictionary
+            variableDictDE.add "connSizeInch", connSizeInch
+            variableDictDE.add "articleNum", articleNum
+            variableDictDE.add "flowRate", flowRate
+            variableDictDE.add "maxDischargePressure", maxDischargePressure
+            variableDictDE.add "housingWet", housingWetDE
+            variableDictDE.add "memMaterial", memMaterialDE
+            variableDictDE.add "maxSolidSize", maxSolidSize
         End If
         
+        If variableDictEN Is Nothing Then
+            Set variableDictEN = New Dictionary
+            variableDictEN.add "connSizeInch", connSizeInch
+            variableDictEN.add "articleNum", articleNum
+            variableDictEN.add "flowRate", flowRate
+            variableDictEN.add "maxDischargePressure", maxDischargePressure
+            variableDictEN.add "housingWet", housingWetEN
+            variableDictEN.add "memMaterial", memMaterialEN
+            variableDictEN.add "maxSolidSize", maxSolidSize
+        End If
+
         ' Reset OUTPUT sheet and SEO OUTPUT sheet
         For k = 1 To 29
             wsOutput.Cells(outputRow, k).Value = ""
@@ -710,8 +721,8 @@ Sub Main()
                         If variableData(k, 1) = seoArticleNameDECell Then
                             seoArticleNameDECell = variableData(k, 2)
                             ' Debug.Print "variableData: "; seoArticleNameDECell
-                            If variableDict.Exists(seoArticleNameDECell) Then
-                                seoArticleNameDECell = variableDict.Item(seoArticleNameDECell)
+                            If variableDictDE.Exists(seoArticleNameDECell) Then
+                                seoArticleNameDECell = variableDictDE.Item(seoArticleNameDECell)
                             End If
                             Exit For
                         End If
@@ -734,8 +745,8 @@ Sub Main()
                         If variableData(k, 1) = seoUrlPathDECell Then
                             seoUrlPathDECell = variableData(k, 2)
                             ' Debug.Print "variableData: "; seoUrlPathDECell
-                            If variableDict.Exists(seoUrlPathDECell) Then
-                                seoUrlPathDECell = variableDict.Item(seoUrlPathDECell)
+                            If variableDictDE.Exists(seoUrlPathDECell) Then
+                                seoUrlPathDECell = variableDictDE.Item(seoUrlPathDECell)
                             End If
                             Exit For
                         End If
@@ -757,9 +768,9 @@ Sub Main()
                     For k = 1 To UBound(variableData, 1)
                         If variableData(k, 1) = seoMetaDescriptionDECell Then
                             seoMetaDescriptionDECell = variableData(k, 2)
-                            ' Debug.Print "variableData: "; seoMetaDescriptionDECell
-                            If variableDict.Exists(seoMetaDescriptionDECell) Then
-                                seoMetaDescriptionDECell = variableDict.Item(seoMetaDescriptionDECell)
+                            Debug.Print "variableData: "; seoMetaDescriptionDECell
+                            If variableDictDE.Exists(seoMetaDescriptionDECell) Then
+                                seoMetaDescriptionDECell = variableDictDE.Item(seoMetaDescriptionDECell)
                             End If
                             Exit For
                         End If
@@ -782,8 +793,8 @@ Sub Main()
                         If variableData(k, 1) = seoShortDescriptionDECell Then
                             seoShortDescriptionDECell = variableData(k, 2)
                             ' Debug.Print "variableData: "; seoShortDescriptionDECell
-                            If variableDict.Exists(seoShortDescriptionDECell) Then
-                                seoShortDescriptionDECell = variableDict.Item(seoShortDescriptionDECell)
+                            If variableDictDE.Exists(seoShortDescriptionDECell) Then
+                                seoShortDescriptionDECell = variableDictDE.Item(seoShortDescriptionDECell)
                             End If
                             Exit For
                         End If
@@ -806,8 +817,8 @@ Sub Main()
                         If variableData(k, 1) = seoArticleNameENCell Then
                             seoArticleNameENCell = variableData(k, 2)
                             ' Debug.Print "variableData: "; seoArticleNameENCell
-                            If variableDict.Exists(seoArticleNameENCell) Then
-                                seoArticleNameENCell = variableDict.Item(seoArticleNameENCell)
+                            If variableDictEN.Exists(seoArticleNameENCell) Then
+                                seoArticleNameENCell = variableDictEN.Item(seoArticleNameENCell)
                             End If
                             Exit For
                         End If
@@ -830,8 +841,8 @@ Sub Main()
                         If variableData(k, 1) = seoUrlPathENCell Then
                             seoUrlPathENCell = variableData(k, 2)
                             ' Debug.Print "variableData: "; seoUrlPathENCell
-                            If variableDict.Exists(seoUrlPathENCell) Then
-                                seoUrlPathENCell = variableDict.Item(seoUrlPathENCell)
+                            If variableDictEN.Exists(seoUrlPathENCell) Then
+                                seoUrlPathENCell = variableDictEN.Item(seoUrlPathENCell)
                             End If
                             Exit For
                         End If
@@ -854,8 +865,8 @@ Sub Main()
                         If variableData(k, 1) = seoMetaDescriptionENCell Then
                             seoMetaDescriptionENCell = variableData(k, 2)
                             ' Debug.Print "variableData: "; seoMetaDescriptionENCell
-                            If variableDict.Exists(seoMetaDescriptionENCell) Then
-                                seoMetaDescriptionENCell = variableDict.Item(seoMetaDescriptionENCell)
+                            If variableDictEN.Exists(seoMetaDescriptionENCell) Then
+                                seoMetaDescriptionENCell = variableDictEN.Item(seoMetaDescriptionENCell)
                             End If
                             Exit For
                         End If
@@ -878,8 +889,8 @@ Sub Main()
                         If variableData(k, 1) = seoShortDescriptionENCell Then
                             seoShortDescriptionENCell = variableData(k, 2)
                             ' Debug.Print "variableData: "; seoShortDescriptionENCell
-                            If variableDict.Exists(seoShortDescriptionENCell) Then
-                                seoShortDescriptionENCell = variableDict.Item(seoShortDescriptionENCell)
+                            If variableDictEN.Exists(seoShortDescriptionENCell) Then
+                                seoShortDescriptionENCell = variableDictEN.Item(seoShortDescriptionENCell)
                             End If
                             Exit For
                         End If
