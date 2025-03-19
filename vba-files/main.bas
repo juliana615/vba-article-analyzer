@@ -259,8 +259,8 @@ Sub Main()
     ' Loop through each article number
     outputRow = 2 ' Start from row 2 in OUTPUT sheet
 
-    ' For i = 5 To lastRow
-    For i = 5 To 5
+    For i = 5 To lastRow
+    ' For i = 5 To 5
         articleNum = wsInput.Cells(i, 1).Value ' Read article number
 
         ' Get parameters from article number
@@ -641,7 +641,7 @@ Sub Main()
             Set variableDictDE = New Dictionary
             variableDictDE.add "connSizeInch", connSizeInch
             variableDictDE.add "articleNum", articleNum
-            variableDictDE.add "flowRate", flowRate
+            variableDictDE.add "conveyCapacity", conveyCapacity
             variableDictDE.add "maxDischargePressure", maxDischargePressure
             variableDictDE.add "housingWet", housingWetDE
             variableDictDE.add "memMaterial", memMaterialDE
@@ -652,7 +652,7 @@ Sub Main()
             Set variableDictEN = New Dictionary
             variableDictEN.add "connSizeInch", connSizeInch
             variableDictEN.add "articleNum", articleNum
-            variableDictEN.add "flowRate", flowRate
+            variableDictEN.add "conveyCapacity", conveyCapacity
             variableDictEN.add "maxDischargePressure", maxDischargePressure
             variableDictEN.add "housingWet", housingWetEN
             variableDictEN.add "memMaterial", memMaterialEN
