@@ -646,6 +646,14 @@ Sub Main()
             variableDictDE.add "housingWet", housingWetDE
             variableDictDE.add "memMaterial", memMaterialDE
             variableDictDE.add "maxSolidSize", maxSolidSize
+        Else
+            variableDictDE("connSizeInch") = connSizeInch
+            variableDictDE("articleNum") = articleNum
+            variableDictDE("conveyCapacity") = conveyCapacity
+            variableDictDE("maxDischargePressure") = maxDischargePressure
+            variableDictDE("housingWet") = housingWetDE
+            variableDictDE("memMaterial") = memMaterialDE
+            variableDictDE("maxSolidSize") = maxSolidSize
         End If
         
         If variableDictEN Is Nothing Then
@@ -657,6 +665,14 @@ Sub Main()
             variableDictEN.add "housingWet", housingWetEN
             variableDictEN.add "memMaterial", memMaterialEN
             variableDictEN.add "maxSolidSize", maxSolidSize
+        Else
+            variableDictEN("connSizeInch") = connSizeInch
+            variableDictEN("articleNum") = articleNum
+            variableDictEN("conveyCapacity") = conveyCapacity
+            variableDictEN("maxDischargePressure") = maxDischargePressure
+            variableDictEN("housingWet") = housingWetEN
+            variableDictEN("memMaterial") = memMaterialEN
+            variableDictEN("maxSolidSize") = maxSolidSize
         End If
 
         ' Reset OUTPUT sheet and SEO OUTPUT sheet
