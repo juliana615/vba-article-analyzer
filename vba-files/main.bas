@@ -354,14 +354,11 @@ Sub Main()
 
         For j = 1 To UBound(connSizeData, 1)
             If connSizeData(j, 1) = connSizeChar Then
-                If connSizeData(j, 2) = optionOneChar Then
+                If connSizeData(j, 2) = optionOneChar Or connSizeData(j, 2) = "" Then
                     connSizeInch = connSizeData(j, 5)
                     connSizeMM = connSizeData(j, 7)
-                ElseIf connSizeData(j, 2) = "" Then
-                    connSizeInch = connSizeData(j, 5)
-                    connSizeMM = connSizeData(j, 7)
+                    Exit For
                 End If
-                Exit For
             End If
         Next j
 
