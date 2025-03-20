@@ -198,7 +198,7 @@ Sub Main()
     ' Gewicht-Abmessungen
     Dim dimensionsWS As Worksheet, dimensionsTable As Range, dimensionsData As Variant
     Set dimensionsWS = Tabelle22
-    Set dimensionsTable = dimensionsWS.Range("A3:L64")
+    Set dimensionsTable = dimensionsWS.Range("A2:L64")
     dimensionsData = dimensionsTable.Value
 
     ' Temperatur - Material der Membrane			
@@ -250,6 +250,7 @@ Sub Main()
     Dim seoArticleNameDECell As String, seoUrlPathDECell As String, seoMetaDescriptionDECell As String, seoShortDescriptionDECell As String, seoArticleNameENCell As String, seoUrlPathENCell As String, seoMetaDescriptionENCell As String, seoShortDescriptionENCell As String
     Dim outputRow As Long
     
+    whiteColor = RGB(255, 255, 255)
     redColor = RGB(252, 228, 214)
     greenColor = RGB(226, 239, 218)
 
@@ -261,6 +262,48 @@ Sub Main()
 
     For i = 5 To lastRow
     ' For i = 5 To 5
+        ' Initialize values each time
+        model = ""
+        connSizeInch = ""
+        housingWetDE = ""
+        housingWetEN = ""
+        housingNotwetDE = ""
+        housingNotwetEN = ""
+        memMaterialDE = ""
+        memMaterialEN = ""
+        memDesignDE = ""
+        memDesignEN = ""
+        checkValveDE = ""
+        checkValveEN = ""
+        valveSeatDE = ""
+        valveSeatEN = ""
+        housingDesignDE = ""
+        housingDesignEN = ""
+        revision = ""
+        optionOne = ""
+        optionTwo = ""
+        FDAComplianceDE = ""
+        FDAComplianceEN = ""
+        explosionDE = ""
+        explosionEN = ""
+        maxSolidSize = ""
+        flowRate = ""
+        maxDischargePressure = ""
+        conveyCapacity = ""
+        connectionType = ""
+        connSizeSuction = ""
+        connSizePressure = ""
+        suctionHeightWet = ""
+        suctionHeightDry = ""
+        airConnInlet = ""
+        airConnOutlet = ""
+        weight = ""
+        length = ""
+        width = ""
+        height = ""
+        memMaterialTempMin = ""
+        memMaterialTempMax = ""
+
         articleNum = wsInput.Cells(i, 1).Value ' Read article number
 
         ' Get parameters from article number
@@ -469,9 +512,11 @@ Sub Main()
             If maxSolidSizeData(j, 1) = connSizeChar Then
                 If maxSolidSizeData(j, 2) = housingWetChar Or maxSolidSizeData(j, 2) = "" Then
                     If maxSolidSizeData(j, 3) = housingNotwetChar Or maxSolidSizeData(j, 3) = "" Then
-                        If maxSolidSizeData(j, 7) = housingDesignChar Or maxSolidSizeData(j, 7) = "" Then
-                            maxSolidSize = maxSolidSizeData(j, 8)
-                            Exit For
+                        If maxSolidSizeData(j, 4) = optionOneChar Or maxSolidSizeData(j, 4) = "" Then
+                            If maxSolidSizeData(j, 7) = housingDesignChar Or maxSolidSizeData(j, 7) = "" Then
+                                maxSolidSize = maxSolidSizeData(j, 8)
+                                Exit For
+                            End If
                         End If
                     End If
                 End If
@@ -511,8 +556,12 @@ Sub Main()
                         If conveyCapacityData(j, 4) = memMaterialChar Or conveyCapacityData(j, 4) = "" Then
                             If conveyCapacityData(j, 5) = memDesignChar Or conveyCapacityData(j, 5) = "" Then
                                 If conveyCapacityData(j, 6) = housingDesignChar Or conveyCapacityData(j, 6) = "" Then
-                                    conveyCapacity = conveyCapacityData(j, 10)
-                                    Exit For
+                                    If conveyCapacityData(j, 7) = optionOneChar Or conveyCapacityData(j, 7) = "" Then
+                                        If conveyCapacityData(j, 8) = optionTwoChar Or conveyCapacityData(j, 8) = "" Then
+                                            conveyCapacity = conveyCapacityData(j, 10)
+                                            Exit For
+                                        End If
+                                    End If
                                 End If
                             End If
                         End If
@@ -587,11 +636,9 @@ Sub Main()
         For j = 1 To UBound(airConnInletData, 1)
             If airConnInletData(j, 1) = connSizeChar Then
                 If airConnInletData(j, 2) = housingWetChar Or airConnInletData(j, 2) = "" Then
-                    If airConnInletData(j, 3) = housingDesignChar Or airConnInletData(j, 3) = "" Then
-                        If airConnInletData(j, 4) = optionOneChar Or airConnInletData(j, 4) = "" Then
-                            airConnInlet = airConnInletData(j, 6)
-                            Exit For
-                        End If
+                    If airConnInletData(j, 3) = optionOneChar Or airConnInletData(j, 3) = "" Then
+                        airConnInlet = airConnInletData(j, 6)
+                        Exit For
                     End If
                 End If
             End If
@@ -609,15 +656,24 @@ Sub Main()
         For j = 1 To UBound(dimensionsData, 1)
             If dimensionsData(j, 1) = connSizeChar Then
                 If dimensionsData(j, 2) = housingWetChar Or dimensionsData(j, 2) = "" Then
+                    If articleNum = "E1AP5T559C" Then
+                        Debug.Print "housingNotwetChar: "; housingNotwetChar
+                        Debug.Print "dimensionsData(j, 3): "; dimensionsData(j, 3)
+                    End If
                     If dimensionsData(j, 3) = housingNotwetChar Or dimensionsData(j, 3) = "" Then
+                        If articleNum = "E1AP5T559C" Then
+                            Debug.Print "housingDesignChar: "; housingDesignChar
+                        End If
                         If dimensionsData(j, 4) = housingDesignChar Or dimensionsData(j, 4) = "" Then
                             If dimensionsData(j, 5) = connectionType Or dimensionsData(j, 5) = "" Then
                                 If dimensionsData(j, 6) = optionOneChar Or dimensionsData(j, 6) = "" Then
-                                    weight = dimensionsData(j, 9)
-                                    length = dimensionsData(j, 10)
-                                    width = dimensionsData(j, 11)
-                                    height = dimensionsData(j, 12)
-                                    Exit For
+                                    If dimensionsData(j, 7) = optionTwoChar Or dimensionsData(j, 7) = "" Then
+                                        weight = dimensionsData(j, 9)
+                                        length = dimensionsData(j, 10)
+                                        width = dimensionsData(j, 11)
+                                        height = dimensionsData(j, 12)
+                                        Exit For
+                                    End If
                                 End If
                             End If
                         End If
@@ -681,35 +737,237 @@ Sub Main()
         Next k
 
         ' Write data to OUTPUT sheet
-        wsOutput.Cells(outputRow, 1).Value = articleNum
-        wsOutput.Cells(outputRow, 2).Value = model
-        wsOutput.Cells(outputRow, 3).Value = connSizeInch & " Zoll"
-        wsOutput.Cells(outputRow, 4).Value = housingWetDE
-        wsOutput.Cells(outputRow, 5).Value = housingNotwetDE
-        wsOutput.Cells(outputRow, 6).Value = memMaterialDE
-        wsOutput.Cells(outputRow, 7).Value = memDesignDE
-        wsOutput.Cells(outputRow, 8).Value = checkValveDE
-        wsOutput.Cells(outputRow, 9).Value = valveSeatDE
-        wsOutput.Cells(outputRow, 10).Value = housingDesignDE
-        wsOutput.Cells(outputRow, 11).Value = FDAComplianceDE
-        wsOutput.Cells(outputRow, 12).Value = explosionDE
-        wsOutput.Cells(outputRow, 13).Value = maxSolidSize & " mm"
-        wsOutput.Cells(outputRow, 14).Value = flowRate & " Liter"
-        wsOutput.Cells(outputRow, 15).Value = maxDischargePressure & " bar"
-        wsOutput.Cells(outputRow, 16).Value = conveyCapacity & " Liter pro Minute"
-        wsOutput.Cells(outputRow, 17).Value = connectionType
-        wsOutput.Cells(outputRow, 18).Value = connSizeSuction & " Zoll"
-        wsOutput.Cells(outputRow, 19).Value = connSizePressure & " Zoll"
-        wsOutput.Cells(outputRow, 20).Value = suctionHeightWet & " Meter"
-        wsOutput.Cells(outputRow, 21).Value = suctionHeightDry & " Meter"
-        wsOutput.Cells(outputRow, 22).Value = airConnInlet & " Zoll"
-        wsOutput.Cells(outputRow, 23).Value = airConnOutlet & " Zoll"
-        wsOutput.Cells(outputRow, 24).Value = memMaterialTempMin & " " & ChrW(176) & "C"
-        wsOutput.Cells(outputRow, 25).Value = memMaterialTempMax & " " & ChrW(176) & "C"
-        wsOutput.Cells(outputRow, 26).Value = weight
-        wsOutput.Cells(outputRow, 27).Value = length
-        wsOutput.Cells(outputRow, 28).Value = width
-        wsOutput.Cells(outputRow, 29).Value = height
+        If articleNum <> "" Then
+            wsOutput.Cells(outputRow, 1).Value = articleNum
+            wsOutput.Cells(outputRow, 1).Interior.ColorIndex = xlNone
+        Else
+            wsOutput.Cells(outputRow, 1).Value = ""
+            wsOutput.Cells(outputRow, 1).Interior.Color = redColor
+        End If
+
+        If model <> "" Then
+           wsOutput.Cells(outputRow, 2).Value = model
+           wsOutput.Cells(outputRow, 2).Interior.ColorIndex = xlNone
+        Else
+            wsOutput.Cells(outputRow, 2).Value = ""
+            wsOutput.Cells(outputRow, 2).Interior.Color = redColor
+        End If
+
+        If connSizeInch <> "" Then
+            wsOutput.Cells(outputRow, 3).Value = connSizeInch & " Zoll"
+            wsOutput.Cells(outputRow, 3).Interior.ColorIndex = xlNone
+        Else
+            wsOutput.Cells(outputRow, 3).Value = ""
+            wsOutput.Cells(outputRow, 3).Interior.Color = redColor
+        End If
+
+        If housingWetDE <> "" Then
+            wsOutput.Cells(outputRow, 4).Value = housingWetDE
+            wsOutput.Cells(outputRow, 4).Interior.ColorIndex = xlNone
+        Else
+            wsOutput.Cells(outputRow, 4).Value = ""
+            wsOutput.Cells(outputRow, 4).Interior.Color = redColor
+        End If
+
+        If housingNotwetDE <> "" Then
+            wsOutput.Cells(outputRow, 5).Value = housingNotwetDE
+            wsOutput.Cells(outputRow, 5).Interior.ColorIndex = xlNone
+        Else
+            wsOutput.Cells(outputRow, 5).Value = ""
+            wsOutput.Cells(outputRow, 5).Interior.Color = redColor
+        End If
+
+        If memMaterialDE <> "" Then
+            wsOutput.Cells(outputRow, 6).Value = memMaterialDE
+            wsOutput.Cells(outputRow, 6).Interior.ColorIndex = xlNone
+        Else
+            wsOutput.Cells(outputRow, 6).Value = ""
+            wsOutput.Cells(outputRow, 6).Interior.Color = redColor
+        End If
+
+        If memDesignDE <> "" Then
+            wsOutput.Cells(outputRow, 7).Value = memDesignDE
+            wsOutput.Cells(outputRow, 7).Interior.ColorIndex = xlNone
+        Else
+            wsOutput.Cells(outputRow, 7).Value = ""
+            wsOutput.Cells(outputRow, 7).Interior.Color = redColor
+        End If
+
+        If checkValveDE <> "" Then
+            wsOutput.Cells(outputRow, 8).Value = checkValveDE
+            wsOutput.Cells(outputRow, 8).Interior.ColorIndex = xlNone
+        Else
+            wsOutput.Cells(outputRow, 8).Value = ""
+            wsOutput.Cells(outputRow, 8).Interior.Color = redColor
+        End If
+
+        If valveSeatDE <> "" Then
+            wsOutput.Cells(outputRow, 9).Value = valveSeatDE
+            wsOutput.Cells(outputRow, 9).Interior.ColorIndex = xlNone
+        Else
+            wsOutput.Cells(outputRow, 9).Value = ""
+            wsOutput.Cells(outputRow, 9).Interior.Color = redColor
+        End If
+
+        If housingDesignDE <> "" Then
+            wsOutput.Cells(outputRow, 10).Value = housingDesignDE
+            wsOutput.Cells(outputRow, 10).Interior.ColorIndex = xlNone
+        Else
+            wsOutput.Cells(outputRow, 10).Value = ""
+            wsOutput.Cells(outputRow, 10).Interior.Color = redColor
+        End If
+
+        If FDAComplianceDE <> "" Then
+            wsOutput.Cells(outputRow, 11).Value = FDAComplianceDE
+            wsOutput.Cells(outputRow, 11).Interior.ColorIndex = xlNone
+        Else
+            wsOutput.Cells(outputRow, 11).Value = ""
+            wsOutput.Cells(outputRow, 11).Interior.Color = redColor
+        End If
+
+        If explosionDE <> "" Then
+            wsOutput.Cells(outputRow, 12).Value = explosionDE
+            wsOutput.Cells(outputRow, 12).Interior.ColorIndex = xlNone
+        Else
+            wsOutput.Cells(outputRow, 12).Value = ""
+            wsOutput.Cells(outputRow, 12).Interior.Color = redColor
+        End If
+
+        If maxSolidSize <> "" Then
+            wsOutput.Cells(outputRow, 13).Value = maxSolidSize & " mm"
+            wsOutput.Cells(outputRow, 13).Interior.ColorIndex = xlNone
+        Else
+            wsOutput.Cells(outputRow, 13).Value = ""
+            wsOutput.Cells(outputRow, 13).Interior.Color = redColor
+        End If
+
+        If flowRate <> "" Then
+            wsOutput.Cells(outputRow, 14).Value = flowRate & " Liter"
+            wsOutput.Cells(outputRow, 14).Interior.ColorIndex = xlNone
+        Else
+            wsOutput.Cells(outputRow, 14).Value = ""
+            wsOutput.Cells(outputRow, 14).Interior.Color = redColor
+        End If
+        
+        If maxDischargePressure <> "" Then
+            wsOutput.Cells(outputRow, 15).Value = maxDischargePressure & " bar"
+            wsOutput.Cells(outputRow, 15).Interior.ColorIndex = xlNone
+        Else
+            wsOutput.Cells(outputRow, 15).Value = ""
+            wsOutput.Cells(outputRow, 15).Interior.Color = redColor
+        End If
+        
+        If conveyCapacity <> "" Then
+            wsOutput.Cells(outputRow, 16).Value = conveyCapacity & " Liter pro Minute"
+            wsOutput.Cells(outputRow, 16).Interior.ColorIndex = xlNone
+        Else
+            wsOutput.Cells(outputRow, 16).Value = ""
+            wsOutput.Cells(outputRow, 16).Interior.Color = redColor
+        End If
+        
+        If connectionType <> "" Then
+            wsOutput.Cells(outputRow, 17).Value = connectionType
+            wsOutput.Cells(outputRow, 17).Interior.ColorIndex = xlNone
+        Else
+            wsOutput.Cells(outputRow, 17).Value = ""
+            wsOutput.Cells(outputRow, 17).Interior.Color = redColor
+        End If
+
+        If connSizeSuction <> "" Then
+            wsOutput.Cells(outputRow, 18).Value = connSizeSuction & " Zoll"
+            wsOutput.Cells(outputRow, 18).Interior.ColorIndex = xlNone
+        Else
+            wsOutput.Cells(outputRow, 18).Value = ""
+            wsOutput.Cells(outputRow, 18).Interior.Color = redColor
+        End If
+
+        If connSizePressure <> "" Then
+            wsOutput.Cells(outputRow, 19).Value = connSizePressure & " Zoll"
+            wsOutput.Cells(outputRow, 19).Interior.ColorIndex = xlNone
+        Else
+            wsOutput.Cells(outputRow, 19).Value = ""
+            wsOutput.Cells(outputRow, 19).Interior.Color = redColor
+        End If
+        
+        If suctionHeightWet <> "" Then
+            wsOutput.Cells(outputRow, 20).Value = suctionHeightWet & " Meter"
+            wsOutput.Cells(outputRow, 20).Interior.ColorIndex = xlNone
+        Else
+            wsOutput.Cells(outputRow, 20).Value = ""
+            wsOutput.Cells(outputRow, 20).Interior.Color = redColor
+        End If
+
+        If suctionHeightDry <> "" Then
+            wsOutput.Cells(outputRow, 21).Value = suctionHeightDry & " Meter"
+            wsOutput.Cells(outputRow, 21).Interior.ColorIndex = xlNone
+        Else
+            wsOutput.Cells(outputRow, 21).Value = ""
+            wsOutput.Cells(outputRow, 21).Interior.Color = redColor
+        End If
+
+        If airConnInlet <> "" Then
+            wsOutput.Cells(outputRow, 22).Value = airConnInlet & " Zoll"
+            wsOutput.Cells(outputRow, 22).Interior.ColorIndex = xlNone
+        Else
+            wsOutput.Cells(outputRow, 22).Value = ""
+            wsOutput.Cells(outputRow, 22).Interior.Color = redColor
+        End If
+
+        If airConnOutlet <> "" Then
+            wsOutput.Cells(outputRow, 23).Value = airConnOutlet & " Zoll"
+            wsOutput.Cells(outputRow, 23).Interior.ColorIndex = xlNone
+        Else
+            wsOutput.Cells(outputRow, 23).Value = ""
+            wsOutput.Cells(outputRow, 23).Interior.Color = redColor
+        End If
+
+        If memMaterialTempMin <> "" Then
+            wsOutput.Cells(outputRow, 24).Value = memMaterialTempMin & " " & ChrW(176) & "C"
+            wsOutput.Cells(outputRow, 24).Interior.ColorIndex = xlNone
+        Else
+            wsOutput.Cells(outputRow, 24).Value = ""
+            wsOutput.Cells(outputRow, 24).Interior.Color = redColor
+        End If
+
+        If memMaterialTempMax <> "" Then
+            wsOutput.Cells(outputRow, 25).Value = memMaterialTempMax & " " & ChrW(176) & "C"
+            wsOutput.Cells(outputRow, 25).Interior.ColorIndex = xlNone
+        Else
+            wsOutput.Cells(outputRow, 25).Value = ""
+            wsOutput.Cells(outputRow, 25).Interior.Color = redColor
+        End If
+
+        If weight <> "" Then
+            wsOutput.Cells(outputRow, 26).Value = weight
+            wsOutput.Cells(outputRow, 26).Interior.ColorIndex = xlNone
+        Else
+            wsOutput.Cells(outputRow, 26).Value = ""
+            wsOutput.Cells(outputRow, 26).Interior.Color = redColor
+        End If
+        
+        If length <> "" Then
+            wsOutput.Cells(outputRow, 27).Value = length
+            wsOutput.Cells(outputRow, 27).Interior.ColorIndex = xlNone
+        Else
+            wsOutput.Cells(outputRow, 27).Value = ""
+            wsOutput.Cells(outputRow, 27).Interior.Color = redColor
+        End If
+        
+        If width <> "" Then
+            wsOutput.Cells(outputRow, 28).Value = width
+            wsOutput.Cells(outputRow, 28).Interior.ColorIndex = xlNone
+        Else
+            wsOutput.Cells(outputRow, 28).Value = ""
+            wsOutput.Cells(outputRow, 28).Interior.Color = redColor
+        End If
+        
+        If height <> "" Then
+            wsOutput.Cells(outputRow, 29).Value = height
+            wsOutput.Cells(outputRow, 29).Interior.ColorIndex = xlNone
+        Else
+            wsOutput.Cells(outputRow, 29).Value = ""
+            wsOutput.Cells(outputRow, 29).Interior.Color = redColor
+        End If
         
         ' Create SEO fields
         For j = 1 To UBound(seoInputData, 1)
@@ -781,7 +1039,7 @@ Sub Main()
                     For k = 1 To UBound(variableData, 1)
                         If variableData(k, 1) = seoMetaDescriptionDECell Then
                             seoMetaDescriptionDECell = variableData(k, 2)
-                            Debug.Print "variableData: "; seoMetaDescriptionDECell
+                            ' Debug.Print "variableData: "; seoMetaDescriptionDECell
                             If variableDictDE.Exists(seoMetaDescriptionDECell) Then
                                 seoMetaDescriptionDECell = variableDictDE.Item(seoMetaDescriptionDECell)
                             End If
