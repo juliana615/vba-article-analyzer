@@ -383,6 +383,17 @@ Sub Main()
         memMaterialTempMin = ""
         memMaterialTempMax = ""
 
+        memMaterialTempMin = "Ohne Limitierung"
+        memMaterialTempMax = "Ohne Limitierung"
+        housingWetTempMin = "Ohne Limitierung"
+        housingWetTempMax = "Ohne Limitierung"
+        housingNotwetTempMin = "Ohne Limitierung"
+        housingNotwetTempMax = "Ohne Limitierung"
+        checkValveTempMin = "Ohne Limitierung"
+        checkValveTempMax = "Ohne Limitierung"
+        resultTempMin = "Ohne Limitierung"
+        resultTempMax = "Ohne Limitierung"
+        
         articleNum = wsInput.Cells(i, 1).Value ' Lese Artikelnummer
 
         ' Parameter aus Artikelnummer extrahieren
