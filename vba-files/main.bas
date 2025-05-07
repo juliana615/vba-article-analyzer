@@ -1,41 +1,22 @@
-Attribute VB_Name = "main"    
-
-' ChrW(246) → ö, ChrW(223) → ß, ChrW(228) → ä, ChrW(252) → ü, ChrW(174) → ®, ChrW(8482) → ™, ChrW(8443) → °C
-
-' Sub GetRGBColor()
-'     Dim testCell As Range
-'     Dim wsSeoInput As Worksheet
-'     Set wsSeoInput = ThisWorkbook.Sheets("SEO INPUT")
-'     Set testCell = wsSeoInput.Range("B6")
-'     Dim colorValue As Long
-'     Dim redVal As Integer, greenVal As Integer, blueVal As Integer
-    
-'     colorValue = testCell.Interior.Color
-    
-'     redVal = colorValue Mod 256
-'     greenVal = (colorValue \ 256) Mod 256
-'     blueVal = (colorValue \ 65536) Mod 256
-    
-'     MsgBox "RGB: (" & redVal & ", " & greenVal & ", " & blueVal & ")"
-' End Sub
+' ChrW(246) ? ö, ChrW(223) ? ß, ChrW(228) ? ä, ChrW(252) ? ü, ChrW(174) ? ®, ChrW(8482) ? ™, ChrW(8443) ? °C
 
 Private Function GetVariableDict(variableData As Variant) As Object
     Dim dict As Object
     Set dict = CreateObject("Scripting.Dictionary")
     
     Dim i As Integer
-    For i = 1 To UBound(variableData, 1) ' Loop through rows
-        If Not dict.exists(variableData(i, 1)) Then ' Avoid duplicates
-            dict.Add variableData(i, 1), variableData(i, 2) ' Add key-value pair
+    For i = 1 To UBound(variableData, 1) ' Loop durch die Zeilen
+        If Not dict.Exists(variableData(i, 1)) Then ' Duplikate vermeiden
+            dict.Add variableData(i, 1), variableData(i, 2) ' Schlüssel-Wert-Paar hinzufügen
         End If
     Next i
     
-    Set GetVariableDict = dict ' Return dictionary
+    Set GetVariableDict = dict ' Rückgabe des Dictionaries
 End Function
     
 ' Private Function GetVariableDictionary(variableData As Variant) As Dictionary
 '     Static obj As Dictionary
-
+'
 '     If obj Is Nothing Then
 '         Set obj = New Dictionary
 '         Dim i As Integer
@@ -43,13 +24,13 @@ End Function
 '             obj.Add variableData(i, 1), variableData(i, 2)
 '         Next i
 '     End If
-
+'
 '     Set GetVariableDictionary = obj
 ' End Function
     
 Sub Main()
     '''''''''''''''''''''
-    ' Initializing Data '
+    ' Initialisierung der Daten '
     '''''''''''''''''''''
     ' Modell
     Dim modelWS As Worksheet, modelTable As Range, modelData As Variant
@@ -75,88 +56,88 @@ Sub Main()
     Set housingNotwetTable = housingNotwetWS.Range("A3:C13")
     housingNotwetData = housingNotwetTable.Value
 
-    ' Material der Membrane		
+    ' Material der Membrane
     Dim memMaterialWS As Worksheet, memMaterialTable As Range, memMaterialData As Variant
     Set memMaterialWS = Tabelle12
     Set memMaterialTable = memMaterialWS.Range("A3:C11")
     memMaterialData = memMaterialTable.Value
 
-    ' Membranausführung		
+    ' Membranausführung
     Dim memDesignWS As Worksheet, memDesignTable As Range, memDesignData As Variant
     Set memDesignWS = Tabelle24
     Set memDesignTable = memDesignWS.Range("A3:C8")
     memDesignData = memDesignTable.Value
 
-    ' Material Rückschlagventil		
+    ' Material Rückschlagventil
     Dim checkValveWS As Worksheet, checkValveTable As Range, checkValveData As Variant
     Set checkValveWS = Tabelle13
     Set checkValveTable = checkValveWS.Range("A3:C16")
     checkValveData = checkValveTable.Value
 
-    ' Material Ventilsitz		
+    ' Material Ventilsitz
     Dim valveSeatWS As Worksheet, valveSeatTable As Range, valveSeatData As Variant
     Set valveSeatWS = Tabelle14
-    Set valveSeatTable = valveSeatWS.Range("A3:C18")
+    Set valveSeatTable = valveSeatWS.Range("A3:C19")
     valveSeatData = valveSeatTable.Value
 
-    ' Gehäuseausführung		
+    ' Gehäuseausführung
     Dim housingDesignWS As Worksheet, housingDesignTable As Range, housingDesignData As Variant
     Set housingDesignWS = Tabelle9
     Set housingDesignTable = housingDesignWS.Range("A3:C4")
     housingDesignData = housingDesignTable.Value
 
-    ' Revisionslevel	
+    ' Revisionslevel
     Dim revisionWS As Worksheet, revisionTable As Range, revisionData As Variant
     Set revisionWS = Tabelle26
     Set revisionTable = revisionWS.Range("A3:B7")
     revisionData = revisionTable.Value
 
-    ' Optionsen		
+    ' Optionsen
     Dim optionsWS As Worksheet, optionsTable As Range, optionsData As Variant
     Set optionsWS = Tabelle27
     Set optionsTable = optionsWS.Range("A3:C19")
     optionsData = optionsTable.Value
 
-    ' FDA-Konformität												
+    ' FDA-Konformität
     Dim FDAWS As Worksheet, FDATable As Range, FDAData As Variant
     Set FDAWS = Tabelle10
     Set FDATable = FDAWS.Range("A3:O102")
     FDAData = FDATable.Value
 
-    ' Exlosionsschutz (ATEX)	
+    ' Explosionsschutz (ATEX)
     Dim explosionWS As Worksheet, explosionTable As Range, explosionData As Variant
     Set explosionWS = Tabelle11
     Set explosionTable = explosionWS.Range("A3:F3")
     explosionData = explosionTable.Value
 
-    ' Maximale Feststoffgröße							
+    ' Maximale Feststoffgröße
     Dim maxSolidSizeWS As Worksheet, maxSolidSizeTable As Range, maxSolidSizeData As Variant
     Set maxSolidSizeWS = Tabelle8
-    Set maxSolidSizeTable = maxSolidSizeWS.Range("A3:H17")
+    Set maxSolidSizeTable = maxSolidSizeWS.Range("A3:H18")
     maxSolidSizeData = maxSolidSizeTable.Value
 
-    ' Fördermenge per Hub							
+    ' Fördermenge per Hub
     Dim flowRateWS As Worksheet, flowRateTable As Range, flowRateData As Variant
     Set flowRateWS = Tabelle18
     Set flowRateTable = flowRateWS.Range("A3:H23")
     flowRateData = flowRateTable.Value
 
-    ' Maximaler Förderdruck						
+    ' Maximaler Förderdruck
     Dim maxDischargePressureWS As Worksheet, maxDischargePressureTable As Range, maxDischargePressureData As Variant
     Set maxDischargePressureWS = Tabelle17
     Set maxDischargePressureTable = maxDischargePressureWS.Range("A3:G11")
     maxDischargePressureData = maxDischargePressureTable.Value
 
-    ' Förderleistung										
+    ' Förderleistung
     Dim conveyCapacityWS As Worksheet, conveyCapacityTable As Range, conveyCapacityData As Variant
     Set conveyCapacityWS = Tabelle16
-    Set conveyCapacityTable = conveyCapacityWS.Range("A3:K205")
+    Set conveyCapacityTable = conveyCapacityWS.Range("A3:K214")
     conveyCapacityData = conveyCapacityTable.Value
 
-    ' Anschlusstyp								
+    ' Anschlusstyp
     Dim connectionTypeWS As Worksheet, connectionTypeTable As Range, connectionTypeData As Variant
     Set connectionTypeWS = Tabelle21
-    Set connectionTypeTable = connectionTypeWS.Range("A3:I81")
+    Set connectionTypeTable = connectionTypeWS.Range("A3:I84")
     connectionTypeData = connectionTypeTable.Value
 
     ' Anschlussgröße (Saugseite)
@@ -180,7 +161,7 @@ Sub Main()
     ' Ansaughöhe (trocken)
     Dim suctionHeightDryWS As Worksheet, suctionHeightDryTable As Range, suctionHeightDryData As Variant
     Set suctionHeightDryWS = Tabelle29
-    Set suctionHeightDryTable = suctionHeightDryWS.Range("A3:H21")
+    Set suctionHeightDryTable = suctionHeightDryWS.Range("A3:I33")
     suctionHeightDryData = suctionHeightDryTable.Value
 
     ' Luftanschluss (Eingang)
@@ -201,7 +182,7 @@ Sub Main()
     Set dimensionsTable = dimensionsWS.Range("A2:L64")
     dimensionsData = dimensionsTable.Value
 
-    ' Temperatur - Material der Membrane			
+    ' Temperatur - Material der Membrane
     Dim memMaterialTempWS As Worksheet, memMaterialTempTable As Range, memMaterialTempData As Variant
     Set memMaterialTempWS = Tabelle31
     Set memMaterialTempTable = memMaterialTempWS.Range("A3:D11")
@@ -212,17 +193,17 @@ Sub Main()
     Set wsVariable = ThisWorkbook.Sheets("Variables")
     Set variableTable = wsVariable.Range("A1:B7")
     variableData = variableTable.Value
-    ' Set variableDict = GetVariableDict(variableData)
 
     Dim wsSeoInput As Worksheet, seoInputTable As Range, seoInputData As Variant
     Set wsSeoInput = ThisWorkbook.Sheets("SEO INPUT")
-    set seoInputTable = wsSeoInput.Range("B4:I200")
+    Set seoInputTable = wsSeoInput.Range("B4:I200")
     seoInputData = seoInputTable.Value
 
-    ' Set worksheet references
+    ' Setze Arbeitsblatt-Referenzen
     Dim wsInput As Worksheet, wsOutput As Worksheet, wsSeoOutput As Worksheet
     Set wsInput = ThisWorkbook.Sheets("INPUT")
     Set wsOutput = ThisWorkbook.Sheets("OUTPUT")
+    ' Die Zeile mit wichtigen Infos (Zeile 1) und die Überschriften (Zeile 2) bleiben fix!
     Set wsSeoOutput = ThisWorkbook.Sheets("SEO OUTPUT")
 
     Dim lastRow As Long
@@ -243,7 +224,7 @@ Sub Main()
     Dim FDAComplianceDE As String, FDAComplianceEN As String
     Dim explosionDE As String, explosionEN As String
     Dim maxSolidSize As String, flowRate As String, maxDischargePressure As String, conveyCapacity As String, connectionType As String, connSizeSuction As String, connSizePressure As String, suctionHeightWet As String, suctionHeightDry As String, airConnInlet As String, airConnOutlet As String
-    Dim weight As String, length As String, width As String, height As String  
+    Dim weight As String, length As String, width As String, height As String
     Dim memMaterialTempMin As String, memMaterialTempMax As String
     Dim redColor As Long, greenColor As Long
     Dim seoArticleNameDE As String, seoUrlPathDE As String, seoMetaDescriptionDE As String, seoShortDescriptionDE As String, seoArticleNameEN As String, seoUrlPathEN As String, seoMetaDescriptionEN As String, seoShortDescriptionEN As String
@@ -254,15 +235,14 @@ Sub Main()
     redColor = RGB(252, 228, 214)
     greenColor = RGB(226, 239, 218)
 
-    ' Find last row in INPUT sheet
+    ' Finde letzte Zeile im INPUT-Arbeitsblatt
     lastRow = wsInput.Cells(wsInput.Rows.Count, 1).End(xlUp).Row
 
-    ' Loop through each article number
-    outputRow = 2 ' Start from row 2 in OUTPUT sheet
+    ' Schleife durch jede Artikelnummer
+    outputRow = 3 ' Starte in OUTPUT ab Zeile 3 (Zeile 1 = wichtige Infos, Zeile 2 = Überschriften)
 
     For i = 5 To lastRow
-    ' For i = 5 To 5
-        ' Initialize values each time
+        ' Initialisiere Werte für jede Artikelnummer
         model = ""
         connSizeInch = ""
         housingWetDE = ""
@@ -304,9 +284,9 @@ Sub Main()
         memMaterialTempMin = ""
         memMaterialTempMax = ""
 
-        articleNum = wsInput.Cells(i, 1).Value ' Read article number
+        articleNum = wsInput.Cells(i, 1).Value ' Lese Artikelnummer
 
-        ' Get parameters from article number
+        ' Parameter aus Artikelnummer extrahieren
         modelChar = Mid(articleNum, 1, 1)
         remainedArticleNumber = Mid(articleNum, 2)
 
@@ -374,19 +354,6 @@ Sub Main()
             optionOneChar = ""
             optionTwoChar = ""
         End If
-
-        ' MsgBox "Model: " & modelChar & vbNewLine & _
-        '         "Connection Size: " & connSizeChar & vbNewLine & _
-        '         "Housing Wet: " & housingWetChar & vbNewLine & _
-        '         "Housing Notwet: " & housingNotwetChar & vbNewLine & _
-        '         "Membrane Material: " & memMaterialChar & vbNewLine & _
-        '         "Membrane Design: " & memDesignChar & vbNewLine & _
-        '         "Check Valve: " & checkValveChar & vbNewLine & _
-        '         "Valve Seat: " & valveSeatChar & vbNewLine & _
-        '         "Housing Design: " & housingDesignChar & vbNewLine & _
-        '         "Revision: " & revisionChar & vbNewLine & _
-        '         "Option1: " & optionOneChar & vbNewLine & _
-        '         "Option2: " & optionTwoChar
 
         For j = 1 To UBound(modelData, 1)
             If modelData(j, 1) = modelChar Then
@@ -535,7 +502,7 @@ Sub Main()
                 End If
             End If
         Next j
-
+        
         For j = 1 To UBound(maxDischargePressureData, 1)
             If maxDischargePressureData(j, 1) = connSizeChar Or maxDischargePressureData(j, 1) = "" Then
                 If maxDischargePressureData(j, 2) = housingWetChar Or maxDischargePressureData(j, 2) = "" Then
@@ -625,7 +592,7 @@ Sub Main()
                 If suctionHeightDryData(j, 2) = housingWetChar Or suctionHeightDryData(j, 2) = "" Then
                     If suctionHeightDryData(j, 3) = housingDesignChar Or suctionHeightDryData(j, 3) = "" Then
                         If suctionHeightDryData(j, 4) = optionOneChar Or suctionHeightDryData(j, 4) = "" Then
-                            suctionHeightDry = suctionHeightDryData(j, 7)
+                            suctionHeightDry = suctionHeightDryData(j, 8)
                             Exit For
                         End If
                     End If
@@ -656,14 +623,7 @@ Sub Main()
         For j = 1 To UBound(dimensionsData, 1)
             If dimensionsData(j, 1) = connSizeChar Then
                 If dimensionsData(j, 2) = housingWetChar Or dimensionsData(j, 2) = "" Then
-                    If articleNum = "E1AP5T559C" Then
-                        Debug.Print "housingNotwetChar: "; housingNotwetChar
-                        Debug.Print "dimensionsData(j, 3): "; dimensionsData(j, 3)
-                    End If
                     If dimensionsData(j, 3) = housingNotwetChar Or dimensionsData(j, 3) = "" Then
-                        If articleNum = "E1AP5T559C" Then
-                            Debug.Print "housingDesignChar: "; housingDesignChar
-                        End If
                         If dimensionsData(j, 4) = housingDesignChar Or dimensionsData(j, 4) = "" Then
                             If dimensionsData(j, 5) = connectionType Or dimensionsData(j, 5) = "" Then
                                 If dimensionsData(j, 6) = optionOneChar Or dimensionsData(j, 6) = "" Then
@@ -692,13 +652,13 @@ Sub Main()
         
         If variableDictDE Is Nothing Then
             Set variableDictDE = New Dictionary
-            variableDictDE.add "connSizeInch", connSizeInch
-            variableDictDE.add "articleNum", articleNum
-            variableDictDE.add "conveyCapacity", conveyCapacity
-            variableDictDE.add "maxDischargePressure", maxDischargePressure
-            variableDictDE.add "housingWet", housingWetDE
-            variableDictDE.add "memMaterial", memMaterialDE
-            variableDictDE.add "maxSolidSize", maxSolidSize
+            variableDictDE.Add "connSizeInch", connSizeInch
+            variableDictDE.Add "articleNum", articleNum
+            variableDictDE.Add "conveyCapacity", conveyCapacity
+            variableDictDE.Add "maxDischargePressure", maxDischargePressure
+            variableDictDE.Add "housingWet", housingWetDE
+            variableDictDE.Add "memMaterial", memMaterialDE
+            variableDictDE.Add "maxSolidSize", maxSolidSize
         Else
             variableDictDE("connSizeInch") = connSizeInch
             variableDictDE("articleNum") = articleNum
@@ -711,13 +671,13 @@ Sub Main()
         
         If variableDictEN Is Nothing Then
             Set variableDictEN = New Dictionary
-            variableDictEN.add "connSizeInch", connSizeInch
-            variableDictEN.add "articleNum", articleNum
-            variableDictEN.add "conveyCapacity", conveyCapacity
-            variableDictEN.add "maxDischargePressure", maxDischargePressure
-            variableDictEN.add "housingWet", housingWetEN
-            variableDictEN.add "memMaterial", memMaterialEN
-            variableDictEN.add "maxSolidSize", maxSolidSize
+            variableDictEN.Add "connSizeInch", connSizeInch
+            variableDictEN.Add "articleNum", articleNum
+            variableDictEN.Add "conveyCapacity", conveyCapacity
+            variableDictEN.Add "maxDischargePressure", maxDischargePressure
+            variableDictEN.Add "housingWet", housingWetEN
+            variableDictEN.Add "memMaterial", memMaterialEN
+            variableDictEN.Add "maxSolidSize", maxSolidSize
         Else
             variableDictEN("connSizeInch") = connSizeInch
             variableDictEN("articleNum") = articleNum
@@ -728,7 +688,7 @@ Sub Main()
             variableDictEN("maxSolidSize") = maxSolidSize
         End If
 
-        ' Reset OUTPUT sheet and SEO OUTPUT sheet
+        ' Lösche den Inhalt der Zellen in der aktuellen Datenzeile (Zeile ab 3)
         For k = 1 To 29
             wsOutput.Cells(outputRow, k).Value = ""
         Next k
@@ -736,7 +696,7 @@ Sub Main()
             wsSeoOutput.Cells(outputRow, k).Value = ""
         Next k
 
-        ' Write data to OUTPUT sheet
+        ' Schreibe Daten in das OUTPUT-Arbeitsblatt
         If articleNum <> "" Then
             wsOutput.Cells(outputRow, 1).Value = articleNum
             wsOutput.Cells(outputRow, 1).Interior.ColorIndex = xlNone
@@ -969,9 +929,9 @@ Sub Main()
             wsOutput.Cells(outputRow, 29).Interior.Color = redColor
         End If
         
-        ' Create SEO fields
+        ' Erzeuge SEO-Felder
         For j = 1 To UBound(seoInputData, 1)
-            ' Initialize
+            ' Initialisierung
             If j = 1 Then
                 seoArticleNameDE = ""
                 seoUrlPathDE = ""
@@ -984,14 +944,11 @@ Sub Main()
             End If
             seoArticleNameDECell = seoInputData(j, 1)
             If seoArticleNameDECell <> "" Then
-                ' Debug.Print "seoArticleNameDECell: "; seoArticleNameDECell
                 If seoArticleNameDECell Like "*[[]*[]]*" Then
                     seoArticleNameDECell = Mid(seoArticleNameDECell, InStr(seoArticleNameDECell, "[") + 1, InStr(seoArticleNameDECell, "]") - InStr(seoArticleNameDECell, "[") - 1)
-                    ' Debug.Print "Refined seoArticleNameDECell: "; seoArticleNameDECell
                     For k = 1 To UBound(variableData, 1)
                         If variableData(k, 1) = seoArticleNameDECell Then
                             seoArticleNameDECell = variableData(k, 2)
-                            ' Debug.Print "variableData: "; seoArticleNameDECell
                             If variableDictDE.Exists(seoArticleNameDECell) Then
                                 seoArticleNameDECell = variableDictDE.Item(seoArticleNameDECell)
                             End If
@@ -1008,14 +965,11 @@ Sub Main()
 
             seoUrlPathDECell = seoInputData(j, 2)
             If seoUrlPathDECell <> "" Then
-                ' Debug.Print "seoUrlPathDECell: "; seoUrlPathDECell
                 If seoUrlPathDECell Like "*[[]*[]]*" Then
                     seoUrlPathDECell = Mid(seoUrlPathDECell, InStr(seoUrlPathDECell, "[") + 1, InStr(seoUrlPathDECell, "]") - InStr(seoUrlPathDECell, "[") - 1)
-                    ' Debug.Print "Refined seoUrlPathDECell: "; seoUrlPathDECell
                     For k = 1 To UBound(variableData, 1)
                         If variableData(k, 1) = seoUrlPathDECell Then
                             seoUrlPathDECell = variableData(k, 2)
-                            ' Debug.Print "variableData: "; seoUrlPathDECell
                             If variableDictDE.Exists(seoUrlPathDECell) Then
                                 seoUrlPathDECell = variableDictDE.Item(seoUrlPathDECell)
                             End If
@@ -1032,14 +986,11 @@ Sub Main()
 
             seoMetaDescriptionDECell = seoInputData(j, 3)
             If seoMetaDescriptionDECell <> "" Then
-                ' Debug.Print "seoMetaDescriptionDECell: "; seoMetaDescriptionDECell
                 If seoMetaDescriptionDECell Like "*[[]*[]]*" Then
                     seoMetaDescriptionDECell = Mid(seoMetaDescriptionDECell, InStr(seoMetaDescriptionDECell, "[") + 1, InStr(seoMetaDescriptionDECell, "]") - InStr(seoMetaDescriptionDECell, "[") - 1)
-                    ' Debug.Print "Refined seoMetaDescriptionDECell: "; seoMetaDescriptionDECell
                     For k = 1 To UBound(variableData, 1)
                         If variableData(k, 1) = seoMetaDescriptionDECell Then
                             seoMetaDescriptionDECell = variableData(k, 2)
-                            ' Debug.Print "variableData: "; seoMetaDescriptionDECell
                             If variableDictDE.Exists(seoMetaDescriptionDECell) Then
                                 seoMetaDescriptionDECell = variableDictDE.Item(seoMetaDescriptionDECell)
                             End If
@@ -1056,14 +1007,11 @@ Sub Main()
 
             seoShortDescriptionDECell = seoInputData(j, 4)
             If seoShortDescriptionDECell <> "" Then
-                ' Debug.Print "seoShortDescriptionDECell: "; seoShortDescriptionDECell
                 If seoShortDescriptionDECell Like "*[[]*[]]*" Then
                     seoShortDescriptionDECell = Mid(seoShortDescriptionDECell, InStr(seoShortDescriptionDECell, "[") + 1, InStr(seoShortDescriptionDECell, "]") - InStr(seoShortDescriptionDECell, "[") - 1)
-                    ' Debug.Print "Refined seoShortDescriptionDECell: "; seoShortDescriptionDECell
                     For k = 1 To UBound(variableData, 1)
                         If variableData(k, 1) = seoShortDescriptionDECell Then
                             seoShortDescriptionDECell = variableData(k, 2)
-                            ' Debug.Print "variableData: "; seoShortDescriptionDECell
                             If variableDictDE.Exists(seoShortDescriptionDECell) Then
                                 seoShortDescriptionDECell = variableDictDE.Item(seoShortDescriptionDECell)
                             End If
@@ -1080,14 +1028,11 @@ Sub Main()
 
             seoArticleNameENCell = seoInputData(j, 5)
             If seoArticleNameENCell <> "" Then
-                ' Debug.Print "seoArticleNameENCell: "; seoArticleNameENCell
                 If seoArticleNameENCell Like "*[[]*[]]*" Then
                     seoArticleNameENCell = Mid(seoArticleNameENCell, InStr(seoArticleNameENCell, "[") + 1, InStr(seoArticleNameENCell, "]") - InStr(seoArticleNameENCell, "[") - 1)
-                    ' Debug.Print "Refined seoArticleNameENCell: "; seoArticleNameENCell
                     For k = 1 To UBound(variableData, 1)
                         If variableData(k, 1) = seoArticleNameENCell Then
                             seoArticleNameENCell = variableData(k, 2)
-                            ' Debug.Print "variableData: "; seoArticleNameENCell
                             If variableDictEN.Exists(seoArticleNameENCell) Then
                                 seoArticleNameENCell = variableDictEN.Item(seoArticleNameENCell)
                             End If
@@ -1104,14 +1049,11 @@ Sub Main()
 
             seoUrlPathENCell = seoInputData(j, 6)
             If seoUrlPathENCell <> "" Then
-                ' Debug.Print "seoUrlPathENCell: "; seoUrlPathENCell
                 If seoUrlPathENCell Like "*[[]*[]]*" Then
                     seoUrlPathENCell = Mid(seoUrlPathENCell, InStr(seoUrlPathENCell, "[") + 1, InStr(seoUrlPathENCell, "]") - InStr(seoUrlPathENCell, "[") - 1)
-                    ' Debug.Print "Refined seoUrlPathENCell: "; seoUrlPathENCell
                     For k = 1 To UBound(variableData, 1)
                         If variableData(k, 1) = seoUrlPathENCell Then
                             seoUrlPathENCell = variableData(k, 2)
-                            ' Debug.Print "variableData: "; seoUrlPathENCell
                             If variableDictEN.Exists(seoUrlPathENCell) Then
                                 seoUrlPathENCell = variableDictEN.Item(seoUrlPathENCell)
                             End If
@@ -1122,20 +1064,17 @@ Sub Main()
                 If seoUrlPathEN = "" Then
                     seoUrlPathEN = seoUrlPathENCell
                 Else
-                    seoUrlPathEN = seoUrlPathEN & " " & seoUrlPathENCell
+                    seoUrlPathEN = seoUrlPathEN & seoUrlPathENCell
                 End If
             End If
 
             seoMetaDescriptionENCell = seoInputData(j, 7)
             If seoMetaDescriptionENCell <> "" Then
-                ' Debug.Print "seoMetaDescriptionENCell: "; seoMetaDescriptionENCell
                 If seoMetaDescriptionENCell Like "*[[]*[]]*" Then
                     seoMetaDescriptionENCell = Mid(seoMetaDescriptionENCell, InStr(seoMetaDescriptionENCell, "[") + 1, InStr(seoMetaDescriptionENCell, "]") - InStr(seoMetaDescriptionENCell, "[") - 1)
-                    ' Debug.Print "Refined seoMetaDescriptionENCell: "; seoMetaDescriptionENCell
                     For k = 1 To UBound(variableData, 1)
                         If variableData(k, 1) = seoMetaDescriptionENCell Then
                             seoMetaDescriptionENCell = variableData(k, 2)
-                            ' Debug.Print "variableData: "; seoMetaDescriptionENCell
                             If variableDictEN.Exists(seoMetaDescriptionENCell) Then
                                 seoMetaDescriptionENCell = variableDictEN.Item(seoMetaDescriptionENCell)
                             End If
@@ -1152,14 +1091,11 @@ Sub Main()
 
             seoShortDescriptionENCell = seoInputData(j, 8)
             If seoShortDescriptionENCell <> "" Then
-                ' Debug.Print "seoShortDescriptionENCell: "; seoShortDescriptionENCell
                 If seoShortDescriptionENCell Like "*[[]*[]]*" Then
                     seoShortDescriptionENCell = Mid(seoShortDescriptionENCell, InStr(seoShortDescriptionENCell, "[") + 1, InStr(seoShortDescriptionENCell, "]") - InStr(seoShortDescriptionENCell, "[") - 1)
-                    ' Debug.Print "Refined seoShortDescriptionENCell: "; seoShortDescriptionENCell
                     For k = 1 To UBound(variableData, 1)
                         If variableData(k, 1) = seoShortDescriptionENCell Then
                             seoShortDescriptionENCell = variableData(k, 2)
-                            ' Debug.Print "variableData: "; seoShortDescriptionENCell
                             If variableDictEN.Exists(seoShortDescriptionENCell) Then
                                 seoShortDescriptionENCell = variableDictEN.Item(seoShortDescriptionENCell)
                             End If
@@ -1175,7 +1111,7 @@ Sub Main()
             End If
         Next j
 
-        ' Write SEO data to SEO OUTPUT sheet
+        ' Schreibe SEO-Daten in das SEO OUTPUT-Arbeitsblatt
         wsSeoOutput.Cells(outputRow, 1).Value = articleNum
         wsSeoOutput.Cells(outputRow, 2).Value = seoArticleNameDE
         wsSeoOutput.Cells(outputRow, 3).Value = seoUrlPathDE
@@ -1186,7 +1122,7 @@ Sub Main()
         wsSeoOutput.Cells(outputRow, 8).Value = seoMetaDescriptionEN
         wsSeoOutput.Cells(outputRow, 9).Value = seoShortDescriptionEN
 
-        ' Move to next row in OUTPUT sheet
+        ' Gehe zur nächsten Datenzeile im OUTPUT-Arbeitsblatt
         outputRow = outputRow + 1
     Next i
     
