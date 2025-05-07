@@ -27,7 +27,91 @@ End Function
 '
 '     Set GetVariableDictionary = obj
 ' End Function
+
+Private Function MaxIgnoreSpecialStrings(ParamArray values() As Variant) As Variant
+    Dim maxVal As Variant
+    Dim tempVal As Variant
+    Dim hasValidValue As Boolean
+    Dim i As Long
     
+    hasValidValue = False
+    On Error Resume Next ' Enable error handling
+    
+    For i = LBound(values) To UBound(values)
+        ' Skip if the value is exactly "Ohne Limitierung"
+        If CStr(values(i)) = "Ohne Limitierung" Then
+            ' Skip this value
+        Else
+            ' Try to convert to number
+            tempVal = CDbl(values(i))
+            
+            ' Only proceed if conversion succeeded (Err.Number = 0)
+            If Err.Number = 0 Then
+                If Not hasValidValue Then
+                    ' First valid value found
+                    maxVal = tempVal
+                    hasValidValue = True
+                ElseIf tempVal > maxVal Then
+                    maxVal = tempVal
+                End If
+            Else
+                ' Reset error for next iteration
+                Err.Clear
+            End If
+        End If
+    Next i
+    
+    On Error GoTo 0 ' Reset error handling
+    
+    If hasValidValue Then
+        MaxIgnoreSpecialStrings = CStr(maxVal)
+    Else
+        MaxIgnoreSpecialStrings = "Ohne Limitierung" ' Or return empty string if preferred
+    End If
+End Function
+
+Private Function MinIgnoreSpecialStrings(ParamArray values() As Variant) As Variant
+    Dim minVal As Variant
+    Dim tempVal As Variant
+    Dim hasValidValue As Boolean
+    Dim i As Long
+    
+    hasValidValue = False
+    On Error Resume Next ' Enable error handling
+    
+    For i = LBound(values) To UBound(values)
+        ' Skip if the value is exactly "Ohne Limitierung"
+        If CStr(values(i)) = "Ohne Limitierung" Then
+            ' Skip this value
+        Else
+            ' Try to convert to number
+            tempVal = CDbl(values(i))
+            
+            ' Only proceed if conversion succeeded (Err.Number = 0)
+            If Err.Number = 0 Then
+                If Not hasValidValue Then
+                    ' First valid value found
+                    minVal = tempVal
+                    hasValidValue = True
+                ElseIf tempVal < minVal Then
+                    minVal = tempVal
+                End If
+            Else
+                ' Reset error for next iteration
+                Err.Clear
+            End If
+        End If
+    Next i
+    
+    On Error GoTo 0 ' Reset error handling
+    
+    If hasValidValue Then
+        MinIgnoreSpecialStrings = CStr(minVal)
+    Else
+        MinIgnoreSpecialStrings = "Ohne Limitierung" ' Or return empty string if preferred
+    End If
+End Function
+
 Sub Main()
     '''''''''''''''''''''
     ' Initialisierung der Daten '
@@ -188,6 +272,18 @@ Sub Main()
     Set memMaterialTempTable = memMaterialTempWS.Range("A3:D11")
     memMaterialTempData = memMaterialTempTable.Value
 
+    ' Temperatur - Gehäuse
+    Dim housingTempWS As Worksheet, housingTempTable As Range, housingTempData As Variant
+    Set housingTempWS = Tabelle32
+    Set housingTempTable = housingTempWS.Range("A3:D11")
+    housingTempData = housingTempTable.Value
+
+    ' Temperatur - Rückschlagventil
+    Dim checkValveTempWS As Worksheet, checkValveTempTable As Range, checkValveTempData As Variant
+    Set checkValveTempWS = Tabelle33
+    Set checkValveTempTable = checkValveTempWS.Range("A3:D11")
+    checkValveTempData = checkValveTempTable.Value
+
     ' Variables
     Dim wsVariable As Worksheet, variableTable As Range, variableData As Variant, variableDictDE As Object, variableDictEN As Object
     Set wsVariable = ThisWorkbook.Sheets("Variables")
@@ -226,6 +322,9 @@ Sub Main()
     Dim maxSolidSize As String, flowRate As String, maxDischargePressure As String, conveyCapacity As String, connectionType As String, connSizeSuction As String, connSizePressure As String, suctionHeightWet As String, suctionHeightDry As String, airConnInlet As String, airConnOutlet As String
     Dim weight As String, length As String, width As String, height As String
     Dim memMaterialTempMin As String, memMaterialTempMax As String
+    Dim housingWetTempMin As String, housingWetTempMax As String, housingNotwetTempMin As String, housingNotwetTempMax As String
+    Dim checkValveTempMin As String, checkValveTempMax As String
+    Dim resultTempMin As String, resultTempMax As String
     Dim redColor As Long, greenColor As Long
     Dim seoArticleNameDE As String, seoUrlPathDE As String, seoMetaDescriptionDE As String, seoShortDescriptionDE As String, seoArticleNameEN As String, seoUrlPathEN As String, seoMetaDescriptionEN As String, seoShortDescriptionEN As String
     Dim seoArticleNameDECell As String, seoUrlPathDECell As String, seoMetaDescriptionDECell As String, seoShortDescriptionDECell As String, seoArticleNameENCell As String, seoUrlPathENCell As String, seoMetaDescriptionENCell As String, seoShortDescriptionENCell As String
@@ -650,6 +749,33 @@ Sub Main()
             End If
         Next j
         
+        For j = 1 To UBound(housingTempData, 1)
+            If housingTempData(j, 1) = housingWetChar Then
+                housingWetTempMin = housingTempData(j, 3)
+                housingWetTempMax = housingTempData(j, 4)
+                Exit For
+            End If
+        Next j
+
+        For j = 1 To UBound(housingTempData, 1)
+            If housingTempData(j, 1) = housingNotwetChar Then
+                housingNotwetTempMin = housingTempData(j, 3)
+                housingNotwetTempMax = housingTempData(j, 4)
+                Exit For
+            End If
+        Next j
+
+        For j = 1 To UBound(checkValveTempData, 1)
+            If checkValveTempData(j, 1) = checkValveChar Then
+                checkValveTempMin = checkValveTempData(j, 3)
+                checkValveTempMax = checkValveTempData(j, 4)
+                Exit For
+            End If
+        Next j
+
+        resultTempMin = MaxIgnoreSpecialStrings(memMaterialTempMin, housingWetTempMin, housingNotwetTempMin, checkValveTempMin)
+        resultTempMax = MinIgnoreSpecialStrings(memMaterialTempMax, housingWetTempMax, housingNotwetTempMax, checkValveTempMax)
+        
         If variableDictDE Is Nothing Then
             Set variableDictDE = New Dictionary
             variableDictDE.Add "connSizeInch", connSizeInch
@@ -881,16 +1007,16 @@ Sub Main()
             wsOutput.Cells(outputRow, 23).Interior.Color = redColor
         End If
 
-        If memMaterialTempMin <> "" Then
-            wsOutput.Cells(outputRow, 24).Value = memMaterialTempMin & " " & ChrW(176) & "C"
+        If resultTempMin <> "" Then
+            wsOutput.Cells(outputRow, 24).Value = resultTempMin & " " & ChrW(176) & "C"
             wsOutput.Cells(outputRow, 24).Interior.ColorIndex = xlNone
         Else
             wsOutput.Cells(outputRow, 24).Value = ""
             wsOutput.Cells(outputRow, 24).Interior.Color = redColor
         End If
 
-        If memMaterialTempMax <> "" Then
-            wsOutput.Cells(outputRow, 25).Value = memMaterialTempMax & " " & ChrW(176) & "C"
+        If resultTempMax <> "" Then
+            wsOutput.Cells(outputRow, 25).Value = resultTempMax & " " & ChrW(176) & "C"
             wsOutput.Cells(outputRow, 25).Interior.ColorIndex = xlNone
         Else
             wsOutput.Cells(outputRow, 25).Value = ""
